@@ -21,6 +21,8 @@ struct GuideStep: Identifiable {
 }
 
 /// The ordered plan, computed from the app's real state each time it's drawn.
+/// Main-actor because it reads the store and the live client.
+@MainActor
 enum Guide {
     static func steps(store: DeviceStore, lip: LIPClient) -> [GuideStep] {
         let m = store.map
