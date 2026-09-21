@@ -1,5 +1,6 @@
 import Foundation
 import Network
+import Security
 import Combine
 
 @MainActor
@@ -62,7 +63,7 @@ final class DiscoveryModel: ObservableObject {
 
     // MARK: - built-in sweep
 
-    struct SweepResult: Sendable { var ip: String; var open23: Bool; var login: Bool; var open8081: Bool }
+    struct SweepResult: Sendable { var ip: String; var open23: Bool; var login: Bool; var banner: String; var open8081: Bool; var tlsSubject: String }
 
     func runSweep() {
         scanning = true; lastError = nil; hosts = []
@@ -109,6 +110,8 @@ final class DiscoveryModel: ObservableObject {
                 byIP[ip]?.lipOpen = r.open23
                 byIP[ip]?.lipLogin = r.login
                 byIP[ip]?.leapOpen = r.open8081
+                byIP[ip]?.banner = r.banner
+                byIP[ip]?.tlsSubject = r.tlsSubject
             }
             let sorted = byIP.values.sorted { a, b in
                 let ra = rank(a), rb = rank(b)
@@ -143,41 +146,85 @@ final class DiscoveryModel: ObservableObject {
 
     nonisolated static func sweepOne(_ ip: String) async -> SweepResult {
         async let a = bannerProbe(ip, port: 23)
-        async let b = PortCheckModel.probe(host: ip, port: 8081, timeout: 1.2)
-        let (open23, login) = await a
-        let open8081 = await b.0
-        return SweepResult(ip: ip, open23: open23, login: login, open8081: open8081)
+        async let b = tlsProbe(ip, port: 8081)
+        let (open23, banner) = await a
+        let (open8081, subject) = await b
+        return SweepResult(ip: ip, open23: open23, login: banner.lowercased().contains("login"),
+                           banner: banner, open8081: open8081, tlsSubject: subject)
     }
 
-    /// Connect to a port and read the greeting. Lutron LIP answers "login: ".
-    nonisolated static func bannerProbe(_ host: String, port: UInt16, timeout: TimeInterval = 1.2) async -> (Bool, Bool) {
-        guard let nwPort = NWEndpoint.Port(rawValue: port) else { return (false, false) }
+    /// Connect to a port and read the greeting (printable, trimmed). Lutron LIP answers "login: ".
+    nonisolated static func bannerProbe(_ host: String, port: UInt16, timeout: TimeInterval = 1.5) async -> (Bool, String) {
+        guard let nwPort = NWEndpoint.Port(rawValue: port) else { return (false, "") }
         return await withCheckedContinuation { cont in
             let conn = NWConnection(host: NWEndpoint.Host(host), port: nwPort, using: .tcp)
             let guardQ = DispatchQueue(label: "banner.guard")
             var resumed = false
-            let finish: (Bool, Bool) -> Void = { open, login in
+            let finish: (Bool, String) -> Void = { open, banner in
                 let first: Bool = guardQ.sync { if resumed { return false }; resumed = true; return true }
                 guard first else { return }
                 conn.cancel()
-                cont.resume(returning: (open, login))
+                cont.resume(returning: (open, banner))
             }
             conn.stateUpdateHandler = { st in
                 switch st {
                 case .ready:
                     conn.receive(minimumIncompleteLength: 1, maximumLength: 512) { data, _, _, _ in
-                        let text = data.map { String(decoding: $0, as: UTF8.self).lowercased() } ?? ""
-                        finish(true, text.contains("login"))
+                        let raw = data.map { String(decoding: $0, as: UTF8.self) } ?? ""
+                        let printable = String(raw.filter { $0.isASCII && !$0.isNewline && ($0.isLetter || $0.isNumber || $0.isPunctuation || $0 == " ") })
+                            .trimmingCharacters(in: .whitespaces)
+                        finish(true, String(printable.prefix(60)))
                     }
-                    DispatchQueue.global().asyncAfter(deadline: .now() + 1.5) { finish(true, false) }
+                    DispatchQueue.global().asyncAfter(deadline: .now() + 2.5) { finish(true, "") }
                 case .failed, .waiting:
-                    finish(false, false)
+                    finish(false, "")
                 default:
                     break
                 }
             }
             conn.start(queue: .global())
-            DispatchQueue.global().asyncAfter(deadline: .now() + timeout + 1.5) { finish(false, false) }
+            DispatchQueue.global().asyncAfter(deadline: .now() + timeout + 2.5) { finish(false, "") }
+        }
+    }
+
+    /// TLS-connect to a port and read the name on the certificate it presents.
+    /// The certificate is accepted regardless (we only want to read it); nothing is sent.
+    nonisolated static func tlsProbe(_ host: String, port: UInt16, timeout: TimeInterval = 1.5) async -> (Bool, String) {
+        guard let nwPort = NWEndpoint.Port(rawValue: port) else { return (false, "") }
+        return await withCheckedContinuation { cont in
+            let guardQ = DispatchQueue(label: "tls.guard")
+            var resumed = false
+            var subject = ""
+            let tls = NWProtocolTLS.Options()
+            sec_protocol_options_set_verify_block(tls.securityProtocolOptions, { _, trust, complete in
+                let secTrust = sec_trust_copy_ref(trust).takeRetainedValue()
+                if let chain = SecTrustCopyCertificateChain(secTrust) as? [SecCertificate], let leaf = chain.first,
+                   let summary = SecCertificateCopySubjectSummary(leaf) as String? {
+                    guardQ.sync { subject = summary }
+                }
+                complete(true)
+            }, guardQ)
+            let params = NWParameters(tls: tls)
+            let conn = NWConnection(host: NWEndpoint.Host(host), port: nwPort, using: params)
+            let finish: (Bool) -> Void = { open in
+                let first: Bool = guardQ.sync { if resumed { return false }; resumed = true; return true }
+                guard first else { return }
+                conn.cancel()
+                let subj = guardQ.sync { subject }
+                cont.resume(returning: (open, subj))
+            }
+            conn.stateUpdateHandler = { st in
+                switch st {
+                case .ready: finish(true)
+                case .failed, .waiting: finish(false)
+                default: break
+                }
+            }
+            conn.start(queue: .global())
+            DispatchQueue.global().asyncAfter(deadline: .now() + timeout + 2.0) {
+                // Handshake did not complete in time; report whether TCP at least opened.
+                finish(!guardQ.sync { subject }.isEmpty)
+            }
         }
     }
 

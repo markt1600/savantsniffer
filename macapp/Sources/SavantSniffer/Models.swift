@@ -12,6 +12,8 @@ struct DiscoveredHost: Identifiable, Hashable {
     var lipOpen = false          // TCP 23 accepted
     var lipLogin = false         // and it greeted with a "login:" prompt (Lutron LIP signature)
     var leapOpen = false         // TCP 8081 accepted (LEAP)
+    var banner = ""              // what port 23 said on connect (printable, trimmed)
+    var tlsSubject = ""          // certificate name presented on 8081
 
     var isLutronCandidate: Bool { lipLogin || classification == "Lutron" || leapOpen }
     var isSavantCandidate: Bool { classification == "Apple" || classification == "Savant" }

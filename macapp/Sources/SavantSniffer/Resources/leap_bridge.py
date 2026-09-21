@@ -47,7 +47,12 @@ async def do_pair(host: str, d: str) -> int:
     _out("LOG Connecting to %s for pairing." % host)
     _out("LOG >>> Press the pairing button on the processor NOW (you have about 30 seconds).")
     try:
-        data = await async_pair(host)
+        data = await asyncio.wait_for(async_pair(host), timeout=120)
+    except asyncio.TimeoutError:
+        _out("ERR pairing timed out after 120 s: no button press was seen. Either the press did not register, "
+             "or this device is not a pairable LEAP processor (a Lutron Connect Bridge for RadioRA 2 / "
+             "HomeWorks QS looks like LEAP but cannot be paired; the real processor speaks telnet).")
+        return 4
     except Exception as e:  # noqa: BLE001
         _out("ERR pairing failed: %s" % e)
         return 2

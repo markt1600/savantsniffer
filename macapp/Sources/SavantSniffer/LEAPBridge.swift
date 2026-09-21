@@ -14,6 +14,7 @@ final class LEAPBridge: ObservableObject {
 
     private var serveProcess: Process?
     private var serveStdin: FileHandle?
+    private var currentProcess: Process?     // pairing / import in flight
 
     let pythonPath: String? = Shell.which("python3")
     var venvDir: URL { AppPaths.support.appendingPathComponent("leap-venv", isDirectory: true) }
@@ -161,15 +162,29 @@ final class LEAPBridge: ObservableObject {
 
     // MARK: - process helpers
 
+    /// Stop whatever one-shot task is running (pairing or import).
+    func cancel() {
+        currentProcess?.terminate()
+        currentProcess = nil
+        busy = false
+        note("Cancelled.")
+    }
+
     private func runStreaming(_ args: [String], onLine: @escaping (String) -> Void, onExit: @escaping (Int32) -> Void) {
         let proc = Process()
+        currentProcess = proc
         proc.executableURL = URL(fileURLWithPath: venvPython)
         proc.arguments = args
         let out = Pipe(), err = Pipe()
         proc.standardOutput = out; proc.standardError = err
         attachLineReader(out.fileHandleForReading, onLine)
         attachLineReader(err.fileHandleForReading) { onLine("py: " + $0) }
-        proc.terminationHandler = { p in Task { @MainActor in onExit(p.terminationStatus) } }
+        proc.terminationHandler = { [weak self] p in
+            Task { @MainActor in
+                if self?.currentProcess === p { self?.currentProcess = nil }
+                onExit(p.terminationStatus)
+            }
+        }
         do { try proc.run() } catch {
             note("ERR could not start python: \(error.localizedDescription)")
             busy = false

@@ -301,13 +301,28 @@ struct InlineSweep: View {
                             Text(h.vendor.isEmpty ? h.classification : h.vendor).font(.system(size: 12)).foregroundStyle(Theme.muted).lineLimit(1)
                             if h.lipLogin { Chip(text: "LIP LOGIN", bg: Theme.amberTint, fg: Theme.amberInk) }
                             else if h.lipOpen { Chip(text: "PORT 23", bg: Theme.greyTint, fg: Theme.muted) }
-                            if h.leapOpen { Chip(text: "LEAP 8081", bg: Theme.purpleTint, fg: Theme.purple) }
+                            if h.leapOpen { Chip(text: "TLS 8081", bg: Theme.purpleTint, fg: Theme.purple) }
+                            if !h.tlsSubject.isEmpty { Text("cert: \(h.tlsSubject)").font(.caption).foregroundStyle(Theme.purple).lineLimit(1) }
                             Spacer()
                             Button(store.map.processor == h.ip ? "✓ processor" : "Use as processor") { store.map.processor = h.ip; store.save() }
                                 .buttonStyle(.borderedProminent).tint(Theme.accent).controlSize(.small)
                                 .disabled(store.map.processor == h.ip)
                         }
                         .padding(8).background(RoundedRectangle(cornerRadius: 8).fill(Theme.greyTint))
+                    }
+                    let others = discovery.hosts.filter { $0.lipOpen && !$0.isLutronCandidate }
+                    if !others.isEmpty {
+                        Text("Other hosts with port 23 open (AV gear, or a processor whose sessions are all taken):").font(.caption).foregroundStyle(Theme.muted)
+                        ForEach(others) { h in
+                            HStack(spacing: 8) {
+                                LED(color: Theme.grey, size: 8)
+                                Text(h.ip).mono(11.5)
+                                Text(h.vendor.isEmpty ? h.classification : h.vendor).font(.caption).foregroundStyle(Theme.muted).lineLimit(1)
+                                Text(h.banner.isEmpty ? "silent on connect" : "says: \(h.banner)").font(.caption).foregroundStyle(Theme.muted).lineLimit(1)
+                                Spacer()
+                                Button("Use as processor anyway") { store.map.processor = h.ip; store.save() }.controlSize(.small)
+                            }
+                        }
                     }
                     Text("\(discovery.hosts.count) hosts found in total; the full list is on the Discover screen.").font(.caption).foregroundStyle(Theme.muted)
                 }

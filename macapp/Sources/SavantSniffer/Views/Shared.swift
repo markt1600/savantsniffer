@@ -114,6 +114,13 @@ struct LEAPPanel: View {
                             .disabled(!leap.paired || host.isEmpty || leap.busy)
                     }
                 }
+                if leap.busy {
+                    HStack(spacing: 10) {
+                        ProgressView().controlSize(.small)
+                        Text("Working… pairing waits up to two minutes for the button press.").font(.caption).foregroundStyle(Theme.muted)
+                        Button("Cancel") { leap.cancel() }.controlSize(.small)
+                    }
+                }
                 if leap.pythonPath == nil {
                     Text("python3 was not found. Install Apple's command line tools: open Terminal and run xcode-select --install").font(.caption).foregroundStyle(Theme.red)
                 }

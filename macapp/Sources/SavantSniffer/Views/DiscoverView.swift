@@ -59,7 +59,10 @@ struct DiscoverView: View {
                                     HStack(spacing: 6) {
                                         if h.lipLogin { Chip(text: "LIP LOGIN", bg: Theme.amberTint, fg: Theme.amberInk) }
                                         else if h.lipOpen { Chip(text: "PORT 23", bg: Theme.greyTint, fg: Theme.muted) }
-                                        if h.leapOpen { Chip(text: "LEAP 8081", bg: Theme.purpleTint, fg: Theme.purple) }
+                                        if h.leapOpen { Chip(text: "TLS 8081", bg: Theme.purpleTint, fg: Theme.purple) }
+                                        if !h.tlsSubject.isEmpty { Text("cert: \(h.tlsSubject)").font(.caption).foregroundStyle(Theme.purple).lineLimit(1) }
+                                        else if h.lipOpen && !h.banner.isEmpty { Text("says: \(h.banner)").font(.caption).foregroundStyle(Theme.muted).lineLimit(1) }
+                                        else if h.lipOpen { Text("silent on connect").font(.caption).foregroundStyle(Theme.muted) }
                                     }
                                     Spacer()
                                     if h.isLutronCandidate {
@@ -77,7 +80,7 @@ struct DiscoverView: View {
                         }
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 12))
-                    Text("LIP LOGIN = answered on port 23 with a login prompt, the Lutron signature. PORT 23 alone is usually AV gear (Denon/Marantz use telnet without a prompt). Private = a phone or laptop with a randomised address.")
+                    Text("LIP LOGIN = answered on port 23 with a login prompt, the Lutron processor's signature. PORT 23 alone is usually AV gear (Denon/Marantz use telnet without a prompt). TLS 8081 shows the name on the device's certificate: a Lutron LEAP processor says so; a Lutron Connect Bridge (RadioRA 2 / HomeWorks QS app bridge) also answers here but cannot be paired. Private = a phone or laptop with a randomised address.")
                         .font(.caption).foregroundStyle(Theme.muted)
                 }
 
