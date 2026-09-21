@@ -11,7 +11,14 @@ enum OUI {
         "B8E856","38C986","88665A","34363B"
     ]
 
+    /// First three octets, zero-padded and uppercased. macOS `arp -a` prints
+    /// octets without leading zeros ("0:16:e1:…"), so each octet is padded.
     static func normalize(_ mac: String) -> String {
+        let octets = mac.split(whereSeparator: { $0 == ":" || $0 == "-" })
+            .map { String($0).uppercased() }
+            .map { $0.count == 1 ? "0" + $0 : $0 }
+        if octets.count >= 3 { return octets.prefix(3).joined() }
+        // fallback for separator-less input
         let hex = mac.uppercased().filter { $0.isHexDigit }
         return String(hex.prefix(6))
     }

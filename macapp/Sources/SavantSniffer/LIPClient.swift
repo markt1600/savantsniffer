@@ -8,20 +8,21 @@ import Combine
 @MainActor
 final class LIPClient: ObservableObject {
     enum State: Equatable { case idle, connecting, authenticating, monitoring, closed, failed(String) }
+    private enum LoginPhase { case awaitLogin, awaitPassword, awaitPrompt, done }
 
     @Published var state: State = .idle
     @Published var systemName: String = ""
     @Published var prompt: String = ""
     @Published var events: [MonitorEvent] = []
     @Published var lastError: String?
+    @Published var connectedSince: Date?
 
     let recorder = MacroRecorder()
     var onEvent: ((MonitorEvent) -> Void)?
 
     private var conn: NWConnection?
     private var buffer = Data()
-    private var loggedIn = false
-    private var host = ""
+    private var phase: LoginPhase = .awaitLogin
     private var user = "lutron"
     private var pass = "integration"
     private var logHandle: FileHandle?
@@ -29,27 +30,38 @@ final class LIPClient: ObservableObject {
     private let readyPrompts = ["QNET>", "GNET>", "QSE>"]
     private let promptSystem = ["QNET>": "HomeWorks QS", "GNET>": "RadioRA 2", "QSE>": "HomeWorks QS (QSE)"]
 
+    var isLive: Bool { state == .monitoring }
+
     // MARK: - lifecycle
+
     func connect(host: String, port: UInt16 = 23, user: String, pass: String) {
         disconnect()
-        self.host = host; self.user = user; self.pass = pass
-        self.loggedIn = false; self.buffer = Data(); self.events = []
+        self.user = user; self.pass = pass
+        phase = .awaitLogin; buffer = Data(); events = []; lastError = nil
+        systemName = ""; prompt = ""; connectedSince = nil
+        guard let nwPort = NWEndpoint.Port(rawValue: port) else {
+            state = .failed("invalid port \(port)"); return
+        }
         state = .connecting
         openLog()
-        let c = NWConnection(host: NWEndpoint.Host(host),
-                             port: NWEndpoint.Port(rawValue: port)!, using: .tcp)
+        let c = NWConnection(host: NWEndpoint.Host(host), port: nwPort, using: .tcp)
         conn = c
         c.stateUpdateHandler = { [weak self] st in
             Task { @MainActor in
+                // Ignore callbacks from a connection we have already replaced or dropped.
+                guard let self, self.conn === c else { return }
                 switch st {
                 case .ready:
-                    self?.state = .authenticating
-                    self?.receiveLoop()
+                    self.state = .authenticating
+                    self.receiveLoop(on: c)
                 case .failed(let e):
-                    self?.state = .failed("\(e)"); self?.lastError = "\(e)"
+                    self.fail("\(e)")
+                case .waiting(let e):
+                    self.lastError = "\(e)"        // still trying; surface the reason
                 case .cancelled:
-                    if case .failed = self?.state { } else { self?.state = .closed }
-                default: break
+                    if case .failed = self.state {} else { self.state = .closed }
+                default:
+                    break
                 }
             }
         }
@@ -57,86 +69,151 @@ final class LIPClient: ObservableObject {
     }
 
     func disconnect() {
-        conn?.cancel(); conn = nil
+        let old = conn
+        conn = nil                 // stale callbacks are ignored from here on
+        old?.cancel()
         closeLog()
-        if state == .monitoring || state == .authenticating || state == .connecting {
-            state = .closed
-        }
+        recorder.finish()
+        connectedSince = nil
+        if case .failed = state {} else if state != .idle { state = .closed }
+    }
+
+    private func fail(_ message: String) {
+        state = .failed(message)
+        lastError = message
+        let old = conn
+        conn = nil
+        old?.cancel()
+        closeLog()
+        recorder.finish()
+        connectedSince = nil
     }
 
     // MARK: - IO
+
     private func send(_ line: String) {
-        let data = (line + "\r\n").data(using: .utf8)!
-        conn?.send(content: data, completion: .contentProcessed { _ in })
+        guard let c = conn, let data = (line + "\r\n").data(using: .utf8) else { return }
+        c.send(content: data, completion: .contentProcessed { _ in })
     }
 
-    private func receiveLoop() {
-        conn?.receive(minimumIncompleteLength: 1, maximumLength: 8192) { [weak self] data, _, isComplete, error in
+    private func receiveLoop(on c: NWConnection) {
+        c.receive(minimumIncompleteLength: 1, maximumLength: 8192) { [weak self] data, _, isComplete, error in
             Task { @MainActor in
-                guard let self = self else { return }
-                if let data = data, !data.isEmpty { self.ingest(data) }
-                if let error = error { self.state = .failed("\(error)"); self.lastError = "\(error)"; return }
-                if isComplete { self.state = .closed; return }
-                if self.conn != nil { self.receiveLoop() }
+                guard let self, self.conn === c else { return }
+                if let data, !data.isEmpty { self.ingest(data) }
+                if let error { self.fail("\(error)"); return }
+                if isComplete { self.state = .closed; self.conn = nil; self.closeLog(); return }
+                if self.conn === c { self.receiveLoop(on: c) }
             }
         }
     }
 
     private func ingest(_ data: Data) {
         buffer.append(data)
+        if phase != .done {
+            handleLogin()
+            if phase != .done { return }
+        }
+        drainLines()
+    }
 
-        if !loggedIn {
-            let text = String(decoding: buffer, as: UTF8.self)
-            if text.lowercased().contains("login:") && !text.lowercased().contains("password:") {
-                send(user); buffer.removeAll(); return
-            }
-            if text.lowercased().contains("password:") {
-                send(pass); buffer.removeAll(); return
-            }
-            for p in readyPrompts where text.contains(p) {
-                loggedIn = true
-                prompt = p
-                systemName = promptSystem[p] ?? "Lutron LIP"
-                buffer.removeAll()
-                enableMonitoring()
-                state = .monitoring
+    // Byte-based prompt matching (telnet may carry non-UTF-8 negotiation bytes,
+    // so string offsets are unreliable; Data offsets are exact).
+    private func lowercasedBytes() -> Data {
+        Data(buffer.map { ($0 >= 65 && $0 <= 90) ? $0 + 32 : $0 })
+    }
+    private func find(_ token: String, caseInsensitive: Bool) -> Range<Int>? {
+        let hay = caseInsensitive ? lowercasedBytes() : Data(buffer)
+        let needle = Data((caseInsensitive ? token.lowercased() : token).utf8)
+        guard let r = hay.range(of: needle) else { return nil }
+        return r.lowerBound..<r.upperBound
+    }
+    private func consume(through end: Int) {
+        buffer = Data(buffer[end...])
+    }
+
+    private func handleLogin() {
+        while phase != .done {
+            switch phase {
+            case .awaitLogin:
+                guard let r = find("login:", caseInsensitive: true) else { return }
+                consume(through: r.upperBound)
+                send(user)
+                phase = .awaitPassword
+            case .awaitPassword:
+                guard let r = find("password:", caseInsensitive: true) else { return }
+                consume(through: r.upperBound)
+                send(pass)
+                phase = .awaitPrompt
+            case .awaitPrompt:
+                var best: (prompt: String, range: Range<Int>)?
+                for p in readyPrompts {
+                    if let r = find(p, caseInsensitive: false),
+                       best == nil || r.lowerBound < best!.range.lowerBound {
+                        best = (p, r)
+                    }
+                }
+                if let b = best {
+                    // A second "login:" BEFORE the prompt means the credentials were rejected.
+                    if let l = find("login:", caseInsensitive: true), l.lowerBound < b.range.lowerBound {
+                        phase = .done
+                        fail("login rejected — check the user name and password")
+                        return
+                    }
+                    consume(through: b.range.upperBound)   // keep any event bytes after it
+                    prompt = b.prompt
+                    systemName = promptSystem[b.prompt] ?? "Lutron LIP"
+                    phase = .done
+                    enableMonitoring()
+                    state = .monitoring
+                    connectedSince = Date()
+                } else if find("login:", caseInsensitive: true) != nil {
+                    phase = .done
+                    fail("login rejected — check the user name and password")
+                    return
+                } else {
+                    return
+                }
+            case .done:
                 return
             }
-            // A second login prompt after we already sent creds means auth failed.
-            if text.components(separatedBy: "login:").count > 2 {
-                let msg = "login rejected — default credentials likely wrong"
-                state = .failed(msg); lastError = msg
-            }
-            return
         }
+    }
 
-        // logged in: split complete lines
-        while let range = buffer.range(of: Data([0x0A])) {
-            let lineData = buffer.subdata(in: buffer.startIndex..<range.lowerBound)
-            buffer.removeSubrange(buffer.startIndex..<range.upperBound)
-            var line = String(data: lineData, encoding: .utf8) ?? ""
-            line = line.trimmingCharacters(in: CharacterSet(charactersIn: "\r\0 "))
-            for p in readyPrompts where line.hasPrefix(p) {
-                line = String(line.dropFirst(p.count)).trimmingCharacters(in: .whitespaces)
+    private func drainLines() {
+        while let nl = buffer.firstIndex(of: 0x0A) {
+            let lineData = buffer[buffer.startIndex..<nl]
+            buffer = Data(buffer[(nl + 1)...])
+            var line = String(decoding: lineData, as: UTF8.self)
+                .trimmingCharacters(in: CharacterSet(charactersIn: "\r\0 "))
+            // Strip any number of echoed ready prompts ("QNET> QNET> ~DEVICE…").
+            var stripped = true
+            while stripped {
+                stripped = false
+                for p in readyPrompts where line.hasPrefix(p) {
+                    line = String(line.dropFirst(p.count)).trimmingCharacters(in: .whitespaces)
+                    stripped = true
+                }
             }
-            if line.isEmpty { continue }
-            let ev = MonitorEvent.parse(line)
-            if ev.kind == .device || ev.kind == .output {
-                recorder.feed(ev)
-                events.append(ev)
-                if events.count > 1000 { events.removeFirst(events.count - 1000) }
-                writeLog(ev)
-                onEvent?(ev)
-            }
+            guard !line.isEmpty else { continue }
+            var ev = MonitorEvent.parse(line)
+            guard ev.kind == .device || ev.kind == .output else { continue }
+            ev.capturing = recorder.active
+            recorder.feed(ev)
+            events.append(ev)
+            if events.count > 1000 { events.removeFirst(events.count - 1000) }
+            writeLog(ev)
+            onEvent?(ev)
         }
     }
 
     private func enableMonitoring() {
-        send("#MONITORING,3,1")   // device/button events
-        send("#MONITORING,5,1")   // output/zone level events
+        send("#MONITORING,3,1")   // device/button events -> ~DEVICE
+        send("#MONITORING,5,1")   // output/zone level events -> ~OUTPUT
     }
 
     // MARK: - control (GATED)
+
     /// Sends a state-changing command. `confirmed` MUST be true (observe-first).
     @discardableResult
     func sendControl(_ command: String, confirmed: Bool) -> Bool {
@@ -151,18 +228,17 @@ final class LIPClient: ObservableObject {
     func queryOutput(_ id: Int) { if state == .monitoring { send("?OUTPUT,\(id),1") } }
 
     // MARK: - logging
+
     private func openLog() {
         let dir = AppPaths.logs
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let f = ISO8601DateFormatter()
-        let name = "monitor-" + f.string(from: Date()).replacingOccurrences(of: ":", with: "") + ".log"
-        let url = dir.appendingPathComponent(name)
+        let f = DateFormatter(); f.dateFormat = "yyyyMMdd-HHmmss"
+        let url = dir.appendingPathComponent("monitor-" + f.string(from: Date()) + ".log")
         FileManager.default.createFile(atPath: url.path, contents: nil)
         logHandle = try? FileHandle(forWritingTo: url)
     }
     private func writeLog(_ ev: MonitorEvent) {
-        let line = ev.timeString + "  " + ev.raw + "\n"
-        logHandle?.write(line.data(using: .utf8)!)
+        if let d = (ev.timeString + "  " + ev.raw + "\n").data(using: .utf8) { logHandle?.write(d) }
     }
     private func closeLog() { try? logHandle?.close(); logHandle = nil }
 }

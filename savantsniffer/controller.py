@@ -54,9 +54,17 @@ class Controller:
         ref = self.dmap.resolve_output(output_phrase)
         return f"?OUTPUT,{ref.id},1  ({ref.area}/{ref.name})"
 
-    def preview_set(self, output_phrase: str, level: float) -> str:
+    @staticmethod
+    def set_command(output_id: int, level: float, fade: float | None = None) -> str:
+        """#OUTPUT set-level, with an optional fade time in seconds (e.g. 20 over 2s)."""
+        if fade is not None and fade > 0:
+            return f"#OUTPUT,{output_id},1,{level:g},{fade:g}"
+        return f"#OUTPUT,{output_id},1,{level:g}"
+
+    def preview_set(self, output_phrase: str, level: float, fade: float | None = None) -> str:
         ref = self.dmap.resolve_output(output_phrase)
-        return f"#OUTPUT,{ref.id},1,{level:g}  -> {ref.area}/{ref.name} to {level:g}%"
+        tail = f" over {fade:g}s" if fade else ""
+        return f"{self.set_command(ref.id, level, fade)}  -> {ref.area}/{ref.name} to {level:g}%{tail}"
 
     def preview_press(self, keypad_phrase: str, button: int) -> str:
         ref = self.dmap.resolve_keypad(keypad_phrase)
@@ -64,11 +72,12 @@ class Controller:
         return f"#DEVICE,{ref.id},{button},3  -> press {ref.area}/{ref.name} button {button} {label}".rstrip()
 
     # --- state-changing (require confirm=True each call) ---
-    def set_level(self, output_phrase: str, level: float, confirm: bool) -> str:
+    def set_level(self, output_phrase: str, level: float, confirm: bool,
+                  fade: float | None = None) -> str:
         if not confirm:
             raise NotArmed("set_level requires confirm=True (observe-first policy)")
         ref = self.dmap.resolve_output(output_phrase)
-        cmd = f"#OUTPUT,{ref.id},1,{level:g}"
+        cmd = self.set_command(ref.id, level, fade)
         self._send(cmd)
         return cmd
 

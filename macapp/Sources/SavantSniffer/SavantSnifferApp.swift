@@ -24,79 +24,110 @@ struct SavantSnifferApp: App {
                 .environmentObject(lip)
                 .environmentObject(discovery)
                 .environmentObject(portcheck)
-                .frame(minWidth: 900, minHeight: 620)
+                .frame(minWidth: 1120, minHeight: 720)
         }
         .windowStyle(.titleBar)
     }
 }
 
 enum Panel: String, CaseIterable, Identifiable {
-    case coverage = "Coverage"
-    case discover = "1 · Discover"
-    case ports = "2 · Port check"
-    case monitor = "3 · Monitor & label"
-    case scenes = "Custom scenes"
-    case control = "Control"
-    case map = "Device map"
-    case capture = "Credentials & LEAP"
+    case coverage, discover, ports, capture, monitor, map, control, scenes
     var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .coverage: return "Coverage"
+        case .discover: return "Discover"
+        case .ports: return "Port check"
+        case .capture: return "Credentials & LEAP"
+        case .monitor: return "Monitor & label"
+        case .map: return "Device map"
+        case .control: return "Control"
+        case .scenes: return "Custom scenes"
+        }
+    }
     var icon: String {
         switch self {
         case .coverage: return "checkmark.seal"
         case .discover: return "dot.radiowaves.left.and.right"
         case .ports: return "network"
-        case .monitor: return "waveform.path.ecg"
-        case .scenes: return "wand.and.stars"
-        case .control: return "slider.horizontal.3"
-        case .map: return "list.bullet.rectangle"
         case .capture: return "key"
+        case .monitor: return "waveform.path.ecg"
+        case .map: return "list.bullet.rectangle"
+        case .control: return "slider.horizontal.3"
+        case .scenes: return "wand.and.stars"
         }
     }
 }
 
 struct ContentView: View {
-    @State private var selection: Panel = .coverage
+    @State private var selection: Panel? = .coverage
+    @EnvironmentObject var lip: LIPClient
+    @EnvironmentObject var store: DeviceStore
+
     var body: some View {
         NavigationSplitView {
-            List(Panel.allCases, selection: $selection) { s in
-                Label(s.rawValue, systemImage: s.icon).tag(s)
+            VStack(spacing: 0) {
+                HStack(spacing: 10) {
+                    RoundedRectangle(cornerRadius: 8).fill(Theme.accent)
+                        .frame(width: 30, height: 30)
+                        .overlay(Image(systemName: "waveform.path.ecg").foregroundStyle(.white).font(.system(size: 13, weight: .bold)))
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("SavantSniffer").font(.system(size: 14, weight: .bold))
+                        Text("observe-first").font(.system(size: 11)).foregroundStyle(Theme.muted)
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 16).padding(.top, 14).padding(.bottom, 6)
+
+                List(selection: $selection) {
+                    Section("Setup") { row(.discover); row(.ports); row(.capture) }
+                    Section("Capture") { row(.coverage); row(.monitor); row(.map) }
+                    Section("Control") { row(.control); row(.scenes) }
+                }
+                .listStyle(.sidebar)
+                .scrollContentBackground(.hidden)
+
+                statusCard.padding(12)
             }
-            .navigationSplitViewColumnWidth(min: 190, ideal: 210, max: 260)
+            .background(Theme.sidebar)
+            .navigationSplitViewColumnWidth(min: 220, ideal: 236, max: 300)
         } detail: {
-            switch selection {
-            case .coverage: CoverageView()
-            case .discover: DiscoverView()
-            case .ports: PortCheckView()
-            case .monitor: MonitorView()
-            case .scenes: ScenesView()
-            case .control: ControlView()
-            case .map: MapView()
-            case .capture: CaptureGuideView()
+            detail(for: selection ?? .coverage)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Theme.ground)
+        }
+    }
+
+    private func row(_ p: Panel) -> some View {
+        Label(p.title, systemImage: p.icon).tag(p)
+    }
+
+    @ViewBuilder
+    private func detail(for p: Panel) -> some View {
+        switch p {
+        case .coverage: CoverageView()
+        case .discover: DiscoverView()
+        case .ports: PortCheckView()
+        case .capture: CaptureGuideView()
+        case .monitor: MonitorView()
+        case .map: MapView()
+        case .control: ControlView()
+        case .scenes: ScenesView()
+        }
+    }
+
+    private var statusCard: some View {
+        HStack(spacing: 8) {
+            LED(color: lip.isLive ? Theme.green : (lip.state == .connecting || lip.state == .authenticating ? Theme.amber : Theme.grey), glow: lip.isLive, size: 9)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(lip.isLive ? "Monitoring" : "Not connected").font(.system(size: 12, weight: .semibold))
+                Text(lip.isLive ? "\(store.map.processor ?? "") · \(lip.prompt)" : (store.map.processor ?? "no processor yet"))
+                    .mono(11).foregroundStyle(Theme.muted).lineLimit(1)
             }
+            Spacer()
         }
-    }
-}
-
-// Shared small UI helpers
-struct StatusDot: View {
-    let status: DeviceMap.CaptureStatus
-    var body: some View {
-        Circle().fill(color).frame(width: 11, height: 11)
-            .overlay(Circle().stroke(.black.opacity(0.15), lineWidth: 0.5))
-    }
-    var color: Color {
-        switch status {
-        case .captured: return .green
-        case .identified: return .yellow
-        case .pending: return Color.gray.opacity(0.4)
-        }
-    }
-}
-
-struct BoolDot: View {
-    let ok: Bool
-    var body: some View {
-        Circle().fill(ok ? Color.green : Color.gray.opacity(0.4))
-            .frame(width: 11, height: 11)
+        .padding(10)
+        .background(RoundedRectangle(cornerRadius: 8).fill(Theme.panel))
+        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.border, lineWidth: 1))
     }
 }

@@ -2,51 +2,71 @@ import SwiftUI
 
 struct MapView: View {
     @EnvironmentObject var store: DeviceStore
-    @State private var mergeResult = ""
+    @EnvironmentObject var lip: LIPClient
+    @State private var note = ""
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                HStack {
-                    Text("Device map").font(.largeTitle.bold())
-                    Spacer()
+                PageHeader(title: "Device map",
+                           subtitle: "system \(store.map.system ?? "?") · processor \(store.map.processor ?? "?") · savant \(store.map.savantHost ?? "?")") {
                     Button("Merge starting layout") {
                         let r = store.mergeSeed()
-                        mergeResult = "added \(r.areas) rooms, \(r.keypads) keypads, \(r.buttons) buttons"
+                        note = "Added \(r.areas) rooms, \(r.keypads) keypads, \(r.buttons) buttons."
                     }
+                    Button("Export report…") { exportReport() }.buttonStyle(.borderedProminent).tint(Theme.accent)
                 }
-                if !mergeResult.isEmpty { Text(mergeResult).font(.caption).foregroundStyle(.secondary) }
-                Text("system: \(store.map.system ?? "?")  ·  processor: \(store.map.processor ?? "?")  ·  savant: \(store.map.savantHost ?? "?")")
-                    .font(.callout).foregroundStyle(.secondary)
+                if !note.isEmpty { Text(note).font(.caption).foregroundStyle(Theme.muted) }
 
                 ForEach(store.map.areas) { area in
-                    GroupBox(area.name.capitalized) {
-                        VStack(alignment: .leading, spacing: 4) {
+                    Card(padding: 14) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(area.name.capitalized).font(.system(size: 14, weight: .bold))
                             ForEach(area.keypads) { kp in
                                 Text(kp.name + (kp.lutronID != nil ? " · id \(kp.lutronID!)" : " · id ?"))
-                                    .font(.callout.bold())
+                                    .font(.system(size: 12, weight: .semibold)).foregroundStyle(Theme.muted).padding(.top, 4)
                                 ForEach(kp.buttons) { b in
                                     HStack(spacing: 8) {
                                         StatusDot(status: b.status(keypadIdentified: kp.lutronID != nil))
-                                        Text(b.label).frame(width: 150, alignment: .leading)
-                                        Text(b.kind).font(.caption).foregroundStyle(.secondary).frame(width: 80, alignment: .leading)
-                                        if let n = b.button { Text("btn \(n)").font(.caption.monospaced()) }
-                                        if let e = b.effect, !e.isEmpty { Text("· \(e.count) loads").font(.caption).foregroundStyle(.secondary) }
+                                        Text(b.label).font(.system(size: 12.5)).frame(width: 150, alignment: .leading)
+                                        Chip.kind(b.kind)
+                                        if let n = b.button { Text("btn \(n)").mono(11).foregroundStyle(Theme.muted) }
+                                        if let e = b.effect, !e.isEmpty {
+                                            Text(e.map { "\($0.id)→\(Int($0.level))" }.joined(separator: " ")).mono(11).foregroundStyle(Theme.muted)
+                                        }
+                                        if let z = b.audioZones, !z.isEmpty {
+                                            Text("audio: " + z.joined(separator: ", ")).font(.system(size: 11)).foregroundStyle(Theme.purple)
+                                        }
                                         Spacer()
                                     }
                                 }
                             }
                             if !area.outputs.isEmpty {
-                                Text("outputs").font(.caption.bold()).foregroundStyle(.secondary).padding(.top, 4)
+                                SectionLabel("Loads").padding(.top, 6)
                                 ForEach(area.outputs) { o in
-                                    Text("• \(o.name) · id \(o.lutronID) (\(o.kind))").font(.caption)
+                                    HStack(spacing: 8) {
+                                        LED(color: Theme.green)
+                                        Text(o.name).font(.system(size: 12.5)).frame(width: 150, alignment: .leading)
+                                        Text("id \(o.lutronID) · \(o.kind)").mono(11).foregroundStyle(Theme.muted)
+                                        Spacer()
+                                    }
                                 }
                             }
-                        }.padding(6).frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                 }
             }
-            .padding(24).frame(maxWidth: .infinity, alignment: .leading)
+            .padding(26)
+        }
+    }
+
+    private func exportReport() {
+        let user = UserDefaults.standard.string(forKey: "lipUser") ?? "lutron"
+        let creds = Exporter.Credentials(host: store.map.processor, user: user, password: Keychain.get(account: user),
+                                         system: store.map.system, prompt: lip.prompt.isEmpty ? nil : lip.prompt,
+                                         savantHost: store.map.savantHost)
+        if let url = Exporter.save(map: store.map, creds: creds, coverage: store.overallCoverage()) {
+            note = "Saved \(url.lastPathComponent) plus the JSON map beside it."
         }
     }
 }

@@ -28,3 +28,7 @@ macapp/.build/
 macapp/.swiftpm/
 *.xcuserstate
 DerivedData/
+
+# Exported reports contain credentials
+integration-report*.md
+zones*.md

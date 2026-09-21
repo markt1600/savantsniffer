@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 // MARK: - Discovery
 
@@ -40,11 +41,11 @@ struct MonitorEvent: Identifiable {
     var timestamp: Date
     var kind: EventKind
     var raw: String
-    // parsed
     var integrationID: Int?
     var component: Int?     // button number for ~DEVICE
     var action: String?
     var level: Double?
+    var capturing = false   // arrived while a macro capture was armed
 
     var timeString: String {
         let f = DateFormatter()
@@ -54,8 +55,13 @@ struct MonitorEvent: Identifiable {
 
     var detail: String {
         switch kind {
-        case .output: return "level \(level.map { String(format: "%g", $0) } ?? "?")"
-        case .device: return "btn \(component.map(String.init) ?? "?") act \(action ?? "?")"
+        case .output:
+            if let l = level { return "level " + String(format: "%g", l) }
+            return "level ?"
+        case .device:
+            let b = component.map { String($0) } ?? "?"
+            let a = (action == "3") ? "press" : (action == "4" ? "release" : (action ?? "?"))
+            return "btn \(b) · \(a)"
         default: return ""
         }
     }
@@ -106,7 +112,7 @@ struct DeviceMap: Codable {
         }
     }
     struct Button: Codable, Identifiable {
-        var id: Int { position ?? label.hashValue }
+        var id: String { "\(position ?? -1)-\(label)" }
         var position: Int?
         var button: Int?        // real LIP component id, filled by sniffing
         var label: String
@@ -116,20 +122,21 @@ struct DeviceMap: Codable {
         var asBuilt: Bool?
         var remarks: String?
         var effect: [Effect]?
-        var savantCaptured: Bool?   // integration buttons: Savant traffic recorded
-        var savantNote: String?     // e.g. captured command / playlist / device
+        var savantCaptured: Bool?
+        var savantNote: String?
+        var audioZones: [String]?   // zones this button drives on the Savant side
+        var audioSource: String?    // e.g. "home office input"
 
-        /// Capture status used for the green-light dashboard.
         func status(keypadIdentified: Bool) -> CaptureStatus {
             let hasComponent = (button != nil)
             switch kind {
             case "integration":
                 if hasComponent && (savantCaptured ?? false) { return .captured }
-                if hasComponent { return .identified }   // press seen; Savant side still to do
+                if hasComponent { return .identified }
                 return keypadIdentified ? .identified : .pending
             case "macro":
                 if hasComponent && (effect?.isEmpty == false) { return .captured }
-                if hasComponent { return .identified }   // button known; burst not captured
+                if hasComponent { return .identified }
                 return keypadIdentified ? .identified : .pending
             default:
                 if hasComponent { return .captured }
@@ -139,12 +146,11 @@ struct DeviceMap: Codable {
     }
 
     enum CaptureStatus: String {
-        case pending      // nothing captured yet
-        case identified   // partially captured (button seen, effect/Savant still to do)
-        case captured     // fully captured
+        case pending, identified, captured
     }
+
     struct Output: Codable, Identifiable {
-        var id: String { name }
+        var id: String { "\(lutronID)-\(name)" }
         var name: String
         var lutronID: Int
         var kind: String
@@ -168,33 +174,30 @@ struct CustomMacro: Codable, Identifiable {
     struct MacroStep: Codable, Identifiable {
         var id: UUID = UUID()
         var type: StepType
-        // output/shade step
         var outputID: Int?
         var level: Double?
-        // keypad press step
+        var fadeSeconds: Double?   // optional ramp time for output steps
         var keypadID: Int?
         var button: Int?
-        // savant integration replay step
         var savantHost: String?
         var savantPort: Int?
-        var savantPayload: String?   // captured command text to replay
-        // pause step
+        var savantPayload: String?
         var delayMs: Int?
         var note: String?
     }
 
     enum StepType: String, Codable, CaseIterable {
-        case output       // #OUTPUT,<id>,1,<level>
-        case press        // #DEVICE,<keypadID>,<button>,3
-        case savant       // replay captured plain-TCP command
-        case delay        // wait delayMs before the next step
+        case output, press, savant, delay
     }
 
-    /// Translate a step into the LIP command it will send (nil for delay/savant).
+    /// The LIP command a step sends (nil for delay/savant).
     static func lipCommand(for step: MacroStep) -> String? {
         switch step.type {
         case .output:
             guard let id = step.outputID, let lvl = step.level else { return nil }
+            if let fade = step.fadeSeconds, fade > 0 {
+                return String(format: "#OUTPUT,%d,1,%g,%g", id, lvl, fade)   // level + fade seconds
+            }
             return String(format: "#OUTPUT,%d,1,%g", id, lvl)
         case .press:
             guard let k = step.keypadID, let b = step.button else { return nil }
@@ -203,15 +206,29 @@ struct CustomMacro: Codable, Identifiable {
             return nil
         }
     }
+
+    /// Human-readable preview line for each step ("will send").
+    static func previewLine(for step: MacroStep) -> String {
+        switch step.type {
+        case .output, .press: return lipCommand(for: step) ?? "(incomplete step)"
+        case .savant:
+            let h = step.savantHost ?? "?"; let p = step.savantPort.map { String($0) } ?? "?"
+            return "tcp \(h):\(p) ← \(step.savantPayload ?? "")"
+        case .delay: return "wait \(step.delayMs ?? 0)ms"
+        }
+    }
 }
 
-// MARK: - Macro capture
+// MARK: - Macro capture (observable so the UI updates as the burst arrives)
 
-final class MacroRecorder {
-    private(set) var active = false
-    private(set) var triggerDevice: Int?
-    private(set) var triggerButton: Int?
-    private(set) var steps: [(id: Int, level: Double)] = []
+@MainActor
+final class MacroRecorder: ObservableObject {
+    struct Step { var id: Int; var level: Double }
+
+    @Published private(set) var active = false
+    @Published private(set) var triggerDevice: Int?
+    @Published private(set) var triggerButton: Int?
+    @Published private(set) var steps: [Step] = []
     private var lastEvent = Date()
 
     func begin() {
@@ -221,13 +238,14 @@ final class MacroRecorder {
     func feed(_ ev: MonitorEvent) {
         guard active else { return }
         if ev.kind == .output, let i = ev.integrationID, let l = ev.level {
-            steps.append((i, l)); lastEvent = Date()
+            steps.append(Step(id: i, level: l)); lastEvent = Date()
         } else if ev.kind == .device {
             if triggerDevice == nil { triggerDevice = ev.integrationID; triggerButton = ev.component }
             lastEvent = Date()
         }
     }
     var settled: Bool { active && Date().timeIntervalSince(lastEvent) > 2.5 }
+    var loadsAffected: Int { Set(steps.map { $0.id }).count }
     func classify() -> String {
         let ids = Set(steps.map { $0.id })
         if ids.isEmpty { return "integration" }
@@ -237,7 +255,7 @@ final class MacroRecorder {
     func effect() -> [DeviceMap.Effect] {
         var last: [Int: Double] = [:]
         for s in steps { last[s.id] = s.level }
-        return last.map { DeviceMap.Effect(id: $0.key, level: $0.value) }
+        return last.keys.sorted().map { DeviceMap.Effect(id: $0, level: last[$0]!) }
     }
     func finish() { active = false }
 }

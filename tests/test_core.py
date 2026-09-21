@@ -259,3 +259,58 @@ def test_controller_reuses_live_client_and_disarms():
     assert ctl.set_level("kitchen island", 40, confirm=True) == "#OUTPUT,12,1,40"
     assert sent == ["#OUTPUT,12,1,40"]
     assert fake._allow_control is False   # disarmed again after sending
+
+
+# ---- report / correlate / fade ----
+
+def test_set_command_with_fade():
+    from savantsniffer.controller import Controller
+    assert Controller.set_command(12, 20) == "#OUTPUT,12,1,20"
+    assert Controller.set_command(12, 20, 2) == "#OUTPUT,12,1,20,2"
+    assert Controller.set_command(12, 20, 0) == "#OUTPUT,12,1,20"
+
+
+def test_report_contains_commands_and_creds():
+    from savantsniffer.report import build_markdown
+    m = DeviceMap({"system": "LIP", "processor": "1.2.3.4", "areas": {}})
+    m.add_output("kitchen", "island", 12)
+    m.add_button("kitchen", "kitchen keypad", 25, 3, label="Room Off", kind="macro", effect={12: 0.0, 13: 0.0})
+    m.add_button("study", "study keypad", 40, 2, label="Music", kind="integration")
+    md = build_markdown(m, {"LUTRON_LIP_USER": "lutron", "LUTRON_LIP_PASSWORD": "s3cret"})
+    assert "`#DEVICE,25,3,3`" in md
+    assert "`#OUTPUT,12,1,<0-100>`" in md
+    assert "s3cret" in md
+    assert "12→0, 13→0" in md
+    assert "still needing Savant-side capture" in md and "Music" in md
+
+
+def test_correlate_matches_press_to_savant_packets():
+    from savantsniffer import correlate as co
+    import datetime as dt
+    t0 = dt.datetime(2026, 9, 21, 19, 42, 7, 318000)
+    log = f"{t0.isoformat(timespec='milliseconds')}  ~DEVICE,12,8,3\n" \
+          f"{(t0 + dt.timedelta(seconds=10)).isoformat(timespec='milliseconds')}  ~DEVICE,12,8,4\n"   # release ignored
+    e = t0.timestamp()
+    payload = "PLAY,zone:office\r".encode().hex()
+    fields = "\n".join([
+        f"{e+0.4:.6f}\t10.0.1.30\t8085\t\t{payload}\t",       # within window
+        f"{e+0.9:.6f}\t10.0.1.30\t8085\t\t{payload}\t",
+        f"{e+5.0:.6f}\t10.0.1.99\t\t9000\t\t{'00'*4}",         # outside window
+    ])
+    packets = co.parse_savant_fields(fields)
+    presses = co.parse_monitor_log(log)
+    assert len(presses) == 1 and presses[0].button == 8
+    res = co.correlate(presses, packets, window=2.0)
+    assert len(res[0].targets) == 1
+    t = res[0].targets[0]
+    assert t["dst"] == "10.0.1.30" and t["port"] == 8085 and t["count"] == 2
+    assert t["preview"].startswith("PLAY,zone:office")
+    assert "keypad 12 button 8" in co.render(res, 2.0)
+
+
+def test_parse_monitor_log_mac_app_format():
+    from savantsniffer import correlate as co
+    import datetime as dt
+    presses = co.parse_monitor_log("19:42:07.318  ~DEVICE,12,8,3\n", date_hint=dt.date(2026, 9, 21))
+    assert len(presses) == 1
+    assert dt.datetime.fromtimestamp(presses[0].t).hour == 19

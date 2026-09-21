@@ -33,18 +33,23 @@ final class PortCheckModel: ObservableObject {
         }
     }
 
-    static func probe(host: String, port: Int, timeout: TimeInterval = 3) async -> (Bool, String) {
-        await withCheckedContinuation { cont in
-            let conn = NWConnection(host: NWEndpoint.Host(host),
-                                    port: NWEndpoint.Port(rawValue: UInt16(port))!,
-                                    using: .tcp)
+    /// TCP-connect probe. The continuation is resumed exactly once: the first of
+    /// ready / failed / waiting / timeout wins, the rest are ignored.
+    nonisolated static func probe(host: String, port: Int, timeout: TimeInterval = 3) async -> (Bool, String) {
+        guard let nwPort = NWEndpoint.Port(rawValue: UInt16(clamping: max(0, port))) else {
+            return (false, "bad port")
+        }
+        return await withCheckedContinuation { cont in
+            let conn = NWConnection(host: NWEndpoint.Host(host), port: nwPort, using: .tcp)
             let guardQ = DispatchQueue(label: "portprobe.guard")
             var resumed = false
             let finish: (Bool, String) -> Void = { ok, detail in
-                guardQ.sync {
-                    if resumed { return }
+                let first: Bool = guardQ.sync {
+                    if resumed { return false }
                     resumed = true
+                    return true
                 }
+                guard first else { return }
                 conn.cancel()
                 cont.resume(returning: (ok, detail))
             }
@@ -63,14 +68,14 @@ final class PortCheckModel: ObservableObject {
         }
     }
 
-    static func identify(_ results: [PortResult]) -> (String, String) {
+    nonisolated static func identify(_ results: [PortResult]) -> (String, String) {
         let open = Set(results.filter { $0.open }.map { $0.port })
         if open.contains(8081) || open.contains(8083) {
-            return ("LEAP", "8081/8083 open → HomeWorks QSX / RadioRA 3 / Caseta. Pair with the app (or pylutron-caseta).")
+            return ("LEAP", "8081/8083 open → HomeWorks QSX / RadioRA 3 / Caseta. Pair with pylutron-caseta (see Credentials & LEAP).")
         }
         if open.contains(23) {
-            return ("LIP", "23 open → HomeWorks QS / RadioRA 2 telnet. Try lutron/integration; confirm from the QNET>/GNET> prompt.")
+            return ("LIP", "23 open → HomeWorks QS / RadioRA 2 telnet. Try lutron/integration; the prompt (QNET>/GNET>) confirms which.")
         }
-        return ("unknown", "No known Lutron integration port answered. Re-check the IP or integration may be disabled.")
+        return ("unknown", "No known Lutron integration port answered. Re-check the IP, or integration may be disabled.")
     }
 }

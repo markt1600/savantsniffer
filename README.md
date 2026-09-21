@@ -121,10 +121,41 @@ integration id / button number. See `devices.example.yaml` for the format.
 
 ### 7. Control from names
 ```bash
-lutron list                         # what's mapped
-lutron set "kitchen island" 50      # asks before changing anything
-lutron press "master keypad" 3      # asks before pressing
+lutron list                          # what's mapped
+lutron set "kitchen island" 50       # asks before changing anything
+lutron set "kitchen island" 20 --fade 2   # ramp to 20% over 2 seconds
+lutron press "master keypad" 3       # asks before pressing
 ```
+Dimmers accept an optional fade time, so a scene the dealer programmed at 50%
+with a quick ramp can become your own at 20% with whatever fade you like.
+
+### Export everything you've learned
+```bash
+lutron export --out integration-report.md
+```
+Writes a Markdown report with the processor, system, credentials, a protocol
+cheat sheet, every keypad and button with its exact `#DEVICE` command, every
+load with its `#OUTPUT`/`?OUTPUT` commands, captured scene effects, and your
+custom scenes. Future apps read this instead of re-testing. It contains
+credentials, so keep it out of git (the default name is ignored).
+
+### Audio zones and other Savant-side effects
+Some buttons drive audio (e.g. office lights on → office audio on; Broadcast →
+several zones). Lutron only reports the keypad press; Savant hears that press
+and commands the audio hardware itself. To map the zones:
+```bash
+# 1. capture the Savant host's traffic while you press the buttons (monitor running)
+sudo tcpdump -i en0 -s 0 -w savant.pcap 'host <savant-ip>'
+# 2. export the packets as text
+tshark -r savant.pcap -Y 'ip.src==<savant-ip>' -T fields -E separator=/t \
+  -e frame.time_epoch -e ip.dst -e tcp.dstport -e udp.dstport -e tcp.payload -e udp.payload > savant.txt
+# 3. line each press up with what Savant sent in the next 2 seconds
+lutron correlate --savant savant.txt --monitor-log logs/monitor-*.log --out zones.md
+```
+The result lists, per press, which device and port Savant talked to and the
+command bytes. Note which zones came on and record them on the button. Plain-TCP
+commands can be replayed as Savant steps in a custom scene; encrypted or
+session-bound protocols can be identified but not replayed.
 
 ### Macro and integration buttons
 Some buttons do more than one thing:
@@ -141,6 +172,16 @@ approach as step 4, but watch the AV/receiver/streamer IPs). This reveals plain-
 control protocols you could drive directly. The integration-button notes from step 7
 tell you which effects to look for.
 
+## How button presses are told apart from everything else
+The monitor is not a packet sniffer. It logs in to the Lutron processor over
+telnet the same way an integration app does and receives only Lutron's own event
+feed. Within that feed every line is self-describing: `~DEVICE,<keypad>,<button>,<action>`
+is a keypad event (action 3 = press, 4 = release) and `~OUTPUT,<id>,1,<level>` is a
+load changing level. Everything else (prompts, echoes, acknowledgements) is
+dropped. Cameras, streaming and other computers never enter this path at all.
+Packet capture is used only for credential recovery and Savant-side effects, and
+those captures are filtered by IP before anything is written.
+
 ## Layout
 ```
 savantsniffer/
@@ -151,8 +192,10 @@ savantsniffer/
   macros.py      macro / integration burst capture
   leap.py        pylutron-caseta pairing + tree dump
   devicemap.py   devices.yaml load/save + name→id resolution
-  controller.py  gated set/press on top of the map
+  controller.py  gated set/press (with fade) on top of the map
   capture.py     credential-capture guidance + telnet stream parser
+  report.py      the integration report (lutron export)
+  correlate.py   press ↔ Savant-traffic correlation (audio zones, AV)
   cli.py         the `lutron` command
   webapp.py      the local web UI (Flask, 127.0.0.1 only)
 tests/           pure-logic tests (no hardware needed)

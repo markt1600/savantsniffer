@@ -8,83 +8,83 @@ struct DiscoverView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Discover hosts").font(.largeTitle.bold())
-                Text("Scans only your local subnet. The exact command is shown first — you approve it before it runs.")
-                    .foregroundStyle(.secondary)
-
-                GroupBox("Tools on this Mac") {
-                    VStack(alignment: .leading, spacing: 6) {
+                PageHeader(title: "Discover hosts",
+                           subtitle: "Scans only your local subnet. The exact command is shown first and runs only after you approve it.") {
+                    EmptyView()
+                }
+                Card {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Tools on this Mac").font(.system(size: 13, weight: .bold))
                         ForEach(discovery.tools, id: \.name) { t in
-                            HStack {
+                            HStack(spacing: 10) {
                                 BoolDot(ok: t.present)
-                                Text(t.name)
-                                if !t.present { Text("install: \(t.hint)").font(.caption).foregroundStyle(.secondary) }
+                                Text(t.name).font(.system(size: 13)).frame(width: 80, alignment: .leading)
+                                Text(t.present ? (t.path ?? "") : "install: \(t.hint)").font(.caption).foregroundStyle(Theme.muted)
                                 Spacer()
                             }
                         }
-                    }.padding(6)
-                }
-
-                HStack {
-                    TextField("subnet", text: $discovery.subnet)
-                        .frame(width: 200)
-                        .onChange(of: discovery.subnet) { _ in discovery.buildCommand() }
-                    Button("Show scan command") { discovery.buildCommand(); showCommand = true }
-                }
-
-                if showCommand {
-                    GroupBox {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(discovery.scanCommand).font(.system(.body, design: .monospaced))
-                                .textSelection(.enabled)
-                            Text(discovery.note).font(.caption).foregroundStyle(.secondary)
-                            HStack {
-                                Button(discovery.scanning ? "Scanning…" : "I approve — run this scan") {
-                                    discovery.runScan()
-                                }.disabled(discovery.scanning)
-                                if discovery.needsSudo {
-                                    Text("Needs admin rights; you may be prompted, or run it in Terminal.")
-                                        .font(.caption).foregroundStyle(.secondary)
-                                }
-                            }
-                        }.padding(6)
+                        Text("Nothing is installed automatically.").font(.caption).foregroundStyle(Theme.muted)
                     }
                 }
-
-                if let err = discovery.lastError {
-                    Text(err).font(.caption).foregroundStyle(.red)
+                Card {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(spacing: 10) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Subnet").font(.system(size: 11, weight: .semibold)).foregroundStyle(Theme.muted)
+                                TextField("192.168.1.0/24", text: $discovery.subnet).textFieldStyle(.roundedBorder).mono(13).frame(width: 180)
+                                    .onChange(of: discovery.subnet) { _ in discovery.buildCommand() }
+                            }
+                            Button("Show scan command") { discovery.buildCommand(); showCommand = true }
+                        }
+                        if showCommand {
+                            Text(discovery.scanCommand).mono(12.5).textSelection(.enabled)
+                                .padding(10).frame(maxWidth: .infinity, alignment: .leading)
+                                .background(RoundedRectangle(cornerRadius: 8).fill(Theme.ink)).foregroundStyle(.white)
+                            Text(discovery.note).font(.caption).foregroundStyle(Theme.muted)
+                            Button(discovery.scanning ? "Scanning…" : "I approve — run this scan") { discovery.runScan() }
+                                .buttonStyle(.borderedProminent).tint(Theme.accent)
+                                .disabled(discovery.scanning)
+                        }
+                        if let err = discovery.lastError { Text(err).font(.caption).foregroundStyle(Theme.red) }
+                    }
                 }
-
                 if !discovery.hosts.isEmpty {
-                    Text("Results").font(.title2.bold())
-                    ForEach(discovery.hosts) { h in
-                        HStack {
-                            Circle().fill(color(h.classification)).frame(width: 10, height: 10)
-                            Text(h.ip).font(.body.monospaced()).frame(width: 130, alignment: .leading)
-                            Text(h.mac).font(.caption.monospaced()).foregroundStyle(.secondary)
-                                .frame(width: 150, alignment: .leading)
-                            Text(h.classification).bold().frame(width: 80, alignment: .leading)
-                            Text(h.vendor).font(.caption).foregroundStyle(.secondary)
-                            Spacer()
-                            if h.classification == "Lutron" {
-                                Button("Use as processor") { store.map.processor = h.ip; store.save() }
-                            } else if h.classification == "Apple" {
-                                Button("Use as Savant host") { store.map.savantHost = h.ip; store.save() }
+                    Card(padding: 0) {
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text("Results").font(.system(size: 13, weight: .bold))
+                                Spacer()
+                                Text("\(discovery.hosts.count) hosts · Lutron and Apple first").font(.caption).foregroundStyle(Theme.muted)
+                            }
+                            .padding(.horizontal, 14).padding(.vertical, 10).background(Theme.greyTint)
+                            Divider()
+                            ForEach(discovery.hosts) { h in
+                                HStack(spacing: 12) {
+                                    LED(color: color(h.classification))
+                                    Text(h.ip).mono(12.5).frame(width: 130, alignment: .leading)
+                                    Text(h.mac).mono(11.5).foregroundStyle(Theme.muted).frame(width: 150, alignment: .leading)
+                                    Text(h.classification).font(.system(size: 12.5, weight: .semibold)).frame(width: 80, alignment: .leading)
+                                    Text(h.vendor).font(.caption).foregroundStyle(Theme.muted)
+                                    Spacer()
+                                    if h.classification == "Lutron" {
+                                        Button("Use as processor") { store.map.processor = h.ip; store.save() }.controlSize(.small)
+                                    } else if h.classification == "Apple" {
+                                        Button("Use as Savant host") { store.map.savantHost = h.ip; store.save() }.controlSize(.small)
+                                    }
+                                }
+                                .padding(.horizontal, 14).padding(.vertical, 7)
+                                .overlay(Divider(), alignment: .bottom)
                             }
                         }
-                        .padding(6)
-                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.gray.opacity(0.06)))
                     }
-                    Text("Match the Lutron row to your processor and the Apple row to the Savant Mac mini.")
-                        .font(.caption).foregroundStyle(.secondary)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
-            .padding(24)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(26)
         }
     }
 
-    func color(_ c: String) -> Color {
-        switch c { case "Lutron": return .purple; case "Apple": return .blue; default: return .gray }
+    private func color(_ c: String) -> Color {
+        switch c { case "Lutron": return Theme.purple; case "Apple": return Theme.blue; default: return Theme.grey }
     }
 }

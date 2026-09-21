@@ -158,15 +158,40 @@ def cmd_set(args):
     _load_env()
     ctl = Controller(DeviceMap.load(args.map))
     try:
-        preview = ctl.preview_set(args.name, args.level)
+        preview = ctl.preview_set(args.name, args.level, args.fade)
     except KeyError as e:
         print(f"{e}")
         return
     if not _confirm(preview, args.yes):
         print("Cancelled. Nothing sent.")
         return
-    sent = ctl.set_level(args.name, args.level, confirm=True)
+    sent = ctl.set_level(args.name, args.level, confirm=True, fade=args.fade)
     print(f"Sent: {sent}")
+
+
+def cmd_export(args):
+    from .report import build_markdown
+    md = build_markdown(DeviceMap.load(args.map), _env_dict())
+    with open(args.out, "w") as f:
+        f.write(md)
+    print(f"Wrote {args.out} (contains credentials — keep it private)")
+
+
+def cmd_correlate(args):
+    from . import correlate as co
+    with open(args.savant) as f:
+        packets = co.parse_savant_fields(f.read())
+    hint = _dt.date.fromtimestamp(packets[0].t) if packets else None
+    with open(args.monitor_log) as f:
+        presses = co.parse_monitor_log(f.read(), date_hint=hint)
+    results = co.correlate(presses, packets, window=args.window)
+    text = co.render(results, args.window)
+    if args.out:
+        with open(args.out, "w") as f:
+            f.write(text)
+        print(f"Wrote {args.out}: {len(presses)} presses, {len(packets)} Savant packets")
+    else:
+        print(text)
 
 
 def cmd_press(args):
@@ -229,8 +254,20 @@ def build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("set", help='set a load level, e.g. set "kitchen island" 50')
     sp.add_argument("name")
     sp.add_argument("level", type=float)
+    sp.add_argument("--fade", type=float, help="fade time in seconds (e.g. 2)")
     sp.add_argument("--yes", action="store_true", help="skip confirm (only after you say so)")
     sp.set_defaults(func=cmd_set)
+
+    sp = sub.add_parser("export", help="write the integration report (Markdown) from devices.yaml + .env")
+    sp.add_argument("--out", default="integration-report.md")
+    sp.set_defaults(func=cmd_export)
+
+    sp = sub.add_parser("correlate", help="match keypad presses to Savant traffic (audio zones, AV)")
+    sp.add_argument("--savant", required=True, help="tshark fields export of the Savant host's packets")
+    sp.add_argument("--monitor-log", required=True, help="monitor log with the presses")
+    sp.add_argument("--window", type=float, default=2.0, help="seconds after each press to look")
+    sp.add_argument("--out", help="write Markdown here instead of printing")
+    sp.set_defaults(func=cmd_correlate)
 
     sp = sub.add_parser("press", help='press a keypad button, e.g. press "master keypad" 3')
     sp.add_argument("name")
