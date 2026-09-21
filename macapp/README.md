@@ -27,12 +27,15 @@ the Lutron password in your login Keychain. It writes its device map and logs to
 `~/Library/Application Support/SavantSniffer/`.
 
 ## Start with the Guide
-The first sidebar item, **Guide**, is an ordered checklist the app ticks off from
-what it has actually captured: find the processor, confirm the system, connect,
-label buttons, capture scenes, name loads, map audio, export, build scenes. Each
-step says what to do, how you'll know it's done, and has a button that takes you
-to the right screen. Step 1 runs the network sweep right there with a progress
-bar. A "Next step" strip at the top of every other screen keeps you oriented.
+The first sidebar item, **Guide**, is the whole workflow on one page: find the
+processor, confirm the system, connect, label buttons, capture scenes, name
+loads, find the Savant host, map audio, export, build scenes. Each step shows
+its instructions and, directly beneath them, the actual tool for that step (the
+sweep with a progress bar, the port check, the connection form, the live event
+stream and capture panel, the export button, the scene builder). Steps tick off
+from what has really been captured, the current one is expanded, and you can
+open any other by clicking it. The other screens remain for direct access; a
+"Next step" strip at the top of each links back to the Guide.
 
 ## Finding the processor without installing anything
 `arp -a` only lists devices your Mac has recently talked to, and a Lutron

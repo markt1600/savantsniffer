@@ -1,29 +1,8 @@
 import SwiftUI
 
 struct ScenesView: View {
-    @EnvironmentObject var store: DeviceStore
-    @EnvironmentObject var lip: LIPClient
-
     @State private var name = ""
     @State private var steps: [CustomMacro.MacroStep] = []
-    @State private var runConfirm: CustomMacro?
-    @State private var cloneKey = ""
-
-    private struct CloneSource: Identifiable { let id: String; let title: String; let effect: [DeviceMap.Effect] }
-    private var cloneSources: [CloneSource] {
-        var out: [CloneSource] = []
-        for a in store.map.areas {
-            for k in a.keypads {
-                for b in k.buttons {
-                    if let e = b.effect, !e.isEmpty {
-                        out.append(CloneSource(id: "\(a.name)|\(k.name)|\(b.label)",
-                                               title: "\(a.name.capitalized) · \(b.label) (\(e.count) loads)", effect: e))
-                    }
-                }
-            }
-        }
-        return out
-    }
 
     var body: some View {
         ScrollView {
@@ -33,32 +12,26 @@ struct ScenesView: View {
                     EmptyView()
                 }
                 HStack(alignment: .top, spacing: 16) {
-                    savedColumn.frame(width: 330)
-                    builderCard
+                    SavedScenesList { m in name = m.name; steps = m.steps }.frame(width: 330)
+                    SceneBuilder(name: $name, steps: $steps)
                 }
             }
             .padding(26)
         }
-        .confirmationDialog("Run this scene?",
-                            isPresented: Binding(get: { runConfirm != nil }, set: { if !$0 { runConfirm = nil } }),
-                            titleVisibility: .visible) {
-            Button("Run — this changes hardware", role: .destructive) {
-                if let m = runConfirm { Task { await store.runMacro(m, using: lip, confirmed: true) } }
-                runConfirm = nil
-            }
-            Button("Cancel", role: .cancel) { runConfirm = nil }
-        } message: {
-            Text(runConfirm.map { "\($0.name): \($0.steps.count) steps will be sent." } ?? "")
-        }
     }
+}
 
-    // MARK: saved
+struct SavedScenesList: View {
+    @EnvironmentObject var store: DeviceStore
+    @EnvironmentObject var lip: LIPClient
+    var onEdit: (CustomMacro) -> Void
+    @State private var runConfirm: CustomMacro?
 
-    private var savedColumn: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionLabel("Saved scenes")
             if (store.map.customMacros ?? []).isEmpty {
-                Text("None yet. Build one on the right.").font(.system(size: 12.5)).foregroundStyle(Theme.muted)
+                Text("None yet. Build one in the builder.").font(.system(size: 12.5)).foregroundStyle(Theme.muted)
             }
             ForEach(store.map.customMacros ?? []) { m in
                 Card(padding: 14) {
@@ -71,14 +44,14 @@ struct ScenesView: View {
                         HStack(spacing: 6) {
                             ForEach(CustomMacro.StepType.allCases, id: \.self) { t in
                                 let n = m.steps.filter { $0.type == t }.count
-                                if n > 0 { Chip.kind(t.rawValue).overlay(Text("\(n) \(t.rawValue)").font(.system(size: 10.5, weight: .bold)).foregroundStyle(.clear)) }
+                                if n > 0 { Chip(text: "\(n) \(t.rawValue)", bg: Theme.greyTint, fg: Theme.muted) }
                             }
                         }
                         HStack(spacing: 8) {
                             Button("Run") { runConfirm = m }
                                 .buttonStyle(.borderedProminent).tint(Theme.accent).controlSize(.small)
                                 .disabled(!lip.isLive)
-                            Button("Edit") { name = m.name; steps = m.steps }.controlSize(.small)
+                            Button("Edit") { onEdit(m) }.controlSize(.small)
                             Button(role: .destructive) { store.deleteMacro(m.id) } label: { Image(systemName: "trash") }
                                 .controlSize(.small)
                         }
@@ -98,11 +71,44 @@ struct ScenesView: View {
                 .overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.border, style: StrokeStyle(lineWidth: 1, dash: [4])))
             }
         }
+        .confirmationDialog("Run this scene?",
+                            isPresented: Binding(get: { runConfirm != nil }, set: { if !$0 { runConfirm = nil } }),
+                            titleVisibility: .visible) {
+            Button("Run — this changes hardware", role: .destructive) {
+                if let m = runConfirm { Task { await store.runMacro(m, using: lip, confirmed: true) } }
+                runConfirm = nil
+            }
+            Button("Cancel", role: .cancel) { runConfirm = nil }
+        } message: {
+            Text(runConfirm.map { "\($0.name): \($0.steps.count) steps will be sent." } ?? "")
+        }
+    }
+}
+
+struct SceneBuilder: View {
+    @EnvironmentObject var store: DeviceStore
+    @EnvironmentObject var lip: LIPClient
+    @Binding var name: String
+    @Binding var steps: [CustomMacro.MacroStep]
+    @State private var cloneKey = ""
+
+    private struct CloneSource: Identifiable { let id: String; let title: String; let effect: [DeviceMap.Effect] }
+    private var cloneSources: [CloneSource] {
+        var out: [CloneSource] = []
+        for a in store.map.areas {
+            for k in a.keypads {
+                for b in k.buttons {
+                    if let e = b.effect, !e.isEmpty {
+                        out.append(CloneSource(id: "\(a.name)|\(k.name)|\(b.label)",
+                                               title: "\(a.name.capitalized) · \(b.label) (\(e.count) loads)", effect: e))
+                    }
+                }
+            }
+        }
+        return out
     }
 
-    // MARK: builder
-
-    private var builderCard: some View {
+    var body: some View {
         Card(padding: 18) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .bottom, spacing: 12) {
@@ -116,7 +122,6 @@ struct ScenesView: View {
                         .buttonStyle(.borderedProminent).tint(Theme.accent)
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty || steps.isEmpty)
                 }
-
                 HStack(spacing: 8) {
                     SectionLabel("Build from a captured button")
                     Picker("", selection: $cloneKey) {
@@ -130,7 +135,6 @@ struct ScenesView: View {
                     .disabled(cloneKey.isEmpty)
                     Text("then change the levels or fades").font(.caption).foregroundStyle(Theme.muted)
                 }
-
                 HStack(spacing: 8) {
                     SectionLabel("Add step")
                     Button("Load to level") { steps.append(.init(type: .output, outputID: firstOutputID(), level: 50)) }
@@ -139,7 +143,6 @@ struct ScenesView: View {
                     Button("Pause") { steps.append(.init(type: .delay, delayMs: 500)) }
                 }
                 .controlSize(.small)
-
                 VStack(spacing: 8) {
                     ForEach($steps) { $step in
                         StepRow(store: store, step: $step,
@@ -148,7 +151,6 @@ struct ScenesView: View {
                         }
                     }
                 }
-
                 if !steps.isEmpty { willSend }
             }
         }

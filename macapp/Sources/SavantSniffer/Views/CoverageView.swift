@@ -37,17 +37,7 @@ struct CoverageView: View {
     }
 
     private func exportReport() {
-        let user = UserDefaults.standard.string(forKey: "lipUser") ?? "lutron"
-        let creds = Exporter.Credentials(host: store.map.processor, user: user,
-                                         password: Keychain.get(account: user),
-                                         system: store.map.system,
-                                         prompt: lip.prompt.isEmpty ? nil : lip.prompt,
-                                         savantHost: store.map.savantHost)
-        if let url = Exporter.save(map: store.map, creds: creds, coverage: store.overallCoverage()) {
-            note = "Saved \(url.lastPathComponent) plus the JSON map beside it."
-            store.map.lastExported = ISO8601DateFormatter().string(from: Date())
-            store.save()
-        }
+        note = Exporter.exportViaPanel(store: store, lip: lip)
     }
 
     private var heroCard: some View {

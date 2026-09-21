@@ -121,6 +121,20 @@ enum Exporter {
 
     private static func fmt(_ d: Double) -> String { String(format: "%g", d) }
 
+    /// One-call export used by every screen: builds credentials from the Keychain,
+    /// shows the save panel, writes both files, records the export date.
+    @MainActor
+    static func exportViaPanel(store: DeviceStore, lip: LIPClient) -> String {
+        let user = UserDefaults.standard.string(forKey: "lipUser") ?? "lutron"
+        let creds = Credentials(host: store.map.processor, user: user, password: Keychain.get(account: user),
+                                system: store.map.system, prompt: lip.prompt.isEmpty ? nil : lip.prompt,
+                                savantHost: store.map.savantHost)
+        guard let url = save(map: store.map, creds: creds, coverage: store.overallCoverage()) else { return "" }
+        store.map.lastExported = ISO8601DateFormatter().string(from: Date())
+        store.save()
+        return "Saved \(url.lastPathComponent) plus the JSON map beside it."
+    }
+
     /// Ask where to save, then write the Markdown report and the JSON map beside it.
     @MainActor
     static func save(map: DeviceMap, creds: Credentials, coverage: DeviceStore.Coverage) -> URL? {
