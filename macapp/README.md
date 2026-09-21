@@ -64,11 +64,22 @@ be read. Vendors come from the full IEEE registry bundled with the app (Lutron i
 - **Credentials & LEAP**: copy-paste commands for credential recovery, Savant
   capture + correlation, and LEAP pairing.
 
+## LEAP processors (RA2 Select, RadioRA 3, HomeWorks QSX, Caseta)
+If the port check finds LEAP (port 8081) instead of telnet, the Guide's step 3
+becomes a four-row panel: set up a private Python environment (installs
+pylutron-caseta once), pair (press the button on the processor), import the
+device tree (every room, keypad, button and load with the dealer's names), and
+start monitoring. The app runs the bundled `leap_bridge.py` in that environment
+and feeds its events into the same stream the telnet client uses, so labelling,
+capture, coverage, control and scenes all work unchanged. Certificates live in
+`~/Library/Application Support/SavantSniffer/leap`, shared with the CLI.
+
 ## What's native vs. Python
 - **Native in the app:** discovery, port checks, LIP (telnet) monitoring and
-  control, labelling, macro capture, coverage dashboard, custom scenes.
-- **Still via the Python tool (shown as copy-paste commands in the app):** LEAP
-  pairing (QSX / RadioRA 3 / Caseta) and packet-capture credential recovery.
+  control, labelling, macro capture, coverage dashboard, custom scenes, export.
+- **Python, driven by the app:** the LEAP bridge (pairing, tree import, live
+  session, control). Packet-capture credential recovery and Savant-traffic
+  correlation stay as copy-paste commands.
 
 ## Safety model
 Same as the toolkit: monitoring is read-only; every state-changing action needs an

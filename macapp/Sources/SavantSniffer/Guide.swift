@@ -43,10 +43,10 @@ enum Guide {
                       doneWhen: "The system type is recorded.",
                       panel: .ports, done: !(m.system ?? "").isEmpty, optional: false),
             isLEAP
-            ? GuideStep(id: 3, title: "Pair with the LEAP processor",
-                        what: "Port check found LEAP (port 8081). LEAP uses TLS and pairing, so there is no telnet login. Run the three commands below in Terminal from the repo folder, press the button on the processor when asked, then click Mark pairing done. If your processor is a RA2 Select or HomeWorks QSX, telnet (LIP) can sometimes be enabled on it instead, which lets the live monitoring below work as designed.",
-                        doneWhen: "Pairing succeeded (certificate files written).",
-                        panel: .capture, done: (m.accessOK ?? false) || lip.isLive, optional: false)
+            ? GuideStep(id: 3, title: "Pair with the LEAP processor and go live",
+                        what: "Port check found LEAP (port 8081): the newer Lutron protocol, which pairs over TLS instead of logging in. Work down the four rows below: set up the Python helper once, pair (press the button on the processor when asked), import the device tree so every room, keypad, button and load appears with the dealer's names, then start monitoring. Everything after this works exactly as with telnet.",
+                        doneWhen: "The live session is running.",
+                        panel: .monitor, done: lip.isLive || ((m.accessOK ?? false) && (m.source ?? "").contains("LEAP")), optional: false)
             : GuideStep(id: 3, title: "Connect and start monitoring",
                         what: "Leave lutron / integration as the login and click Connect. The pill turns green when logged in. Attempts give up after 10 seconds with a reason. If login is rejected, the real password can be recovered from your own traffic or from Savant's configuration bundle (see Credentials & LEAP).",
                         doneWhen: "A login has succeeded.",
@@ -162,10 +162,7 @@ struct GuideView: View {
         case 2:
             PortCheckCard()
         case 3:
-            VStack(alignment: .leading, spacing: 12) {
-                if (store.map.system ?? "").uppercased().contains("LEAP") { LEAPCommandsCard() }
-                ConnectionCard()
-            }
+            ConnectionCard()
         case 4, 5, 6:
             VStack(alignment: .leading, spacing: 12) {
                 HStack { ConnectionStatusPill(); Spacer() }

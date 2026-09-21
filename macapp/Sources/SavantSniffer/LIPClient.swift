@@ -9,6 +9,7 @@ import Combine
 final class LIPClient: ObservableObject {
     enum State: Equatable { case idle, connecting, authenticating, monitoring, closed, failed(String) }
     private enum LoginPhase { case awaitLogin, awaitPassword, awaitPrompt, done }
+    enum Transport { case telnet, external }   // external = the LEAP bridge feeding the same hub
 
     @Published var state: State = .idle
     @Published var systemName: String = ""
@@ -19,6 +20,9 @@ final class LIPClient: ObservableObject {
 
     let recorder = MacroRecorder()
     var onEvent: ((MonitorEvent) -> Void)?
+    private(set) var transport: Transport = .telnet
+    var externalSend: ((String) -> Bool)?   // set by the LEAP bridge
+    var externalStop: (() -> Void)?
 
     private var conn: NWConnection?
     private var generation = 0          // invalidates timeouts from earlier connects
@@ -103,7 +107,45 @@ final class LIPClient: ObservableObject {
         return text
     }
 
+    // MARK: - external transport (LEAP bridge)
+
+    func attachExternal(systemName: String) {
+        if transport == .telnet { let old = conn; conn = nil; old?.cancel() }
+        transport = .external
+        self.systemName = systemName; prompt = "LEAP"
+        events = []; lastError = nil
+        openLog()
+        state = .monitoring
+        connectedSince = Date()
+    }
+
+    func detachExternal(reason: String?) {
+        guard transport == .external else { return }
+        transport = .telnet
+        closeLog(); recorder.finish(); connectedSince = nil
+        if let r = reason { state = .failed(r); lastError = r } else { state = .closed }
+    }
+
+    func ingestExternalLine(_ line: String) { handleLine(line) }
+
+    /// Translate a LIP-shaped control command into the bridge's command line.
+    nonisolated static func bridgeCommand(for lip: String) -> String? {
+        let p = lip.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) }
+        if p.first == "#OUTPUT", p.count >= 4, p[2] == "1" {
+            return "SET \(p[1]) \(p[3])" + (p.count >= 5 ? " \(p[4])" : "")
+        }
+        if p.first == "#DEVICE", p.count >= 4, p[3] == "3" {
+            return "PRESS \(p[1]) \(p[2])"
+        }
+        return nil
+    }
+
     func disconnect() {
+        if transport == .external {
+            externalStop?()
+            detachExternal(reason: nil)
+            return
+        }
         let old = conn
         conn = nil                 // stale callbacks are ignored from here on
         old?.cancel()
@@ -219,27 +261,30 @@ final class LIPClient: ObservableObject {
         while let nl = buffer.firstIndex(of: 0x0A) {
             let lineData = buffer[buffer.startIndex..<nl]
             buffer = Data(buffer[(nl + 1)...])
-            var line = String(decoding: lineData, as: UTF8.self)
-                .trimmingCharacters(in: CharacterSet(charactersIn: "\r\0 "))
-            // Strip any number of echoed ready prompts ("QNET> QNET> ~DEVICE…").
-            var stripped = true
-            while stripped {
-                stripped = false
-                for p in readyPrompts where line.hasPrefix(p) {
-                    line = String(line.dropFirst(p.count)).trimmingCharacters(in: .whitespaces)
-                    stripped = true
-                }
-            }
-            guard !line.isEmpty else { continue }
-            var ev = MonitorEvent.parse(line)
-            guard ev.kind == .device || ev.kind == .output else { continue }
-            ev.capturing = recorder.active
-            recorder.feed(ev)
-            events.append(ev)
-            if events.count > 1000 { events.removeFirst(events.count - 1000) }
-            writeLog(ev)
-            onEvent?(ev)
+            handleLine(String(decoding: lineData, as: UTF8.self))
         }
+    }
+
+    /// One line from either transport: strip prompts, parse, record.
+    private func handleLine(_ raw: String) {
+        var line = raw.trimmingCharacters(in: CharacterSet(charactersIn: "\r\0 "))
+        var stripped = true
+        while stripped {
+            stripped = false
+            for p in readyPrompts where line.hasPrefix(p) {
+                line = String(line.dropFirst(p.count)).trimmingCharacters(in: .whitespaces)
+                stripped = true
+            }
+        }
+        guard !line.isEmpty else { return }
+        var ev = MonitorEvent.parse(line)
+        guard ev.kind == .device || ev.kind == .output else { return }
+        ev.capturing = recorder.active
+        recorder.feed(ev)
+        events.append(ev)
+        if events.count > 1000 { events.removeFirst(events.count - 1000) }
+        writeLog(ev)
+        onEvent?(ev)
     }
 
     private func enableMonitoring() {
@@ -255,12 +300,16 @@ final class LIPClient: ObservableObject {
         guard confirmed else { return false }
         guard command.hasPrefix("#OUTPUT") || command.hasPrefix("#DEVICE") else { return false }
         guard state == .monitoring else { return false }
+        if transport == .external {
+            guard let cmd = Self.bridgeCommand(for: command) else { return false }
+            return externalSend?(cmd) ?? false
+        }
         send(command)
         return true
     }
 
-    /// Read-only query of a load's current level.
-    func queryOutput(_ id: Int) { if state == .monitoring { send("?OUTPUT,\(id),1") } }
+    /// Read-only query of a load's current level (telnet only; LEAP pushes levels itself).
+    func queryOutput(_ id: Int) { if state == .monitoring && transport == .telnet { send("?OUTPUT,\(id),1") } }
 
     // MARK: - logging
 

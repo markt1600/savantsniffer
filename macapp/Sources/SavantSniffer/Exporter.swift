@@ -33,6 +33,12 @@ enum Exporter {
         o.append("")
         o.append("## Protocol cheat sheet")
         o.append("")
+        if (map.system ?? "").uppercased().contains("LEAP") {
+            o.append("This processor speaks LEAP (TLS on 8081, pair once; certificates in ~/Library/Application Support/SavantSniffer/leap).")
+            o.append("Ids below are LEAP device ids. The bundled leap_bridge.py maps them: `SET <device> <level> [fade]`, `PRESS <device> <button>`.")
+            o.append("The telnet (LIP) commands are listed for reference; they apply if LIP is enabled on the processor.")
+            o.append("")
+        }
         o.append("```")
         o.append("open TCP \(creds.host ?? map.processor ?? "<processor>"):23")
         o.append("<- login:      -> send \"\(creds.user)\\r\\n\"")

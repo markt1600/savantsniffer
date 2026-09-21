@@ -57,7 +57,95 @@ struct ConnectionStatusPill: View {
     }
 }
 
-/// Host / user / password + Connect, with LEAP notice and failure reason.
+/// Everything needed to get a LEAP processor live, inline: environment, pairing,
+/// device tree import, and the live session. Same event hub as telnet afterwards.
+struct LEAPPanel: View {
+    @EnvironmentObject var leap: LEAPBridge
+    @EnvironmentObject var store: DeviceStore
+    @EnvironmentObject var lip: LIPClient
+    @State private var note = ""
+
+    private var host: String { store.map.processor ?? "" }
+    private var imported: Bool { (store.map.source ?? "").contains("LEAP") }
+
+    var body: some View {
+        Card {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("LEAP processor").font(.system(size: 13, weight: .bold))
+                    Text(host).mono(12.5).foregroundStyle(Theme.muted)
+                    Spacer()
+                    Chip(text: "LEAP", bg: Theme.purpleTint, fg: Theme.purple)
+                }
+                Text("The newer Lutron protocol: TLS with a one-time pairing instead of a password. Four clicks, top to bottom.")
+                    .font(.system(size: 12.5)).foregroundStyle(Theme.muted)
+
+                stepRow(ok: leap.envReady, title: "Python environment",
+                        detail: leap.envReady ? "ready" : "installs pylutron-caseta into a private folder (needs internet once)") {
+                    Button(leap.busy ? "Working…" : (leap.envReady ? "Reinstall" : "Set up")) { leap.setup() }
+                        .disabled(leap.busy || leap.pythonPath == nil)
+                }
+                stepRow(ok: leap.paired, title: "Pairing",
+                        detail: leap.paired ? "paired" : "click, then press the pairing button on the processor within 30 seconds") {
+                    Button(leap.busy ? "Working…" : (leap.paired ? "Pair again" : "Pair now")) {
+                        leap.pair(host: host) { ok in
+                            if ok { store.map.accessOK = true; store.map.system = "LEAP"; store.save() }
+                        }
+                    }
+                    .buttonStyle(.borderedProminent).tint(Theme.accent)
+                    .disabled(leap.busy || !leap.envReady || host.isEmpty)
+                }
+                stepRow(ok: imported, title: "Device tree",
+                        detail: imported ? "rooms, keypads, buttons and loads imported with the dealer's names" : "fills the map from the processor: every room, keypad, button and load, named") {
+                    Button(leap.busy ? "Working…" : (imported ? "Import again" : "Import")) {
+                        leap.importTree(host: host) { data in
+                            if let d = data { note = store.importLEAPTree(d) }
+                        }
+                    }
+                    .disabled(leap.busy || !leap.paired || host.isEmpty)
+                }
+                stepRow(ok: leap.serving && lip.isLive, title: "Live session",
+                        detail: leap.serving ? "streaming button presses and load levels" : "starts the event stream used by the steps below") {
+                    if leap.serving {
+                        Button("Stop") { leap.stopServe() }
+                    } else {
+                        Button("Start monitoring") { leap.startServe(host: host, lip: lip) }
+                            .buttonStyle(.borderedProminent).tint(Theme.accent)
+                            .disabled(!leap.paired || host.isEmpty || leap.busy)
+                    }
+                }
+                if leap.pythonPath == nil {
+                    Text("python3 was not found. Install Apple's command line tools: open Terminal and run xcode-select --install").font(.caption).foregroundStyle(Theme.red)
+                }
+                if let e = leap.lastError { Text(e).font(.caption).foregroundStyle(Theme.red) }
+                if !note.isEmpty { Text(note).font(.caption).foregroundStyle(Theme.greenInk) }
+                if !leap.log.isEmpty {
+                    VStack(alignment: .leading, spacing: 2) {
+                        ForEach(Array(leap.log.suffix(8).enumerated()), id: \.offset) { _, l in
+                            Text(l).mono(11).foregroundStyle(l.hasPrefix("ERR") ? Theme.red : Theme.muted).lineLimit(2)
+                        }
+                    }
+                    .padding(10).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Theme.greyTint))
+                }
+            }
+        }
+    }
+
+    private func stepRow<T: View>(ok: Bool, title: String, detail: String, @ViewBuilder trailing: () -> T) -> some View {
+        HStack(spacing: 12) {
+            BoolDot(ok: ok)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).font(.system(size: 13, weight: .semibold))
+                Text(detail).font(.system(size: 12)).foregroundStyle(Theme.muted)
+            }
+            Spacer()
+            trailing()
+        }
+    }
+}
+
+/// Host / user / password + Connect (telnet), or the LEAP panel when the system is LEAP.
 struct ConnectionCard: View {
     @EnvironmentObject var lip: LIPClient
     @EnvironmentObject var store: DeviceStore
@@ -66,7 +154,17 @@ struct ConnectionCard: View {
     @State private var user = "lutron"
     @State private var pass = "integration"
 
+    private var isLEAP: Bool { (store.map.system ?? "").uppercased().contains("LEAP") }
+
     var body: some View {
+        if isLEAP {
+            LEAPPanel()
+        } else {
+            telnetForm
+        }
+    }
+
+    private var telnetForm: some View {
         VStack(alignment: .leading, spacing: 10) {
             Card(padding: 16) {
                 HStack(alignment: .bottom, spacing: 12) {

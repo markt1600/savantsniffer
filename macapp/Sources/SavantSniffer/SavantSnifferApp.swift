@@ -17,11 +17,13 @@ struct SavantSnifferApp: App {
     @StateObject private var discovery = DiscoveryModel()
     @StateObject private var portcheck = PortCheckModel()
     @StateObject private var nav = Nav()
+    @StateObject private var leap = LEAPBridge()
 
     var body: some Scene {
         WindowGroup("SavantSniffer") {
             ContentView()
                 .environmentObject(nav)
+                .environmentObject(leap)
                 .environmentObject(store)
                 .environmentObject(lip)
                 .environmentObject(discovery)

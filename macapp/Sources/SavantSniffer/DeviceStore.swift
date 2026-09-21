@@ -120,6 +120,97 @@ final class DeviceStore: ObservableObject {
         if recentLabels.count > 8 { recentLabels.removeLast(recentLabels.count - 8) }
     }
 
+    // MARK: - LEAP device tree import
+
+    struct LEAPTree: Codable {
+        struct A: Codable { var id: String; var name: String }
+        struct D: Codable { var id: String; var name: String; var type: String?; var model: String?; var area: String?; var zone: String?; var level: Double? }
+        struct B: Codable { var id: String; var parent: String; var number: Int?; var name: String? }
+        var areas: [A]; var devices: [D]; var buttons: [B]
+    }
+
+    /// Fill the map from the processor's own tree: every room, keypad, button and
+    /// load with the dealer's names and real ids. Intents from the button schedule
+    /// are carried over where the names match. Returns a summary.
+    @discardableResult
+    func importLEAPTree(_ data: Data) -> String {
+        guard let tree = try? JSONDecoder().decode(LEAPTree.self, from: data) else { return "could not parse the device tree" }
+        let seed = DeviceStore.loadSeed()
+        var seedByKey: [String: DeviceMap.Button] = [:]
+        var seedByLabel: [String: [DeviceMap.Button]] = [:]
+        for a in seed?.areas ?? [] {
+            for k in a.keypads { for b in k.buttons {
+                seedByKey[a.name.lowercased() + "|" + b.label.lowercased()] = b
+                seedByLabel[b.label.lowercased(), default: []].append(b)
+            } }
+        }
+        func intentFor(area: String, label: String) -> DeviceMap.Button? {
+            if let b = seedByKey[area.lowercased() + "|" + label.lowercased()] { return b }
+            if let list = seedByLabel[label.lowercased()], list.count == 1 { return list[0] }
+            return nil
+        }
+        func lutronID(_ s: String) -> Int { Int(s) ?? abs(s.hashValue % 1_000_000) }
+        func kindFor(type: String?) -> String {
+            let t = (type ?? "").lowercased()
+            if t.contains("shade") || t.contains("blind") || t.contains("drape") { return "shade" }
+            if t.contains("switch") || t.contains("plug") || t.contains("relay") || t.contains("contact") { return "switch" }
+            return "dimmer"
+        }
+
+        let byParent = Dictionary(grouping: tree.buttons.filter { $0.number != nil }, by: { $0.parent })
+        var areas: [String: DeviceMap.Area] = [:]
+        var nKeypads = 0, nButtons = 0, nOutputs = 0
+        for d in tree.devices {
+            let areaName = (d.area ?? "").isEmpty ? "unsorted" : d.area!.lowercased()
+            var area = areas[areaName] ?? DeviceMap.Area(name: areaName, keypads: [], outputs: [])
+            if let btns = byParent[d.id], !btns.isEmpty {
+                var buttons: [DeviceMap.Button] = []
+                for b in btns.sorted(by: { ($0.number ?? 0) < ($1.number ?? 0) }) {
+                    let label = (b.name ?? "").isEmpty ? "Button \(b.number ?? 0)" : b.name!
+                    let s = intentFor(area: areaName, label: label)
+                    buttons.append(DeviceMap.Button(position: b.number, button: b.number, label: label,
+                                                    kind: s?.kind ?? "output", subsystem: s?.subsystem,
+                                                    intent: s?.intent, asBuilt: s?.asBuilt, remarks: s?.remarks))
+                }
+                area.keypads.append(DeviceMap.Keypad(name: d.name.isEmpty ? "keypad \(d.id)" : d.name,
+                                                     lutronID: lutronID(d.id), buttons: buttons))
+                nKeypads += 1; nButtons += buttons.count
+            } else if d.zone != nil {
+                area.outputs.append(DeviceMap.Output(name: d.name.isEmpty ? "load \(d.id)" : d.name,
+                                                     lutronID: lutronID(d.id), kind: kindFor(type: d.type)))
+                nOutputs += 1
+            }
+            areas[areaName] = area
+        }
+        let imported = areas.values.filter { !$0.keypads.isEmpty || !$0.outputs.isEmpty }.sorted { $0.name < $1.name }
+
+        let hasCaptures = map.areas.contains { a in a.keypads.contains { k in k.buttons.contains { $0.button != nil } } || !a.outputs.isEmpty }
+            || !(map.customMacros ?? []).isEmpty
+        if !hasCaptures {
+            map.areas = imported
+        } else {
+            for ia in imported {
+                if let ai = map.areas.firstIndex(where: { $0.name == ia.name }) {
+                    for kp in ia.keypads {
+                        if let ki = map.areas[ai].keypads.firstIndex(where: { $0.lutronID == kp.lutronID }) {
+                            map.areas[ai].keypads[ki].name = kp.name
+                            for b in kp.buttons where !map.areas[ai].keypads[ki].buttons.contains(where: { $0.button == b.button }) {
+                                map.areas[ai].keypads[ki].buttons.append(b)
+                            }
+                        } else { map.areas[ai].keypads.append(kp) }
+                    }
+                    for o in ia.outputs where !map.areas[ai].outputs.contains(where: { $0.lutronID == o.lutronID }) {
+                        map.areas[ai].outputs.append(o)
+                    }
+                } else { map.areas.append(ia) }
+            }
+        }
+        map.system = "LEAP"
+        map.source = "LEAP device tree"
+        save()
+        return "Imported \(imported.count) rooms, \(nKeypads) keypads, \(nButtons) buttons, \(nOutputs) loads."
+    }
+
     // MARK: - coverage
 
     struct Coverage {

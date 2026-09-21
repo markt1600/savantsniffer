@@ -1,111 +1,58 @@
-"""LEAP support for HomeWorks QSX / RadioRA 3 / Caseta via pylutron-caseta.
+"""LEAP support (HomeWorks QSX / RadioRA 3 / RA2 Select / Caseta).
 
-Two steps:
-  1. pair() — one-time. You press the physical pairing button on the bridge/processor
-     when prompted; this writes caseta.key / caseta.crt / caseta-bridge.crt locally.
-  2. dump_tree() — connect with those certs and print the full area/device/button/zone
-     tree so you can fill devices.yaml.
-
-pylutron-caseta is async. These are thin sync wrappers.
+Thin wrapper over leap_bridge.py so the package CLI keeps working:
+  python3 -m savantsniffer.leap pair  <host>
+  python3 -m savantsniffer.leap dump  <host> [--json]
+  python3 -m savantsniffer.leap serve <host>
+Certificates live in ~/Library/Application Support/SavantSniffer/leap by default
+(override with --dir), the same place the Mac app uses, so pairing once serves both.
 """
 from __future__ import annotations
-import asyncio
 import json
-import os
+import sys
 
-KEYFILE = os.environ.get("LUTRON_LEAP_KEYFILE", "caseta.key")
-CERTFILE = os.environ.get("LUTRON_LEAP_CERTFILE", "caseta.crt")
-CAFILE = os.environ.get("LUTRON_LEAP_CA", "caseta-bridge.crt")
+from . import leap_bridge
 
 
-def _require_lib():
-    try:
-        import pylutron_caseta  # noqa: F401
-    except ImportError as e:
-        raise RuntimeError(
-            "pylutron-caseta not installed. Install with: pip install pylutron-caseta"
-        ) from e
+def pair(host: str, d: str | None = None) -> int:
+    return leap_bridge.main(["pair", host] + (["--dir", d] if d else []))
 
 
-async def _pair(host: str):
-    from pylutron_caseta.pairing import async_pair
-    print(f"Pairing with {host}.")
-    print(">>> Press the small black button on the bridge / the pairing button on the "
-          "QSX processor NOW (you have ~30s).")
-    data = await async_pair(host)
-    with open(CERTFILE, "w") as f:
-        f.write(data["cert"])
-    with open(KEYFILE, "w") as f:
-        f.write(data["key"])
-    with open(CAFILE, "w") as f:
-        f.write(data["ca"])
-    print(f"Paired. Wrote {CERTFILE}, {KEYFILE}, {CAFILE}.")
-    print(f"Bridge type: {data.get('version', 'unknown')}")
-
-
-def pair(host: str) -> None:
-    _require_lib()
-    asyncio.run(_pair(host))
-
-
-async def _connect(host: str):
-    from pylutron_caseta.smartbridge import Smartbridge
-    bridge = Smartbridge.create_tls(host, KEYFILE, CERTFILE, CAFILE)
-    await bridge.connect()
-    return bridge
-
-
-async def _dump(host: str) -> dict:
-    bridge = await _connect(host)
-    try:
-        tree = {
-            "areas": bridge.areas,
-            "devices": bridge.devices,
-            "scenes": bridge.scenes,
-            "buttons": getattr(bridge, "buttons", {}),
-            "occupancy_groups": getattr(bridge, "occupancy_groups", {}),
-        }
-        return tree
-    finally:
-        await bridge.close()
-
-
-def dump_tree(host: str, as_json: bool = False) -> dict:
-    _require_lib()
-    tree = asyncio.run(_dump(host))
-    if as_json:
-        print(json.dumps(tree, indent=2, default=str))
-    else:
-        _pretty(tree)
-    return tree
-
-
-def _pretty(tree: dict) -> None:
+def dump_tree(host: str, as_json: bool = False, d: str | None = None) -> int:
+    import io, contextlib
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc = leap_bridge.main(["tree", host] + (["--dir", d] if d else []))
+    text = buf.getvalue().strip()
+    if as_json or rc != 0:
+        print(text)
+        return rc
+    tree = json.loads(text.splitlines()[-1])
     print("\n=== AREAS ===")
-    for aid, a in (tree.get("areas") or {}).items():
-        print(f"  [{aid}] {a.get('name')}")
-    print("\n=== DEVICES (zones/loads) ===")
-    for did, d in (tree.get("devices") or {}).items():
-        print(f"  [{did}] {d.get('name')}  type={d.get('type')} "
-              f"zone={d.get('zone')} area={d.get('area')}")
-    print("\n=== BUTTONS (keypads/picos) ===")
-    for bid, b in (tree.get("buttons") or {}).items():
-        print(f"  [{bid}] {b}")
-    print("\n=== SCENES ===")
-    for sid, s in (tree.get("scenes") or {}).items():
-        print(f"  [{sid}] {s.get('name')}")
+    for a in tree["areas"]:
+        print(f"  [{a['id']}] {a['name']}")
+    print("\n=== DEVICES ===")
+    for d_ in tree["devices"]:
+        print(f"  [{d_['id']}] {d_['name']}  type={d_['type']} area={d_['area']} zone={d_['zone']} level={d_['level']}")
+    print("\n=== BUTTONS ===")
+    for b in tree["buttons"]:
+        print(f"  [{b['id']}] device {b['parent']} button {b['number']}  {b['name']}")
+    return 0
 
 
 if __name__ == "__main__":
-    import sys
-    if len(sys.argv) < 3:
-        print("usage: python -m savantsniffer.leap <pair|dump> <host>")
+    args = sys.argv[1:]
+    if len(args) < 2:
+        print(__doc__)
         raise SystemExit(2)
-    action, host = sys.argv[1], sys.argv[2]
+    action, host = args[0], args[1]
+    d = None
+    if "--dir" in args:
+        d = args[args.index("--dir") + 1]
     if action == "pair":
-        pair(host)
-    elif action == "dump":
-        dump_tree(host, as_json="--json" in sys.argv)
-    else:
-        print("unknown action")
-        raise SystemExit(2)
+        raise SystemExit(pair(host, d))
+    if action == "dump":
+        raise SystemExit(dump_tree(host, "--json" in args, d))
+    if action == "serve":
+        raise SystemExit(leap_bridge.main(["serve", host] + (["--dir", d] if d else [])))
+    print("unknown action"); raise SystemExit(2)
