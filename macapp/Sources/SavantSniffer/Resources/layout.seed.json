@@ -1,0 +1,1559 @@
+{
+  "system": null,
+  "processor": null,
+  "source": "LUTRON_20231108_rev button schedule (starting scaffold)",
+  "areas": [
+    {
+      "name": "foyer",
+      "keypads": [
+        {
+          "name": "foyer keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Home Light",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Home Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ON/OFF @ 50% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Music",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Short press restart & shuffle playlist; long press turn off music",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Home AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Does not include STUDY AC"
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Hallway Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Hallway AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 7,
+              "button": null,
+              "label": "Lift Access",
+              "kind": "integration",
+              "subsystem": "lift",
+              "intent": "Allow access from L1",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 8,
+              "button": null,
+              "label": "Home Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "ALL OFF except appliances (short); + bedrooms (long)",
+              "asBuilt": false,
+              "remarks": "20231108"
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "study",
+      "keypads": [
+        {
+          "name": "study keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Faceplate pending replacement"
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ON/OFF @ 75% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Relaxed",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ON/OFF @ 50% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Broadcast",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Turn ON music for Hallway, LIVING, DINING & KITCHEN",
+              "asBuilt": false,
+              "remarks": "undefined"
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Lights",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "AC, Light & Music OFF",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "wine cellar",
+      "keypads": [
+        {
+          "name": "wine cellar keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Lights",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ON/OFF specific lights",
+              "asBuilt": false,
+              "remarks": "20231108 check feasibility"
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "ALL OFF",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Music",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Short press restart & shuffle; long press off",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Vol Up",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Increase music vol",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Vol Down",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Decrease music vol",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "living",
+      "keypads": [
+        {
+          "name": "living keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle LIVING @ 75% & WINE CELLAR @ 100%",
+              "asBuilt": false,
+              "remarks": "20231108"
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Workspace",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle LIVING @ 50% & WINE CELLAR @ 100%",
+              "asBuilt": false,
+              "remarks": "20231108"
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Focused",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle LIVING @ 25% & WINE CELLAR @ 100%",
+              "asBuilt": false,
+              "remarks": "20231108"
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Broadcast",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Turn ON music for Hallway, LIVING, DINING & KITCHEN",
+              "asBuilt": false,
+              "remarks": "20231108"
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF LIVING Light @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Fan",
+              "kind": "fan",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Fan speed via remote"
+            },
+            {
+              "position": 7,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 8,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF LIVING Light, AC & Music",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "dining",
+      "keypads": [
+        {
+          "name": "dining keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "DINING hanging @ 100% & downlight @ 75%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Relaxed",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "DINING hanging @ 100% & downlight @ 50%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Focused",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "DINING hanging @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Music",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Short press restart & shuffle; long press off",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "DINING hanging & downlight @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Fan",
+              "kind": "fan",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF LIVING's fan only",
+              "asBuilt": false,
+              "remarks": "20231107"
+            },
+            {
+              "position": 7,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 8,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF DINING Light, AC & Music",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "kitchen",
+      "keypads": [
+        {
+          "name": "kitchen keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF KITCHEN Light & AC",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Music",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Short press restart & shuffle; long press off",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Vol Up",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Increase music vol",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Vol Down",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Decrease music vol",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "yard",
+      "keypads": [
+        {
+          "name": "yard keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Room Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Turn ON MAID's room light",
+              "asBuilt": false,
+              "remarks": "20231108 re-check cabling"
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Room AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF MAID's room light & AC",
+              "asBuilt": false,
+              "remarks": "20231108 re-check cabling"
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Bathroom Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Hallway Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Turn ON ALL yard lights @ 100%",
+              "asBuilt": false,
+              "remarks": "20231108 re-check cabling"
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Hallway Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF Hallway Light & Steigan",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 7,
+              "button": null,
+              "label": "Steigan",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 8,
+              "button": null,
+              "label": "Dim Up",
+              "kind": "dim",
+              "subsystem": "lighting",
+              "intent": "Increase intensity of hallway lights",
+              "asBuilt": false,
+              "remarks": "20231108"
+            },
+            {
+              "position": 9,
+              "button": null,
+              "label": "Dim Down",
+              "kind": "dim",
+              "subsystem": "lighting",
+              "intent": "Decrease intensity of hallway lights",
+              "asBuilt": false,
+              "remarks": "20231108"
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "balcony dining",
+      "keypads": [
+        {
+          "name": "balcony dining keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF (Fan's) light",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Fan",
+              "kind": "fan",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF fan only",
+              "asBuilt": false,
+              "remarks": "pending integration with bond"
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Balcony Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF light & fan",
+              "asBuilt": false,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "balcony living",
+      "keypads": [
+        {
+          "name": "balcony living keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Fan",
+              "kind": "fan",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": false,
+              "remarks": "provision for future fan"
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Balcony Power",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF power socket",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Balcony Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF light, power socket & fan",
+              "asBuilt": false,
+              "remarks": "20231108"
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "powder room hallway",
+      "keypads": [
+        {
+          "name": "powder room hallway keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Living Room Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF LIVING Light @ 100%",
+              "asBuilt": false,
+              "remarks": "interchangeable switch issues"
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Living Room Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn ON LIVING @ 75%",
+              "asBuilt": false,
+              "remarks": "interchangeable switch issues"
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Living Room Fan",
+              "kind": "fan",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "fan speed via remote"
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Living Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF LIVING Light & AC",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Hallway Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle Hallway Light / +Pinball (Hue)",
+              "asBuilt": true,
+              "remarks": "20231107"
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Hallway Ambient",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 50% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 7,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 8,
+              "button": null,
+              "label": "Hallway Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF Hallway Light & AC",
+              "asBuilt": false,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "powder room internal",
+      "keypads": [
+        {
+          "name": "powder room internal keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF downlight",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "@ 50% & Vanity Mirror @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Music",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Short press restart & shuffle; long press off",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF Lights & Music",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Vol Up",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Increase music vol",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Vol Down",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Decrease music vol",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "cinema room",
+      "keypads": [
+        {
+          "name": "cinema room keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Movie",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Lights off, curtains, Hue poster off, Apple TV on",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Entrance Curtain",
+              "kind": "shade",
+              "subsystem": "shade",
+              "intent": "Toggle OPEN/CLOSE",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Day Curtain",
+              "kind": "shade",
+              "subsystem": "shade",
+              "intent": "Toggle OPEN/CLOSE",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Night Curtain",
+              "kind": "shade",
+              "subsystem": "shade",
+              "intent": "Toggle OPEN/CLOSE",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle circumference LEDs @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Relaxed",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle circumference LEDs @ 50%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 7,
+              "button": null,
+              "label": "Focused",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle center light @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 8,
+              "button": null,
+              "label": "Color",
+              "kind": "rgb",
+              "subsystem": "lighting",
+              "intent": "Toggle RGB color change",
+              "asBuilt": false,
+              "remarks": ""
+            },
+            {
+              "position": 9,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ALL lights @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 10,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 11,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF everything",
+              "asBuilt": true,
+              "remarks": "20231107 resolved entrance curtain close"
+            },
+            {
+              "position": 12,
+              "button": null,
+              "label": "Broadcast",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Turn ON music for Hallway, LIVING, DINING & KITCHEN",
+              "asBuilt": false,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "mbr hallway",
+      "keypads": [
+        {
+          "name": "mbr hallway keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ON/OFF @ 50% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Hallway Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF Hallway Light & AC",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "mbr entrance",
+      "keypads": [
+        {
+          "name": "mbr entrance keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ALL lights @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ALL lights @ 50%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Relaxed",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "MBR @ 50%, headboard off",
+              "asBuilt": false,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Fan",
+              "kind": "fan",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "fan speed via remote"
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF AC at entrance",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "mbr bedside",
+      "keypads": [
+        {
+          "name": "mbr bedside keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Morning",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Curtain OPEN + AC OFF",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Evening",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Curtain CLOSE + Light OFF + AC ON",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Day Curtain",
+              "kind": "shade",
+              "subsystem": "shade",
+              "intent": "Toggle OPEN/CLOSE",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Night Curtain",
+              "kind": "shade",
+              "subsystem": "shade",
+              "intent": "Toggle OPEN/CLOSE",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ALL lights @ 50%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Relaxed",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "MBR @ 50%, headboard off",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 7,
+              "button": null,
+              "label": "Night Light",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "BATHROOM (WC) Light @ 50%",
+              "asBuilt": false,
+              "remarks": "20231107"
+            },
+            {
+              "position": 8,
+              "button": null,
+              "label": "Home Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "ALL OFF except Kitchen appliances, MBR & KIDDO BR",
+              "asBuilt": false,
+              "remarks": "20231108"
+            },
+            {
+              "position": 9,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ALL lights @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 10,
+              "button": null,
+              "label": "Fan",
+              "kind": "fan",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": "fan speed via remote"
+            },
+            {
+              "position": 11,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF AC at bedside",
+              "asBuilt": true,
+              "remarks": "Temp control via remote"
+            },
+            {
+              "position": 12,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF Music & Light, AC at bedside remains ON",
+              "asBuilt": false,
+              "remarks": "20231107"
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "mbr wiw",
+      "keypads": [
+        {
+          "name": "mbr wiw keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Dehumidifier",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF dehumidifier mode on AC",
+              "asBuilt": false,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF Light & AC",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "mbr bath",
+      "keypads": [
+        {
+          "name": "mbr bath keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ALL lights @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Light in front of WC @ 50%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Music",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Short press restart & shuffle; long press off",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF Light & Music",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "vanity",
+      "keypads": [
+        {
+          "name": "vanity keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ON/OFF @ 100% Intensity",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ON/OFF @ 50% Intensity",
+              "asBuilt": false,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "meditation room",
+      "keypads": [
+        {
+          "name": "meditation room keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle LEDs @ 50%",
+              "asBuilt": false,
+              "remarks": "interchangeable switch issues"
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Relaxed",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle downlights @ 50%",
+              "asBuilt": false,
+              "remarks": "interchangeable switch issues"
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ALL lights @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Color",
+              "kind": "rgb",
+              "subsystem": "lighting",
+              "intent": "Toggle RGB color change",
+              "asBuilt": false,
+              "remarks": ""
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Music",
+              "kind": "integration",
+              "subsystem": "audio",
+              "intent": "Short press restart & shuffle; long press off",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 6,
+              "button": null,
+              "label": "Shades",
+              "kind": "shade",
+              "subsystem": "shade",
+              "intent": "Toggle OPEN/CLOSE",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 7,
+              "button": null,
+              "label": "AC",
+              "kind": "hvac",
+              "subsystem": "hvac",
+              "intent": "Toggle ON/OFF",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 8,
+              "button": null,
+              "label": "Room Off",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn OFF AC, Music & Lights",
+              "asBuilt": false,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "kiddo room",
+      "keypads": [
+        {
+          "name": "kiddo room keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ALL lights @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ALL lights @ 75%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 3,
+              "button": null,
+              "label": "Relaxed",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle ALL lights @ 50%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 4,
+              "button": null,
+              "label": "Focus",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Toggle lights at windows only @ 50%",
+              "asBuilt": false,
+              "remarks": "circuit constraint"
+            },
+            {
+              "position": 5,
+              "button": null,
+              "label": "Night Light",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Turn ON bathroom light @ 50%",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "kiddo bathroom",
+      "keypads": [
+        {
+          "name": "kiddo bathroom keypad",
+          "id": null,
+          "buttons": [
+            {
+              "position": 1,
+              "button": null,
+              "label": "Light",
+              "kind": "output",
+              "subsystem": "lighting",
+              "intent": "Toggle ALL lights @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            },
+            {
+              "position": 2,
+              "button": null,
+              "label": "Ambient",
+              "kind": "macro",
+              "subsystem": "scene",
+              "intent": "Shower downlight @ 50%, vanity mirror @ 100%",
+              "asBuilt": true,
+              "remarks": ""
+            }
+          ]
+        }
+      ],
+      "outputs": []
+    }
+  ]
+}

@@ -22,3 +22,9 @@ venv/
 *.egg-info/
 .pytest_cache/
 .pytest_cache/
+
+# Swift / Xcode build artifacts
+macapp/.build/
+macapp/.swiftpm/
+*.xcuserstate
+DerivedData/
