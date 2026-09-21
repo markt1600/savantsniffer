@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>savantsniffer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>savantsniffer</h1>
+  <p class="muted">Local, observe-first control for a Lutron/Savant system you own.
+     OS: <strong>{{ osinfo }}</strong> · preferred scanner: <strong>{{ scanner }}</strong></p>
+  <p class="warn">Observe first. Nothing changes your lights, shades, or scenes unless you
+     tick the confirm box on the Control panel each time.</p>
+</header>
+
+<nav>
+  <a href="#discover">1 · Discover</a>
+  <a href="#ports">2 · Port check</a>
+  <a href="#monitor">3 · Monitor &amp; label</a>
+  <a href="#map">Map</a>
+  <a href="#control">Control</a>
+</nav>
+
+<section id="tools">
+  <h2>Tools on this machine</h2>
+  <ul class="tools">
+    {% for t in tools.values() %}
+      <li class="{{ 'ok' if t.present else 'no' }}">
+        {{ '✓' if t.present else '✗' }} {{ t.name }}
+        {% if not t.present and t.install_hint %}<span class="muted">— install: {{ t.install_hint }}</span>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  <p class="muted">Nothing is installed automatically. Install a missing tool yourself if you want it.</p>
+</section>
+
+<section id="discover">
+  <h2>1 · Discover hosts on your subnet</h2>
+  <label>Subnet <input id="subnet" placeholder="auto-detect (e.g. 192.168.1.0/24)"></label>
+  <button onclick="showScanCmd()">Show scan command</button>
+  <pre id="scanCmd" class="cmd"></pre>
+  <button id="runScanBtn" style="display:none" onclick="runScan()">I approve — run this scan</button>
+  <div id="scanResults"></div>
+</section>
+
+<section id="ports">
+  <h2>2 · Port check the Lutron processor</h2>
+  <label>Host <input id="phost" placeholder="192.168.1.50"></label>
+  <button onclick="portcheck()">Check 23 / 8081 / 8083</button>
+  <div id="portResults"></div>
+</section>
+
+<section id="monitor">
+  <h2>3 · Monitor &amp; label (LIP / telnet)</h2>
+  <label>Host <input id="mhost" placeholder="(uses LUTRON_HOST from .env if blank)"></label>
+  <button id="startMon" onclick="startMonitor()">Start monitor</button>
+  <button id="stopMon" onclick="stopMonitor()">Stop</button>
+  <span id="monStatus" class="muted">stopped</span>
+  <p class="muted">Walk the house. Press a keypad button or move a dimmer, then click its
+     event below and give it a room + name. It's saved into devices.yaml.</p>
+  <div class="macrobox">
+    <h3>Capture a macro / integration button</h3>
+    <p class="muted">Some buttons ("home off") fire a burst of loads; others ("music")
+       trigger Savant/Spotify with no Lutron output. Arm capture, press the physical
+       button, watch the burst, then save it with a name.</p>
+    <button onclick="macroBegin()">Arm capture — I'm about to press a button</button>
+    <span id="macroState" class="muted">idle</span>
+    <div id="macroLive"></div>
+    <div id="macroSave" style="display:none">
+      <label>Room <input id="macroArea" placeholder="whole house"></label>
+      <label>Keypad <input id="macroKeypad" placeholder="entry keypad"></label>
+      <label>Button label <input id="macroLabel" placeholder="home off"></label>
+      <label>Type
+        <select id="macroKind">
+          <option value="">auto-detect</option>
+          <option value="output">output</option>
+          <option value="macro">macro (scene)</option>
+          <option value="integration">integration (Savant/Spotify)</option>
+        </select>
+      </label>
+      <button onclick="macroSave()">Save button</button>
+    </div>
+  </div>
+  <table id="events"><thead><tr>
+    <th>time</th><th>kind</th><th>id</th><th>detail</th><th>raw</th><th></th>
+  </tr></thead><tbody></tbody></table>
+</section>
+
+<section id="map">
+  <h2>Device map (devices.yaml)</h2>
+  <button onclick="loadMap()">Refresh</button>
+  <button onclick="loadSeed()">Load starting layout (from the button schedule)</button>
+  <span id="seedState" class="muted"></span>
+  <pre id="mapView" class="cmd"></pre>
+</section>
+
+<section id="control">
+  <h2>Control (gated)</h2>
+  <p class="warn">Each action needs the confirm box ticked. This sends a real command.</p>
+  <div>
+    <h3>Set a load level</h3>
+    <label>Name <input id="setName" placeholder="kitchen island"></label>
+    <label>Level <input id="setLevel" type="number" min="0" max="100" value="50"></label>
+    <label><input type="checkbox" id="setConfirm"> I confirm this changes hardware</label>
+    <button onclick="doSet()">Send set</button>
+  </div>
+  <div>
+    <h3>Press a keypad button</h3>
+    <label>Keypad <input id="pressName" placeholder="master keypad"></label>
+    <label>Button <input id="pressBtn" type="number" min="1" value="1"></label>
+    <label><input type="checkbox" id="pressConfirm"> I confirm this changes hardware</label>
+    <button onclick="doPress()">Send press</button>
+  </div>
+  <div id="controlResult"></div>
+</section>
+
+<div id="labelModal" class="modal" style="display:none">
+  <div class="modalbox">
+    <h3>Label this event</h3>
+    <pre id="labelRaw" class="cmd"></pre>
+    <label>Room / area <input id="labelArea" placeholder="kitchen"></label>
+    <label>Name / function <input id="labelName" placeholder="island (dimmer) or master keypad"></label>
+    <label>Button label (keypads) <input id="labelBtnLabel" placeholder="movie scene"></label>
+    <button onclick="saveLabel()">Save to map</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# Secrets — never commit
+.env
+*.env
+!.env.example
+
+# Live device map (may contain your layout); commit devices.example.yaml instead
+devices.yaml
+
+# Packet captures and logs (may contain credentials / private data)
+captures/*
+!captures/.gitkeep
+logs/*
+!logs/.gitkeep
+*.pcap
+*.pcapng
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.pytest_cache/

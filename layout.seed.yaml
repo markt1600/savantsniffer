@@ -1,0 +1,1282 @@
+system: null
+processor: null
+source: LUTRON_20231108_rev button schedule (starting scaffold)
+areas:
+  foyer:
+    keypads:
+      foyer keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Home Light
+            kind: macro
+            subsystem: scene
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+            effect: null
+          2:
+            position: 2
+            button: null
+            label: Home Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle ON/OFF @ 50% Intensity
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Music
+            kind: integration
+            subsystem: audio
+            intent: Short press restart & shuffle playlist; long press turn off music
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          4:
+            position: 4
+            button: null
+            label: Home AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Does not include STUDY AC
+          5:
+            position: 5
+            button: null
+            label: Hallway Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          6:
+            position: 6
+            button: null
+            label: Hallway AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Temp control via remote
+          7:
+            position: 7
+            button: null
+            label: Lift Access
+            kind: integration
+            subsystem: lift
+            intent: Allow access from L1
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          8:
+            position: 8
+            button: null
+            label: Home Off
+            kind: macro
+            subsystem: scene
+            intent: ALL OFF except appliances (short); + bedrooms (long)
+            as_built: false
+            remarks: '20231108'
+            effect: null
+  study:
+    keypads:
+      study keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Faceplate pending replacement
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle ON/OFF @ 75% Intensity
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Relaxed
+            kind: macro
+            subsystem: scene
+            intent: Toggle ON/OFF @ 50% Intensity
+            as_built: true
+            effect: null
+          4:
+            position: 4
+            button: null
+            label: Broadcast
+            kind: integration
+            subsystem: audio
+            intent: Turn ON music for Hallway, LIVING, DINING & KITCHEN
+            as_built: false
+            remarks: undefined
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          5:
+            position: 5
+            button: null
+            label: Lights
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          6:
+            position: 6
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: AC, Light & Music OFF
+            as_built: true
+            effect: null
+  wine cellar:
+    keypads:
+      wine cellar keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Lights
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle ON/OFF specific lights
+            as_built: false
+            remarks: 20231108 check feasibility
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: ALL OFF
+            as_built: true
+            effect: null
+          4:
+            position: 4
+            button: null
+            label: Music
+            kind: integration
+            subsystem: audio
+            intent: Short press restart & shuffle; long press off
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          5:
+            position: 5
+            button: null
+            label: Vol Up
+            kind: integration
+            subsystem: audio
+            intent: Increase music vol
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          6:
+            position: 6
+            button: null
+            label: Vol Down
+            kind: integration
+            subsystem: audio
+            intent: Decrease music vol
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+  living:
+    keypads:
+      living keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle LIVING @ 75% & WINE CELLAR @ 100%
+            as_built: false
+            remarks: '20231108'
+            effect: null
+          2:
+            position: 2
+            button: null
+            label: Workspace
+            kind: macro
+            subsystem: scene
+            intent: Toggle LIVING @ 50% & WINE CELLAR @ 100%
+            as_built: false
+            remarks: '20231108'
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Focused
+            kind: macro
+            subsystem: scene
+            intent: Toggle LIVING @ 25% & WINE CELLAR @ 100%
+            as_built: false
+            remarks: '20231108'
+            effect: null
+          4:
+            position: 4
+            button: null
+            label: Broadcast
+            kind: integration
+            subsystem: audio
+            intent: Turn ON music for Hallway, LIVING, DINING & KITCHEN
+            as_built: false
+            remarks: '20231108'
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          5:
+            position: 5
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF LIVING Light @ 100%
+            as_built: true
+          6:
+            position: 6
+            button: null
+            label: Fan
+            kind: fan
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Fan speed via remote
+          7:
+            position: 7
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Temp control via remote
+          8:
+            position: 8
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF LIVING Light, AC & Music
+            as_built: true
+            effect: null
+  dining:
+    keypads:
+      dining keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: DINING hanging @ 100% & downlight @ 75%
+            as_built: true
+            effect: null
+          2:
+            position: 2
+            button: null
+            label: Relaxed
+            kind: macro
+            subsystem: scene
+            intent: DINING hanging @ 100% & downlight @ 50%
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Focused
+            kind: macro
+            subsystem: scene
+            intent: DINING hanging @ 100%
+            as_built: true
+            effect: null
+          4:
+            position: 4
+            button: null
+            label: Music
+            kind: integration
+            subsystem: audio
+            intent: Short press restart & shuffle; long press off
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          5:
+            position: 5
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: DINING hanging & downlight @ 100%
+            as_built: true
+          6:
+            position: 6
+            button: null
+            label: Fan
+            kind: fan
+            subsystem: hvac
+            intent: Toggle ON/OFF LIVING's fan only
+            as_built: false
+            remarks: '20231107'
+          7:
+            position: 7
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Temp control via remote
+          8:
+            position: 8
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF DINING Light, AC & Music
+            as_built: true
+            effect: null
+  kitchen:
+    keypads:
+      kitchen keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Temp control via remote
+          3:
+            position: 3
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF KITCHEN Light & AC
+            as_built: true
+            effect: null
+          4:
+            position: 4
+            button: null
+            label: Music
+            kind: integration
+            subsystem: audio
+            intent: Short press restart & shuffle; long press off
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          5:
+            position: 5
+            button: null
+            label: Vol Up
+            kind: integration
+            subsystem: audio
+            intent: Increase music vol
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          6:
+            position: 6
+            button: null
+            label: Vol Down
+            kind: integration
+            subsystem: audio
+            intent: Decrease music vol
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+  yard:
+    keypads:
+      yard keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Room Light
+            kind: output
+            subsystem: lighting
+            intent: Turn ON MAID's room light
+            as_built: false
+            remarks: 20231108 re-check cabling
+          2:
+            position: 2
+            button: null
+            label: Room AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Temp control via remote
+          3:
+            position: 3
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF MAID's room light & AC
+            as_built: false
+            remarks: 20231108 re-check cabling
+            effect: null
+          4:
+            position: 4
+            button: null
+            label: Bathroom Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          5:
+            position: 5
+            button: null
+            label: Hallway Light
+            kind: output
+            subsystem: lighting
+            intent: Turn ON ALL yard lights @ 100%
+            as_built: false
+            remarks: 20231108 re-check cabling
+          6:
+            position: 6
+            button: null
+            label: Hallway Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF Hallway Light & Steigan
+            as_built: true
+            effect: null
+          7:
+            position: 7
+            button: null
+            label: Steigan
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF
+            as_built: true
+          8:
+            position: 8
+            button: null
+            label: Dim Up
+            kind: dim
+            subsystem: lighting
+            intent: Increase intensity of hallway lights
+            as_built: false
+            remarks: '20231108'
+          9:
+            position: 9
+            button: null
+            label: Dim Down
+            kind: dim
+            subsystem: lighting
+            intent: Decrease intensity of hallway lights
+            as_built: false
+            remarks: '20231108'
+  balcony dining:
+    keypads:
+      balcony dining keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF (Fan's) light
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Fan
+            kind: fan
+            subsystem: hvac
+            intent: Toggle ON/OFF fan only
+            as_built: false
+            remarks: pending integration with bond
+          3:
+            position: 3
+            button: null
+            label: Balcony Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF light & fan
+            as_built: false
+            effect: null
+  balcony living:
+    keypads:
+      balcony living keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Fan
+            kind: fan
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: false
+            remarks: provision for future fan
+          3:
+            position: 3
+            button: null
+            label: Balcony Power
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF power socket
+            as_built: true
+          4:
+            position: 4
+            button: null
+            label: Balcony Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF light, power socket & fan
+            as_built: false
+            remarks: '20231108'
+            effect: null
+  powder room hallway:
+    keypads:
+      powder room hallway keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Living Room Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF LIVING Light @ 100%
+            as_built: false
+            remarks: interchangeable switch issues
+          2:
+            position: 2
+            button: null
+            label: Living Room Ambient
+            kind: macro
+            subsystem: scene
+            intent: Turn ON LIVING @ 75%
+            as_built: false
+            remarks: interchangeable switch issues
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Living Room Fan
+            kind: fan
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: fan speed via remote
+          4:
+            position: 4
+            button: null
+            label: Living Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF LIVING Light & AC
+            as_built: true
+            effect: null
+          5:
+            position: 5
+            button: null
+            label: Hallway Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle Hallway Light / +Pinball (Hue)
+            as_built: true
+            remarks: '20231107'
+          6:
+            position: 6
+            button: null
+            label: Hallway Ambient
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 50% Intensity
+            as_built: true
+          7:
+            position: 7
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Temp control via remote
+          8:
+            position: 8
+            button: null
+            label: Hallway Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF Hallway Light & AC
+            as_built: false
+            effect: null
+  powder room internal:
+    keypads:
+      powder room internal keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF downlight
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: '@ 50% & Vanity Mirror @ 100%'
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Music
+            kind: integration
+            subsystem: audio
+            intent: Short press restart & shuffle; long press off
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          4:
+            position: 4
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF Lights & Music
+            as_built: true
+            effect: null
+          5:
+            position: 5
+            button: null
+            label: Vol Up
+            kind: integration
+            subsystem: audio
+            intent: Increase music vol
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          6:
+            position: 6
+            button: null
+            label: Vol Down
+            kind: integration
+            subsystem: audio
+            intent: Decrease music vol
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+  cinema room:
+    keypads:
+      cinema room keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Movie
+            kind: macro
+            subsystem: scene
+            intent: Lights off, curtains, Hue poster off, Apple TV on
+            as_built: true
+            effect: null
+          2:
+            position: 2
+            button: null
+            label: Entrance Curtain
+            kind: shade
+            subsystem: shade
+            intent: Toggle OPEN/CLOSE
+            as_built: true
+          3:
+            position: 3
+            button: null
+            label: Day Curtain
+            kind: shade
+            subsystem: shade
+            intent: Toggle OPEN/CLOSE
+            as_built: true
+          4:
+            position: 4
+            button: null
+            label: Night Curtain
+            kind: shade
+            subsystem: shade
+            intent: Toggle OPEN/CLOSE
+            as_built: true
+          5:
+            position: 5
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle circumference LEDs @ 100%
+            as_built: true
+            effect: null
+          6:
+            position: 6
+            button: null
+            label: Relaxed
+            kind: macro
+            subsystem: scene
+            intent: Toggle circumference LEDs @ 50%
+            as_built: true
+            effect: null
+          7:
+            position: 7
+            button: null
+            label: Focused
+            kind: macro
+            subsystem: scene
+            intent: Toggle center light @ 100%
+            as_built: true
+            effect: null
+          8:
+            position: 8
+            button: null
+            label: Color
+            kind: rgb
+            subsystem: lighting
+            intent: Toggle RGB color change
+            as_built: false
+          9:
+            position: 9
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ALL lights @ 100%
+            as_built: true
+          10:
+            position: 10
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Temp control via remote
+          11:
+            position: 11
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF everything
+            as_built: true
+            remarks: 20231107 resolved entrance curtain close
+            effect: null
+          12:
+            position: 12
+            button: null
+            label: Broadcast
+            kind: integration
+            subsystem: audio
+            intent: Turn ON music for Hallway, LIVING, DINING & KITCHEN
+            as_built: false
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+  mbr hallway:
+    keypads:
+      mbr hallway keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle ON/OFF @ 50% Intensity
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: Temp control via remote
+          4:
+            position: 4
+            button: null
+            label: Hallway Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF Hallway Light & AC
+            as_built: true
+            effect: null
+  mbr entrance:
+    keypads:
+      mbr entrance keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ALL lights @ 100%
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle ALL lights @ 50%
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Relaxed
+            kind: macro
+            subsystem: scene
+            intent: MBR @ 50%, headboard off
+            as_built: false
+            effect: null
+          4:
+            position: 4
+            button: null
+            label: Fan
+            kind: fan
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: fan speed via remote
+          5:
+            position: 5
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF AC at entrance
+            as_built: true
+  mbr bedside:
+    keypads:
+      mbr bedside keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Morning
+            kind: macro
+            subsystem: scene
+            intent: Curtain OPEN + AC OFF
+            as_built: true
+            effect: null
+          2:
+            position: 2
+            button: null
+            label: Evening
+            kind: macro
+            subsystem: scene
+            intent: Curtain CLOSE + Light OFF + AC ON
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Day Curtain
+            kind: shade
+            subsystem: shade
+            intent: Toggle OPEN/CLOSE
+            as_built: true
+          4:
+            position: 4
+            button: null
+            label: Night Curtain
+            kind: shade
+            subsystem: shade
+            intent: Toggle OPEN/CLOSE
+            as_built: true
+          5:
+            position: 5
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle ALL lights @ 50%
+            as_built: true
+            effect: null
+          6:
+            position: 6
+            button: null
+            label: Relaxed
+            kind: macro
+            subsystem: scene
+            intent: MBR @ 50%, headboard off
+            as_built: true
+            effect: null
+          7:
+            position: 7
+            button: null
+            label: Night Light
+            kind: macro
+            subsystem: scene
+            intent: BATHROOM (WC) Light @ 50%
+            as_built: false
+            remarks: '20231107'
+            effect: null
+          8:
+            position: 8
+            button: null
+            label: Home Off
+            kind: macro
+            subsystem: scene
+            intent: ALL OFF except Kitchen appliances, MBR & KIDDO BR
+            as_built: false
+            remarks: '20231108'
+            effect: null
+          9:
+            position: 9
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ALL lights @ 100%
+            as_built: true
+          10:
+            position: 10
+            button: null
+            label: Fan
+            kind: fan
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+            remarks: fan speed via remote
+          11:
+            position: 11
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF AC at bedside
+            as_built: true
+            remarks: Temp control via remote
+          12:
+            position: 12
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF Music & Light, AC at bedside remains ON
+            as_built: false
+            remarks: '20231107'
+            effect: null
+  mbr wiw:
+    keypads:
+      mbr wiw keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+          3:
+            position: 3
+            button: null
+            label: Dehumidifier
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF dehumidifier mode on AC
+            as_built: false
+          4:
+            position: 4
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF Light & AC
+            as_built: true
+            effect: null
+  mbr bath:
+    keypads:
+      mbr bath keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ALL lights @ 100%
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Light in front of WC @ 50%
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Music
+            kind: integration
+            subsystem: audio
+            intent: Short press restart & shuffle; long press off
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          4:
+            position: 4
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF Light & Music
+            as_built: true
+            effect: null
+  vanity:
+    keypads:
+      vanity keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ON/OFF @ 100% Intensity
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle ON/OFF @ 50% Intensity
+            as_built: false
+            effect: null
+  meditation room:
+    keypads:
+      meditation room keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle LEDs @ 50%
+            as_built: false
+            remarks: interchangeable switch issues
+            effect: null
+          2:
+            position: 2
+            button: null
+            label: Relaxed
+            kind: macro
+            subsystem: scene
+            intent: Toggle downlights @ 50%
+            as_built: false
+            remarks: interchangeable switch issues
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ALL lights @ 100%
+            as_built: true
+          4:
+            position: 4
+            button: null
+            label: Color
+            kind: rgb
+            subsystem: lighting
+            intent: Toggle RGB color change
+            as_built: false
+          5:
+            position: 5
+            button: null
+            label: Music
+            kind: integration
+            subsystem: audio
+            intent: Short press restart & shuffle; long press off
+            as_built: true
+            note: effect is outside Lutron (Savant); capture via Savant traffic
+          6:
+            position: 6
+            button: null
+            label: Shades
+            kind: shade
+            subsystem: shade
+            intent: Toggle OPEN/CLOSE
+            as_built: true
+          7:
+            position: 7
+            button: null
+            label: AC
+            kind: hvac
+            subsystem: hvac
+            intent: Toggle ON/OFF
+            as_built: true
+          8:
+            position: 8
+            button: null
+            label: Room Off
+            kind: macro
+            subsystem: scene
+            intent: Turn OFF AC, Music & Lights
+            as_built: false
+            effect: null
+  kiddo room:
+    keypads:
+      kiddo room keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ALL lights @ 100%
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Toggle ALL lights @ 75%
+            as_built: true
+            effect: null
+          3:
+            position: 3
+            button: null
+            label: Relaxed
+            kind: macro
+            subsystem: scene
+            intent: Toggle ALL lights @ 50%
+            as_built: true
+            effect: null
+          4:
+            position: 4
+            button: null
+            label: Focus
+            kind: macro
+            subsystem: scene
+            intent: Toggle lights at windows only @ 50%
+            as_built: false
+            remarks: circuit constraint
+            effect: null
+          5:
+            position: 5
+            button: null
+            label: Night Light
+            kind: macro
+            subsystem: scene
+            intent: Turn ON bathroom light @ 50%
+            as_built: true
+            effect: null
+  kiddo bathroom:
+    keypads:
+      kiddo bathroom keypad:
+        id: null
+        note: one keypad; split if this location has several
+        buttons:
+          1:
+            position: 1
+            button: null
+            label: Light
+            kind: output
+            subsystem: lighting
+            intent: Toggle ALL lights @ 100%
+            as_built: true
+          2:
+            position: 2
+            button: null
+            label: Ambient
+            kind: macro
+            subsystem: scene
+            intent: Shower downlight @ 50%, vanity mirror @ 100%
+            as_built: true
+            effect: null

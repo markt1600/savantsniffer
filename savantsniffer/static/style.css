@@ -1,0 +1,40 @@
+:root { --bg:#0f1115; --panel:#181b22; --fg:#e6e6e6; --muted:#8a92a3;
+        --accent:#5aa9e6; --ok:#4caf50; --no:#e05c5c; --warn:#e0b34c; }
+* { box-sizing:border-box; }
+body { margin:0; font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif;
+       background:var(--bg); color:var(--fg); padding:0 0 4rem; }
+header,section,nav { max-width:960px; margin:0 auto; padding:0 1.2rem; }
+header { padding-top:1.5rem; }
+h1 { margin:.2rem 0; color:var(--accent); }
+h2 { margin-top:2rem; border-bottom:1px solid #2a2f3a; padding-bottom:.3rem; }
+.muted { color:var(--muted); }
+.warn { color:var(--warn); }
+nav { display:flex; gap:1rem; flex-wrap:wrap; padding:.8rem 1.2rem; position:sticky; top:0;
+      background:var(--bg); border-bottom:1px solid #2a2f3a; z-index:5; }
+nav a { color:var(--accent); text-decoration:none; }
+input { background:var(--panel); border:1px solid #2a2f3a; color:var(--fg);
+        padding:.4rem .5rem; border-radius:6px; margin:.2rem .4rem .2rem 0; }
+label { display:inline-block; margin:.2rem .6rem .2rem 0; }
+button { background:var(--accent); color:#04121f; border:0; padding:.5rem .8rem;
+         border-radius:6px; cursor:pointer; font-weight:600; margin:.2rem .3rem .2rem 0; }
+button:hover { filter:brightness(1.1); }
+.cmd { background:#04070c; border:1px solid #2a2f3a; padding:.7rem; border-radius:6px;
+       white-space:pre-wrap; word-break:break-all; }
+.tools { list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:.4rem 1.2rem; }
+.tools li.ok { color:var(--ok); } .tools li.no { color:var(--no); }
+table { width:100%; border-collapse:collapse; margin-top:.6rem; }
+th,td { text-align:left; padding:.35rem .5rem; border-bottom:1px solid #232833; font-size:13px; }
+tr.DEVICE td { color:#a6d5ff; } tr.OUTPUT td { color:#c9f0c0; }
+tr.STATUS td, tr.ERROR td { color:var(--warn); font-style:italic; }
+.modal { position:fixed; inset:0; background:rgba(0,0,0,.6); display:flex;
+         align-items:center; justify-content:center; z-index:20; }
+.modalbox { background:var(--panel); padding:1.4rem; border-radius:10px; width:min(500px,92vw); }
+.host-row { padding:.3rem 0; }
+.host-row .ip { font-weight:600; }
+.tag { font-size:11px; padding:.1rem .4rem; border-radius:4px; margin-left:.4rem; }
+.tag.Lutron { background:#3a2a55; } .tag.Apple { background:#2a4055; }
+.macrobox { background:var(--panel); border:1px solid #2a2f3a; border-radius:8px;
+            padding:.8rem 1rem; margin:.8rem 0; }
+.macrobox h3 { margin-top:0; }
+select { background:var(--panel); border:1px solid #2a2f3a; color:var(--fg);
+         padding:.4rem; border-radius:6px; }

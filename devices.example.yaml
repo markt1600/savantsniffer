@@ -1,0 +1,23 @@
+# Example device map. Copy to devices.yaml (git-ignored) and fill in as you walk
+# the house. IDs come from the monitor log (~DEVICE / ~OUTPUT lines) or the LEAP tree dump.
+#
+#   ~OUTPUT,12,1,50.00   -> integration/zone id 12 is at 50%
+#   ~DEVICE,25,3,3       -> keypad id 25, button 3, action 3 (press)
+
+system: LIP              # LIP (telnet) or LEAP (TLS)
+processor: 192.168.1.50  # your Lutron processor IP
+
+areas:
+  kitchen:
+    outputs:
+      island:   {id: 12, kind: dimmer}
+      cans:     {id: 13, kind: switch}
+    keypads:
+      master keypad:
+        id: 25
+        buttons:
+          1: {label: "all on"}
+          3: {label: "movie scene"}
+  living room:
+    outputs:
+      lamps:    {id: 21, kind: dimmer}

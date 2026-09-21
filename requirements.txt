@@ -1,0 +1,12 @@
+# Core
+PyYAML>=6.0
+python-dotenv>=1.0.0
+
+# Local web UI
+Flask>=3.0.0
+
+# LEAP systems (HomeWorks QSX / RadioRA 3 / Caseta). Optional: only needed for LEAP.
+pylutron-caseta>=0.18.0
+
+# Nice-to-have for discovery MAC vendor lookups (optional; a bundled table is used as fallback)
+# mac-vendor-lookup>=0.1.12
