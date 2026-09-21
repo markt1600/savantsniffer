@@ -90,7 +90,7 @@ def build_scan_command(subnet: str | None = None, info: OSInfo | None = None) ->
     if tool == "arp-scan":
         return ScanPlan(
             tool="arp-scan",
-            command=["arp-scan", "--localnet"] if subnet is None else ["arp-scan", subnet],
+            command=["arp-scan", subnet],
             needs_sudo=True,
             subnet=subnet,
             note="Fast layer-2 scan; returns IP + MAC + vendor directly.",
@@ -145,9 +145,14 @@ def parse_scan_output(tool: str, text: str) -> list[Host]:
     return hosts
 
 
-def run_scan(plan: ScanPlan, timeout: int = 120) -> tuple[list[Host], str]:
-    """Run an APPROVED scan plan. Caller is responsible for having shown/confirmed it."""
-    cmd = (["sudo"] if plan.needs_sudo else []) + plan.command
+def run_scan(plan: ScanPlan, timeout: int = 120, sudo: bool = True) -> tuple[list[Host], str]:
+    """Run an APPROVED scan plan. Caller is responsible for having shown/confirmed it.
+
+    sudo=False runs the tool unprivileged (for non-interactive callers such as the
+    web UI, where sudo has no terminal to prompt on). MAC addresses may then be
+    missing from nmap output; arp-scan needs root and will fail.
+    """
+    cmd = (["sudo"] if (plan.needs_sudo and sudo) else []) + plan.command
     proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     out = proc.stdout + ("\n" + proc.stderr if proc.stderr else "")
     return parse_scan_output(plan.tool, out), out

@@ -169,3 +169,93 @@ def test_seed_file_is_valid():
     assert d["areas"]
     total = sum(len(k["buttons"]) for a in d["areas"].values() for k in a["keypads"].values())
     assert total > 100
+
+
+# ---- socket-level tests for the LIP client (no hardware: socketpair) ----
+
+def _client_on_socketpair():
+    import socket
+    from savantsniffer.lip import LIPClient
+    a, b = socket.socketpair()
+    c = LIPClient("unused")
+    c.sock = a
+    a.settimeout(1.0)
+    return c, b
+
+
+def test_login_success_and_prompt_detection():
+    import threading
+    c, peer = _client_on_socketpair()
+
+    def processor():
+        peer.sendall(b"\r\nlogin: ")
+        assert peer.recv(64) == b"lutron\r\n"
+        peer.sendall(b"password: ")
+        assert peer.recv(64) == b"integration\r\n"
+        peer.sendall(b"\r\nQNET> ")
+    t = threading.Thread(target=processor); t.start()
+    c._login()
+    t.join()
+    assert c.prompt == "QNET>"
+    assert c.system == "HomeWorks QS"
+    c.close(); peer.close()
+
+
+def test_login_rejected_raises():
+    import threading
+    from savantsniffer.lip import LIPAuthError
+    c, peer = _client_on_socketpair()
+
+    def processor():
+        peer.sendall(b"login: ")
+        peer.recv(64)
+        peer.sendall(b"password: ")
+        peer.recv(64)
+        peer.sendall(b"\r\nlogin: ")       # rejected -> prompts again
+    t = threading.Thread(target=processor); t.start()
+    try:
+        c._login()
+        assert False, "expected LIPAuthError"
+    except LIPAuthError:
+        pass
+    t.join(); c.close(); peer.close()
+
+
+def test_read_events_stop_when_quiet():
+    """The stop callable must end the loop even if the processor sends nothing."""
+    import time
+    c, peer = _client_on_socketpair()
+    deadline = time.monotonic() + 2.5
+    got = list(c.read_events(stop=lambda: time.monotonic() > deadline))
+    assert got == []
+    c.close(); peer.close()
+
+
+def test_read_events_parses_and_strips_prompt():
+    c, peer = _client_on_socketpair()
+    peer.sendall(b"QNET> ~DEVICE,25,3,3\r\n~OUTPUT,12,1,50.00\r\n")
+    seen = []
+    for ev in c.read_events(stop=lambda: len(seen) >= 2):
+        seen.append(ev)
+    assert [e.raw for e in seen] == ["~DEVICE,25,3,3", "~OUTPUT,12,1,50.00"]
+    assert seen[0].kind == "DEVICE" and seen[1].kind == "OUTPUT"
+    c.close(); peer.close()
+
+
+def test_controller_reuses_live_client_and_disarms():
+    """With a live client supplied, no new session is opened and control is re-disarmed."""
+    from savantsniffer.controller import Controller
+    from savantsniffer.lip import LIPClient
+    sent = []
+
+    class Fake(LIPClient):
+        def __init__(self): super().__init__("x"); self.sock = object()
+        def send_raw(self, line): sent.append(line)
+        def _client(self): raise AssertionError("must not open a second session")
+    m = DeviceMap({"areas": {}}); m.add_output("kitchen", "island", 12)
+    fake = Fake()
+    ctl = Controller(m, client=fake)
+    ctl._client = lambda: (_ for _ in ()).throw(AssertionError("second session opened"))
+    assert ctl.set_level("kitchen island", 40, confirm=True) == "#OUTPUT,12,1,40"
+    assert sent == ["#OUTPUT,12,1,40"]
+    assert fake._allow_control is False   # disarmed again after sending

@@ -158,12 +158,16 @@ class LIPClient:
         finally:
             self.sock.settimeout(self.timeout)
 
-    def read_events(self):
-        """Yield MonitorEvent objects as lines arrive. Blocks; stop by breaking/closing."""
+    def read_events(self, stop=None):
+        """Yield MonitorEvent objects as lines arrive.
+
+        stop: optional zero-arg callable; checked on every read timeout and after
+        every line so a caller can end the loop even when the processor is quiet.
+        """
         self.sock.settimeout(1.0)
         pending = self._buf
         self._buf = b""
-        while True:
+        while not (stop and stop()):
             while b"\n" in pending:
                 line, pending = pending.split(b"\n", 1)
                 text = line.decode(errors="replace").strip("\r\x00 ")

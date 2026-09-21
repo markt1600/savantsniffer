@@ -40,6 +40,7 @@ class MonitorManager:
         self.system = None
         self.logpath = None
         self.recorder = MacroRecorder()
+        self.client = None   # live LIPClient while monitoring (reused for control)
 
     def running(self) -> bool:
         return self.thread is not None and self.thread.is_alive()
@@ -73,17 +74,16 @@ class MonitorManager:
         from .lip import LIPClient
         self.status = "connecting"
         try:
-            with LIPClient(host, port=int(port), username=user, password=pw) as c:
+            with LIPClient(host, port=int(port), username=user, password=pw) as c, \
+                 open(self.logpath, "a", buffering=1) as f:
+                self.client = c
                 self.system = c.system
                 self.status = "monitoring"
                 c.enable_monitoring()
                 self._emit({"kind": "STATUS", "raw": f"connected: {c.system} {c.prompt}",
                             "ts": _dt.datetime.now().isoformat()})
-                f = open(self.logpath, "a", buffering=1)
                 f.write(f"# monitor start {_dt.datetime.now().isoformat()} {c.system}\n")
-                for ev in c.read_events():
-                    if self.stop_flag.is_set():
-                        break
+                for ev in c.read_events(stop=self.stop_flag.is_set):
                     if ev.kind in ("DEVICE", "OUTPUT"):
                         self.recorder.feed(ev.raw)
                         obj = {"kind": ev.kind, "raw": ev.raw,
@@ -92,10 +92,10 @@ class MonitorManager:
                         obj.update(_parse_ids(ev.raw))
                         self._emit(obj)
                         f.write(ev.format() + "\n")
-                f.close()
         except Exception as e:
             self._emit({"kind": "ERROR", "raw": str(e), "ts": _dt.datetime.now().isoformat()})
         finally:
+            self.client = None
             self.status = "stopped"
             self._emit({"kind": "STATUS", "raw": "session closed",
                         "ts": _dt.datetime.now().isoformat()})
@@ -159,12 +159,17 @@ def scan():
         return jsonify({"error": "not confirmed"}), 400
     plan = discovery.build_scan_command(subnet=body.get("subnet") or None)
     try:
-        hosts, raw = discovery.run_scan(plan)
+        # No terminal here for sudo to prompt on, so run unprivileged.
+        hosts, raw = discovery.run_scan(plan, sudo=False)
     except FileNotFoundError:
         return jsonify({"error": f"{plan.tool} not installed"}), 500
     buckets = discovery.classify_hosts(hosts)
+    note = ""
+    if plan.needs_sudo:
+        note = (f"Ran without root. For MAC/vendor data run in Terminal: {plan.shown}"
+                " — or use `sudo lutron discover`.")
     return jsonify({"buckets": {k: [vars(h) for h in v] for k, v in buckets.items()},
-                    "command": plan.shown})
+                    "command": plan.shown, "note": note})
 
 
 @app.route("/api/portcheck")
@@ -311,7 +316,8 @@ def control():
     body = request.get_json(force=True)
     if not body.get("confirm"):
         return jsonify({"error": "confirm required (observe-first)"}), 400
-    ctl = Controller(DeviceMap.load())
+    # Reuse the monitor's live session so we never hold two integration sessions.
+    ctl = Controller(DeviceMap.load(), client=mgr.client if mgr.running() else None)
     try:
         if body["action"] == "set":
             sent = ctl.set_level(body["name"], float(body["level"]), confirm=True)

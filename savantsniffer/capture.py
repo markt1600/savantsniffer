@@ -90,7 +90,7 @@ def write_env(creds: Credentials, host: str, path: str = ".env") -> None:
     if creds.password:
         lines.append(f"LUTRON_LIP_PASSWORD={creds.password}")
     with open(path, "a") as f:
-        f.write("\n# --- captured " + "".join(lines[:1]) + "\n")
+        f.write("\n# --- credentials recovered from capture ---\n")
         for ln in lines:
             f.write(ln + "\n")
 

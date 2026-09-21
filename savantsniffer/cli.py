@@ -16,6 +16,7 @@ Observe-first: `set` and `press` prompt for confirmation every time unless --yes
 from __future__ import annotations
 import argparse
 import datetime as _dt
+import os
 import sys
 
 from . import osdetect, discovery, portcheck
@@ -132,7 +133,7 @@ def cmd_list(args):
 
 def cmd_seed(args):
     import yaml
-    if not __import__("os").path.exists(args.seed):
+    if not os.path.exists(args.seed):
         print(f"seed file not found: {args.seed}")
         return
     with open(args.seed) as f:

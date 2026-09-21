@@ -18,6 +18,24 @@ class NotArmed(Exception):
 @dataclass
 class Controller:
     dmap: DeviceMap
+    client: LIPClient | None = None   # reuse a live session instead of opening a 2nd one
+
+    def _send(self, cmd: str) -> None:
+        """Send a gated command over the live client if given, else a short session.
+
+        Never opens a second session while a live one is supplied, honouring the
+        processor's small integration-session pool.
+        """
+        if self.client is not None:
+            self.client.arm_control(True)
+            try:
+                self.client.send_control(cmd)
+            finally:
+                self.client.arm_control(False)
+            return
+        with self._client() as c:
+            c.arm_control(True)
+            c.send_control(cmd)
 
     def _client(self) -> LIPClient:
         env = _env()
@@ -51,9 +69,7 @@ class Controller:
             raise NotArmed("set_level requires confirm=True (observe-first policy)")
         ref = self.dmap.resolve_output(output_phrase)
         cmd = f"#OUTPUT,{ref.id},1,{level:g}"
-        with self._client() as c:
-            c.arm_control(True)
-            c.send_control(cmd)
+        self._send(cmd)
         return cmd
 
     def press(self, keypad_phrase: str, button: int, confirm: bool) -> str:
@@ -61,9 +77,7 @@ class Controller:
             raise NotArmed("press requires confirm=True (observe-first policy)")
         ref = self.dmap.resolve_keypad(keypad_phrase)
         cmd = f"#DEVICE,{ref.id},{button},3"
-        with self._client() as c:
-            c.arm_control(True)
-            c.send_control(cmd)
+        self._send(cmd)
         return cmd
 
 

@@ -28,6 +28,7 @@ async function runScan() {
         <span class="tag ${label}">${label}</span></div>`;
     }
   }
+  if (d.note) html += `<p class="muted">${d.note}</p>`;
   document.getElementById('scanResults').innerHTML = html || '<p class="muted">no hosts parsed</p>';
 }
 
