@@ -192,7 +192,9 @@ final class DiscoveryModel: ObservableObject {
     nonisolated static func tlsProbe(_ host: String, port: UInt16, timeout: TimeInterval = 1.5) async -> (Bool, String) {
         guard let nwPort = NWEndpoint.Port(rawValue: port) else { return (false, "") }
         return await withCheckedContinuation { cont in
-            let guardQ = DispatchQueue(label: "tls.guard")
+            // Plain lock: the verify block and the state handler run on different
+            // queues, and a lock never deadlocks the queue it is called from.
+            let lock = NSLock()
             var resumed = false
             var subject = ""
             let tls = NWProtocolTLS.Options()
@@ -200,17 +202,19 @@ final class DiscoveryModel: ObservableObject {
                 let secTrust = sec_trust_copy_ref(trust).takeRetainedValue()
                 if let chain = SecTrustCopyCertificateChain(secTrust) as? [SecCertificate], let leaf = chain.first,
                    let summary = SecCertificateCopySubjectSummary(leaf) as String? {
-                    guardQ.sync { subject = summary }
+                    lock.lock(); subject = summary; lock.unlock()
                 }
-                complete(true)
-            }, guardQ)
+                complete(true)   // accept anything: we only want to read the name
+            }, DispatchQueue.global())
             let params = NWParameters(tls: tls)
             let conn = NWConnection(host: NWEndpoint.Host(host), port: nwPort, using: params)
             let finish: (Bool) -> Void = { open in
-                let first: Bool = guardQ.sync { if resumed { return false }; resumed = true; return true }
-                guard first else { return }
+                lock.lock()
+                if resumed { lock.unlock(); return }
+                resumed = true
+                let subj = subject
+                lock.unlock()
                 conn.cancel()
-                let subj = guardQ.sync { subject }
                 cont.resume(returning: (open, subj))
             }
             conn.stateUpdateHandler = { st in
@@ -222,8 +226,8 @@ final class DiscoveryModel: ObservableObject {
             }
             conn.start(queue: .global())
             DispatchQueue.global().asyncAfter(deadline: .now() + timeout + 2.0) {
-                // Handshake did not complete in time; report whether TCP at least opened.
-                finish(!guardQ.sync { subject }.isEmpty)
+                lock.lock(); let sawCert = !subject.isEmpty; lock.unlock()
+                finish(sawCert)   // handshake never finished; a seen certificate still counts as open
             }
         }
     }
