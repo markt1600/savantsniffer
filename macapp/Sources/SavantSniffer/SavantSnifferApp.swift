@@ -16,10 +16,12 @@ struct SavantSnifferApp: App {
     @StateObject private var lip = LIPClient()
     @StateObject private var discovery = DiscoveryModel()
     @StateObject private var portcheck = PortCheckModel()
+    @StateObject private var nav = Nav()
 
     var body: some Scene {
         WindowGroup("SavantSniffer") {
             ContentView()
+                .environmentObject(nav)
                 .environmentObject(store)
                 .environmentObject(lip)
                 .environmentObject(discovery)
@@ -31,10 +33,11 @@ struct SavantSnifferApp: App {
 }
 
 enum Panel: String, CaseIterable, Identifiable {
-    case coverage, discover, ports, capture, monitor, map, control, scenes
+    case guide, coverage, discover, ports, capture, monitor, map, control, scenes
     var id: String { rawValue }
     var title: String {
         switch self {
+        case .guide: return "Guide"
         case .coverage: return "Coverage"
         case .discover: return "Discover"
         case .ports: return "Port check"
@@ -47,6 +50,7 @@ enum Panel: String, CaseIterable, Identifiable {
     }
     var icon: String {
         switch self {
+        case .guide: return "map"
         case .coverage: return "checkmark.seal"
         case .discover: return "dot.radiowaves.left.and.right"
         case .ports: return "network"
@@ -60,7 +64,7 @@ enum Panel: String, CaseIterable, Identifiable {
 }
 
 struct ContentView: View {
-    @State private var selection: Panel? = .coverage
+    @EnvironmentObject var nav: Nav
     @EnvironmentObject var lip: LIPClient
     @EnvironmentObject var store: DeviceStore
 
@@ -79,7 +83,8 @@ struct ContentView: View {
                 }
                 .padding(.horizontal, 16).padding(.top, 14).padding(.bottom, 6)
 
-                List(selection: $selection) {
+                List(selection: $nav.panel) {
+                    Section("Start here") { row(.guide) }
                     Section("Setup") { row(.discover); row(.ports); row(.capture) }
                     Section("Capture") { row(.coverage); row(.monitor); row(.map) }
                     Section("Control") { row(.control); row(.scenes) }
@@ -92,9 +97,12 @@ struct ContentView: View {
             .background(Theme.sidebar)
             .navigationSplitViewColumnWidth(min: 220, ideal: 236, max: 300)
         } detail: {
-            detail(for: selection ?? .coverage)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Theme.ground)
+            VStack(spacing: 0) {
+                if (nav.panel ?? .guide) != .guide { NextStepBanner() }
+                detail(for: nav.panel ?? .guide)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .background(Theme.ground)
         }
     }
 
@@ -105,6 +113,7 @@ struct ContentView: View {
     @ViewBuilder
     private func detail(for p: Panel) -> some View {
         switch p {
+        case .guide: GuideView()
         case .coverage: CoverageView()
         case .discover: DiscoverView()
         case .ports: PortCheckView()

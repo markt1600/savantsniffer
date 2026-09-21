@@ -21,4 +21,4 @@ savantsniffer-web = "savantsniffer.webapp:main"
 packages = ["savantsniffer"]
 
 [tool.setuptools.package-data]
-savantsniffer = ["templates/*.html", "static/*"]
+savantsniffer = ["templates/*.html", "static/*", "data/*.tsv"]

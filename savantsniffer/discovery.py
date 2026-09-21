@@ -15,32 +15,61 @@ from dataclasses import dataclass, field
 
 from .osdetect import OSInfo, detect, preferred_scanner
 
-# --- MAC OUI prefixes (first 3 octets, uppercase, no separators) ---
-# Lutron Electronics registered OUIs (first three octets). Matching also falls back
-# to any vendor string containing "lutron", so an unlisted OUI is still caught by name.
-LUTRON_OUIS = {"0016E1", "001BB1", "0007E0"}
+# --- MAC vendor lookup: the full IEEE MA-L registry ships with the package ---
+_OUI_TABLE: dict[str, str] | None = None
 
-# Apple OUIs are numerous; we match a representative common set and also fall back
-# to any vendor string containing "Apple".
-APPLE_OUIS = {
-    "F0189E", "3C0754", "A45E60", "8C8590", "C82A14", "D0817A", "8C7C92",
-    "A8BBCF", "F0DBF8", "AC87A3", "E0F847", "F86214", "40A6D9", "7CD1C3",
-    "68967B", "D89E3F", "B8E856", "38C986", "88665A", "34363B",
-}
+
+def _oui_table() -> dict[str, str]:
+    global _OUI_TABLE
+    if _OUI_TABLE is None:
+        import importlib.resources as res
+        table: dict[str, str] = {}
+        try:
+            text = res.files("savantsniffer").joinpath("data/oui.tsv").read_text(encoding="utf-8")
+            for line in text.splitlines():
+                k, _, v = line.partition("\t")
+                if k and v:
+                    table[k] = v
+        except (FileNotFoundError, OSError):
+            pass
+        _OUI_TABLE = table
+    return _OUI_TABLE
 
 
 def normalize_oui(mac: str) -> str:
+    """First three octets, zero-padded (macOS `arp -a` prints "0:f:e7:…")."""
+    parts = re.split(r"[:-]", mac.strip())
+    if len(parts) >= 3:
+        return "".join(p.upper().zfill(2) for p in parts[:3])
     hexonly = re.sub(r"[^0-9A-Fa-f]", "", mac).upper()
     return hexonly[:6]
 
 
-def guess_vendor(mac: str, vendor_hint: str = "") -> str:
+def is_locally_administered(mac: str) -> bool:
+    """Randomised private Wi-Fi addresses (phones/laptops) set bit 1 of octet 0."""
     oui = normalize_oui(mac)
-    if oui in LUTRON_OUIS or "lutron" in vendor_hint.lower():
+    try:
+        return bool(int(oui[:2], 16) & 0x02)
+    except ValueError:
+        return False
+
+
+def vendor_name(mac: str) -> str:
+    return _oui_table().get(normalize_oui(mac), "")
+
+
+def guess_vendor(mac: str, vendor_hint: str = "") -> str:
+    """Coarse class: Lutron | Savant | Apple | private | <vendor name> | unknown."""
+    if not vendor_hint and is_locally_administered(mac):
+        return "private"
+    name = (vendor_hint or vendor_name(mac)).lower()
+    if "lutron" in name:
         return "Lutron"
-    if oui in APPLE_OUIS or "apple" in vendor_hint.lower():
+    if "savant" in name:
+        return "Savant"
+    if "apple" in name:
         return "Apple"
-    return vendor_hint or "unknown"
+    return (vendor_hint or vendor_name(mac)) or "unknown"
 
 
 @dataclass
@@ -159,7 +188,9 @@ def run_scan(plan: ScanPlan, timeout: int = 120, sudo: bool = True) -> tuple[lis
 
 
 def classify_hosts(hosts: list[Host]) -> dict[str, list[Host]]:
-    buckets: dict[str, list[Host]] = {"Lutron": [], "Apple": [], "unknown": []}
+    buckets: dict[str, list[Host]] = {"Lutron": [], "Savant": [], "Apple": [], "other": [], "private": [], "unknown": []}
     for h in hosts:
-        buckets.setdefault(h.classification, []).append(h)
+        c = h.classification
+        key = c if c in ("Lutron", "Savant", "Apple", "private", "unknown") else "other"
+        buckets[key].append(h)
     return buckets

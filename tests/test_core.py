@@ -11,15 +11,19 @@ import datetime as dt
 
 
 def test_oui_classification():
-    assert discovery.guess_vendor("00:16:e1:aa:bb:cc") == "Lutron"
-    assert discovery.guess_vendor("f0:18:9e:aa:bb:cc") == "Apple"
+    assert discovery.guess_vendor("00:0f:e7:aa:bb:cc") == "Lutron"        # real Lutron OUI
+    assert discovery.guess_vendor("0:f:e7:aa:bb:cc") == "Lutron"          # arp -a style, no leading zeros
+    assert discovery.guess_vendor("b8:1:1f:67:a:10") == "Apple"
+    assert discovery.guess_vendor("00:1a:ae:00:00:01") == "Savant"
+    assert discovery.guess_vendor("a2:f9:81:97:bc:c8") == "private"       # randomised address
     assert discovery.guess_vendor("de:ad:be:ef:00:01", "Lutron Electronics") == "Lutron"
-    assert discovery.guess_vendor("de:ad:be:ef:00:01") == "unknown"
+    assert discovery.guess_vendor("dc:ad:be:ef:00:01") == "unknown"       # unregistered, not private
+    assert "D&M" in discovery.vendor_name("0:6:78:a2:e3:6b")
 
 
 def test_arp_scan_parser():
-    text = "192.168.1.50\t00:16:e1:11:22:33\tLutron Electronics Co\n" \
-           "192.168.1.20\tf0:18:9e:44:55:66\tApple, Inc.\n"
+    text = "192.168.1.50\t00:0f:e7:11:22:33\tLutron Electronics Co\n" \
+           "192.168.1.20\tb8:01:1f:44:55:66\tApple, Inc.\n"
     hosts = discovery.parse_scan_output("arp-scan", text)
     assert len(hosts) == 2
     assert hosts[0].classification == "Lutron"
@@ -29,7 +33,7 @@ def test_arp_scan_parser():
 def test_nmap_parser():
     text = ("Nmap scan report for 192.168.1.50\n"
             "Host is up.\n"
-            "MAC Address: 00:16:E1:11:22:33 (Lutron Electronics)\n")
+            "MAC Address: 00:0F:E7:11:22:33 (Lutron Electronics)\n")
     hosts = discovery.parse_scan_output("nmap", text)
     assert hosts[0].ip == "192.168.1.50"
     assert hosts[0].classification == "Lutron"

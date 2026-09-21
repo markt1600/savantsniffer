@@ -4,11 +4,17 @@ import Combine
 // MARK: - Discovery
 
 struct DiscoveredHost: Identifiable, Hashable {
-    var id: String { ip + mac }
+    var id: String { ip }
     var ip: String
     var mac: String
     var vendor: String
-    var classification: String   // "Lutron" | "Apple" | "unknown"
+    var classification: String   // Lutron | Savant | Apple | Ubiquiti | Denon/Marantz | Hue | IoT | private | other | unknown
+    var lipOpen = false          // TCP 23 accepted
+    var lipLogin = false         // and it greeted with a "login:" prompt (Lutron LIP signature)
+    var leapOpen = false         // TCP 8081 accepted (LEAP)
+
+    var isLutronCandidate: Bool { lipLogin || classification == "Lutron" || leapOpen }
+    var isSavantCandidate: Bool { classification == "Apple" || classification == "Savant" }
 }
 
 // MARK: - Port check
@@ -93,6 +99,7 @@ struct DeviceMap: Codable {
     var savantHost: String?
     var accessOK: Bool?      // LIP login succeeded or LEAP paired
     var source: String?
+    var lastExported: String?   // ISO date of the last report export (for the Guide)
     var areas: [Area]
     var customMacros: [CustomMacro]?
 

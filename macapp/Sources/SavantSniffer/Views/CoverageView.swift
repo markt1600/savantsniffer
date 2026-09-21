@@ -45,6 +45,8 @@ struct CoverageView: View {
                                          savantHost: store.map.savantHost)
         if let url = Exporter.save(map: store.map, creds: creds, coverage: store.overallCoverage()) {
             note = "Saved \(url.lastPathComponent) plus the JSON map beside it."
+            store.map.lastExported = ISO8601DateFormatter().string(from: Date())
+            store.save()
         }
     }
 

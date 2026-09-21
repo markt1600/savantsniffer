@@ -35,6 +35,10 @@ This gives you two commands: `lutron` (CLI) and `savantsniffer-web` (the web UI)
 
 ## The workflow, step by step
 
+### 0. If you use the Mac app: open the Guide
+The native app's Guide screen walks these same steps in order and checks them off
+from real state. The CLI below is the same workflow by hand.
+
 ### 1. Discover the Lutron processor and the Savant Mac mini
 ```bash
 lutron doctor        # what discovery tools exist on your OS (installs nothing)

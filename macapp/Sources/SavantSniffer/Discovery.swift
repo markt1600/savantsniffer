@@ -1,4 +1,5 @@
 import Foundation
+import Network
 import Combine
 
 @MainActor
@@ -10,6 +11,9 @@ final class DiscoveryModel: ObservableObject {
     @Published var needsSudo = false
     @Published var hosts: [DiscoveredHost] = []
     @Published var scanning = false
+    @Published var progress: String = ""
+    @Published var progressFraction: Double = 0     // 0…1 while sweeping
+    @Published var candidatesSoFar = 0               // hosts answering on 23/8081 so far
     @Published var lastError: String?
 
     struct Tool { var name: String; var present: Bool; var path: String?; var hint: String }
@@ -22,21 +26,13 @@ final class DiscoveryModel: ObservableObject {
     }
 
     func refreshTools() {
-        let hints = ["nmap": "brew install nmap",
-                     "arp-scan": "brew install arp-scan",
-                     "arp": "preinstalled on macOS",
-                     "tcpdump": "preinstalled on macOS",
+        let hints = ["nmap": "brew install nmap", "arp-scan": "brew install arp-scan",
+                     "arp": "preinstalled on macOS", "tcpdump": "preinstalled on macOS",
                      "tshark": "brew install --cask wireshark"]
         tools = ["nmap","arp-scan","arp","tcpdump","tshark"].map {
             let p = Shell.which($0)
             return Tool(name: $0, present: p != nil, path: p, hint: hints[$0] ?? "")
         }
-    }
-
-    var preferredTool: String {
-        if Shell.which("arp-scan") != nil { return "arp-scan" }
-        if Shell.which("nmap") != nil { return "nmap" }
-        return "arp"
     }
 
     func detectSubnet() {
@@ -47,66 +43,162 @@ final class DiscoveryModel: ObservableObject {
         if subnet.isEmpty { subnet = "192.168.1.0/24" }
     }
 
-    /// The exact command line that will run (shown for approval, then executed as-is).
+    /// The built-in sweep needs no extra tools and no admin rights: it opens a TCP
+    /// connection to every address on the /24 on ports 23 and 8081 (the two Lutron
+    /// integration ports), which also populates the ARP cache, then reads `arp -a`
+    /// for MAC addresses and looks each one up in the IEEE vendor registry.
     func buildCommand() {
-        let tool = preferredTool
-        toolName = tool
-        switch tool {
-        case "arp-scan":
-            scanCommand = "\(Shell.which("arp-scan") ?? "arp-scan") \(subnet)"
-            needsSudo = true
-            note = "Fast layer-2 scan; returns IP + MAC + vendor. macOS will ask for your password."
-        case "nmap":
-            scanCommand = "\(Shell.which("nmap") ?? "nmap") -sn \(subnet)"
-            needsSudo = true
-            note = "Ping sweep; runs as root so MAC addresses are included. macOS will ask for your password."
-        default:
-            scanCommand = "arp -a"
-            needsSudo = false
-            note = "Reads the existing ARP cache only (no active scan)."
-        }
+        toolName = "sweep"
+        needsSudo = false
+        scanCommand = "TCP connect to \(subnet) ports 23 + 8081 (1s timeout each), then: arp -a"
+        note = "Built in, no install, no password. Finds the Lutron processor by its telnet login prompt even if it never talks to this Mac."
     }
 
-    func runScan() {
+    var privilegedCommand: String? {
+        if let p = Shell.which("arp-scan") { return "\(p) \(subnet)" }
+        if let p = Shell.which("nmap") { return "\(p) -sn \(subnet)" }
+        return nil
+    }
+
+    // MARK: - built-in sweep
+
+    struct SweepResult: Sendable { var ip: String; var open23: Bool; var login: Bool; var open8081: Bool }
+
+    func runSweep() {
         scanning = true; lastError = nil; hosts = []
-        let tool = toolName
-        let command = scanCommand
-        let privileged = needsSudo
+        progress = "starting…"; progressFraction = 0; candidatesSoFar = 0
+        let subnet = self.subnet
         Task.detached {
-            let result: Shell.Result
-            if privileged {
-                // Runs the SAME command the user approved, via the native admin prompt.
-                result = Shell.runPrivileged(command)
-            } else if let p = Shell.which("arp") {
-                result = Shell.run(p, ["-a"])
-            } else {
-                result = Shell.Result(stdout: "", stderr: "arp not found", code: -1)
+            let ips = Self.expand(subnet)
+            var results: [String: SweepResult] = [:]
+            var done = 0
+            var found = 0
+            await withTaskGroup(of: SweepResult.self) { group in
+                var it = ips.makeIterator()
+                for _ in 0..<48 {
+                    if let ip = it.next() { group.addTask { await Self.sweepOne(ip) } }
+                }
+                for await r in group {
+                    results[r.ip] = r
+                    done += 1
+                    if r.open23 || r.open8081 { found += 1 }
+                    if done % 4 == 0 || done == ips.count {
+                        let d = done, n = ips.count, f = found
+                        await MainActor.run {
+                            self.progress = "checked \(d) of \(n) addresses"
+                            self.progressFraction = Double(d) / Double(max(n, 1))
+                            self.candidatesSoFar = f
+                        }
+                    }
+                    if let ip = it.next() { group.addTask { await Self.sweepOne(ip) } }
+                }
             }
-            let parsed = Self.parse(tool: tool, text: result.stdout + "\n" + result.stderr)
-            let sorted = parsed.sorted { rank($0.classification) < rank($1.classification) }
-            let err: String? = (parsed.isEmpty && (result.code != 0 || !result.stderr.isEmpty))
-                ? (result.stderr.isEmpty ? "scan produced no hosts (exit \(result.code))" : result.stderr)
-                : nil
+            await MainActor.run { self.progress = "reading MAC addresses…"; self.progressFraction = 1 }
+            // MACs from the ARP cache the sweep just populated.
+            let arpText = Shell.which("arp").map { Shell.run($0, ["-a"]).stdout } ?? ""
+            var byIP: [String: DiscoveredHost] = [:]
+            for h in Self.parse(tool: "arp", text: arpText) where !h.ip.hasPrefix("169.254.") {
+                byIP[h.ip] = h
+            }
+            for (ip, r) in results where r.open23 || r.open8081 {
+                if byIP[ip] == nil {
+                    byIP[ip] = DiscoveredHost(ip: ip, mac: "", vendor: "", classification: "unknown")
+                }
+            }
+            for (ip, r) in results {
+                byIP[ip]?.lipOpen = r.open23
+                byIP[ip]?.lipLogin = r.login
+                byIP[ip]?.leapOpen = r.open8081
+            }
+            let sorted = byIP.values.sorted { a, b in
+                let ra = rank(a), rb = rank(b)
+                return ra != rb ? ra < rb : ipKey(a.ip).lexicographicallyPrecedes(ipKey(b.ip))
+            }
             await MainActor.run {
                 self.hosts = sorted
                 self.scanning = false
-                self.lastError = err
+                self.progress = ""
+                if sorted.isEmpty { self.lastError = "No hosts found. Check the subnet." }
             }
         }
     }
 
-    // MARK: - parsing (nonisolated: called from the detached task)
+    /// Optional privileged scan (arp-scan / nmap) via the native admin prompt.
+    func runPrivileged() {
+        guard let command = privilegedCommand else { return }
+        scanning = true; lastError = nil; hosts = []; progress = "waiting for admin approval…"
+        let tool = command.contains("arp-scan") ? "arp-scan" : "nmap"
+        Task.detached {
+            let result = Shell.runPrivileged(command)
+            let parsed = Self.parse(tool: tool, text: result.stdout + "\n" + result.stderr)
+            let sorted = parsed.sorted { rank($0) < rank($1) }
+            await MainActor.run {
+                self.hosts = sorted
+                self.scanning = false
+                self.progress = ""
+                if parsed.isEmpty { self.lastError = result.stderr.isEmpty ? "scan produced no hosts" : result.stderr }
+            }
+        }
+    }
+
+    nonisolated static func sweepOne(_ ip: String) async -> SweepResult {
+        async let a = bannerProbe(ip, port: 23)
+        async let b = PortCheckModel.probe(host: ip, port: 8081, timeout: 1.2)
+        let (open23, login) = await a
+        let open8081 = await b.0
+        return SweepResult(ip: ip, open23: open23, login: login, open8081: open8081)
+    }
+
+    /// Connect to a port and read the greeting. Lutron LIP answers "login: ".
+    nonisolated static func bannerProbe(_ host: String, port: UInt16, timeout: TimeInterval = 1.2) async -> (Bool, Bool) {
+        guard let nwPort = NWEndpoint.Port(rawValue: port) else { return (false, false) }
+        return await withCheckedContinuation { cont in
+            let conn = NWConnection(host: NWEndpoint.Host(host), port: nwPort, using: .tcp)
+            let guardQ = DispatchQueue(label: "banner.guard")
+            var resumed = false
+            let finish: (Bool, Bool) -> Void = { open, login in
+                let first: Bool = guardQ.sync { if resumed { return false }; resumed = true; return true }
+                guard first else { return }
+                conn.cancel()
+                cont.resume(returning: (open, login))
+            }
+            conn.stateUpdateHandler = { st in
+                switch st {
+                case .ready:
+                    conn.receive(minimumIncompleteLength: 1, maximumLength: 512) { data, _, _, _ in
+                        let text = data.map { String(decoding: $0, as: UTF8.self).lowercased() } ?? ""
+                        finish(true, text.contains("login"))
+                    }
+                    DispatchQueue.global().asyncAfter(deadline: .now() + 1.5) { finish(true, false) }
+                case .failed, .waiting:
+                    finish(false, false)
+                default:
+                    break
+                }
+            }
+            conn.start(queue: .global())
+            DispatchQueue.global().asyncAfter(deadline: .now() + timeout + 1.5) { finish(false, false) }
+        }
+    }
+
+    /// All host addresses of an a.b.c.0/24 (other prefix lengths fall back to /24 of the base).
+    nonisolated static func expand(_ cidr: String) -> [String] {
+        let base = cidr.split(separator: "/").first.map(String.init) ?? cidr
+        var comps = base.split(separator: ".").map(String.init)
+        guard comps.count == 4 else { return [] }
+        return (1...254).map { comps[3] = String($0); return comps.joined(separator: ".") }
+    }
+
+    // MARK: - parsing (nonisolated: called from detached tasks)
 
     nonisolated static func parse(tool: String, text: String) -> [DiscoveredHost] {
         var out: [DiscoveredHost] = []
         let lines = text.components(separatedBy: .newlines)
         if tool == "arp-scan" {
             for line in lines {
-                let cols = line.split(whereSeparator: { $0 == "\t" || $0 == " " })
-                    .map(String.init).filter { !$0.isEmpty }
+                let cols = line.split(whereSeparator: { $0 == "\t" || $0 == " " }).map(String.init).filter { !$0.isEmpty }
                 if cols.count >= 2, isIP(cols[0]), isMAC(cols[1]) {
-                    let vendor = cols.count > 2 ? cols[2...].joined(separator: " ") : ""
-                    out.append(host(cols[0], cols[1], vendor))
+                    out.append(host(cols[0], cols[1], cols.count > 2 ? cols[2...].joined(separator: " ") : ""))
                 }
             }
         } else if tool == "nmap" {
@@ -119,32 +211,30 @@ final class DiscoveryModel: ObservableObject {
                 if line.contains("MAC Address:"),
                    let macR = line.range(of: #"([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}"#, options: .regularExpression),
                    let ip = currentIP {
-                    let mac = String(line[macR])
                     var vendor = ""
                     if let vR = line.range(of: #"\((.*?)\)"#, options: .regularExpression) {
                         vendor = String(line[vR]).trimmingCharacters(in: CharacterSet(charactersIn: "()"))
                     }
-                    out.append(host(ip, mac, vendor))
+                    out.append(host(ip, String(line[macR]), vendor))
                     currentIP = nil
                 }
             }
         } else { // arp -a
             for line in lines {
                 guard let ipR = line.range(of: #"(\d+\.\d+\.\d+\.\d+)"#, options: .regularExpression),
-                      let macR = line.range(of: #"([0-9a-fA-F]{1,2}[:-]){5}[0-9a-fA-F]{1,2}"#,
-                                            options: .regularExpression)
+                      let macR = line.range(of: #"([0-9a-fA-F]{1,2}[:-]){5}[0-9a-fA-F]{1,2}"#, options: .regularExpression)
                 else { continue }
                 let mac = String(line[macR]).replacingOccurrences(of: "-", with: ":")
-                if mac.lowercased().hasPrefix("ff:ff") { continue }   // broadcast entries
+                if mac.lowercased().hasPrefix("ff:ff") { continue }
                 out.append(host(String(line[ipR]), mac, ""))
             }
         }
         return out
     }
 
-    nonisolated private static func host(_ ip: String, _ mac: String, _ vendor: String) -> DiscoveredHost {
-        DiscoveredHost(ip: ip, mac: mac, vendor: vendor,
-                       classification: OUI.classify(mac: mac, vendorHint: vendor))
+    nonisolated private static func host(_ ip: String, _ mac: String, _ vendorHint: String) -> DiscoveredHost {
+        let vendor = vendorHint.isEmpty ? (OUI.isLocallyAdministered(mac) ? "private address (phone/laptop)" : (OUI.vendor(for: mac) ?? "")) : vendorHint
+        return DiscoveredHost(ip: ip, mac: mac, vendor: vendor, classification: OUI.classify(mac: mac, vendorHint: vendorHint))
     }
     nonisolated private static func isIP(_ s: String) -> Bool {
         s.range(of: #"^\d+\.\d+\.\d+\.\d+$"#, options: .regularExpression) != nil
@@ -167,10 +257,9 @@ final class DiscoveryModel: ObservableObject {
                 let name = String(cString: cur.pointee.ifa_name)
                 if name.hasPrefix("en") {
                     var host = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-                    if getnameinfo(addr, socklen_t(addr.pointee.sa_len), &host,
-                                   socklen_t(host.count), nil, 0, NI_NUMERICHOST) == 0 {
-                        address = String(cString: host)
-                        break
+                    if getnameinfo(addr, socklen_t(addr.pointee.sa_len), &host, socklen_t(host.count), nil, 0, NI_NUMERICHOST) == 0 {
+                        let ip = String(cString: host)
+                        if !ip.hasPrefix("169.254.") { address = ip; break }
                     }
                 }
             }
@@ -181,6 +270,17 @@ final class DiscoveryModel: ObservableObject {
     }
 }
 
-private func rank(_ c: String) -> Int {
-    switch c { case "Lutron": return 0; case "Apple": return 1; default: return 2 }
+private func rank(_ h: DiscoveredHost) -> Int {
+    if h.lipLogin || h.classification == "Lutron" || h.leapOpen { return 0 }
+    switch h.classification {
+    case "Savant": return 1
+    case "Apple": return 2
+    case "Denon/Marantz", "Sonos", "Hue": return 3
+    case "Ubiquiti": return 4
+    case "private": return 7
+    case "unknown": return 6
+    default: return 5
+    }
 }
+
+private func ipKey(_ ip: String) -> [Int] { ip.split(separator: ".").compactMap { Int($0) } }

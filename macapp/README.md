@@ -26,6 +26,23 @@ The app is a local developer tool and is intentionally **not sandboxed**: it run
 the Lutron password in your login Keychain. It writes its device map and logs to
 `~/Library/Application Support/SavantSniffer/`.
 
+## Start with the Guide
+The first sidebar item, **Guide**, is an ordered checklist the app ticks off from
+what it has actually captured: find the processor, confirm the system, connect,
+label buttons, capture scenes, name loads, map audio, export, build scenes. Each
+step says what to do, how you'll know it's done, and has a button that takes you
+to the right screen. Step 1 runs the network sweep right there with a progress
+bar. A "Next step" strip at the top of every other screen keeps you oriented.
+
+## Finding the processor without installing anything
+`arp -a` only lists devices your Mac has recently talked to, and a Lutron
+processor normally never talks to your laptop, so it won't be there. The built-in
+sweep fixes that: it opens a TCP connection to every address on your /24 on ports
+23 and 8081 (about 15 seconds, no admin rights), which both finds the processor
+by its telnet `login:` greeting and populates the ARP cache so MAC addresses can
+be read. Vendors come from the full IEEE registry bundled with the app (Lutron is
+`00:0F:E7`), and randomised private addresses (phones, laptops) are flagged.
+
 ## Screens
 - **Coverage**: progress ring, captured/partial/pending tiles, the four things you
   need (processor, system, access, Savant host), and one card per room with a dot
