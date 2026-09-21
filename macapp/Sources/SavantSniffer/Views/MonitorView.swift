@@ -3,6 +3,7 @@ import SwiftUI
 struct MonitorView: View {
     @EnvironmentObject var lip: LIPClient
     @EnvironmentObject var store: DeviceStore
+    @EnvironmentObject var discovery: DiscoveryModel
 
     @State private var host = ""
     @State private var user = "lutron"
@@ -19,6 +20,11 @@ struct MonitorView: View {
                 connectionPill
             }
             connectionCard
+            if let notice = leapNotice { notice }
+            if case .failed(let why) = lip.state {
+                Label(why, systemImage: "xmark.octagon").font(.system(size: 12.5)).foregroundStyle(Theme.red)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             HStack(alignment: .top, spacing: 16) {
                 eventsCard
                 VStack(spacing: 14) {
@@ -51,13 +57,36 @@ struct MonitorView: View {
         }
     }
 
+    /// If the recorded system or the sweep says this host speaks LEAP, not LIP, say so.
+    private var leapNotice: AnyView? {
+        let sys = (store.map.system ?? "").uppercased()
+        let sweep = discovery.hosts.first { $0.ip == host }
+        let leapOnly = (sweep.map { $0.leapOpen && !$0.lipOpen } ?? false)
+        guard sys.contains("LEAP") || leapOnly else { return nil }
+        return AnyView(
+            Card(padding: 12) {
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(Theme.amber)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("This looks like a LEAP-generation Lutron device, not a telnet (LIP) one.").font(.system(size: 13, weight: .semibold))
+                        Text((leapOnly ? "During the sweep \(host) answered on port 8081 (LEAP) but not on port 23. " : "The recorded system type is LEAP. ")
+                             + "Telnet monitoring won't work here. Use the LEAP pairing steps on Credentials & LEAP, or, on RA2 Select / HomeWorks QSX, check whether telnet integration can be enabled on the processor.")
+                            .font(.system(size: 12.5)).foregroundStyle(Theme.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+        )
+    }
+
     // MARK: header pill
     private var connectionPill: some View {
         HStack(spacing: 10) {
             LED(color: stateColor, glow: lip.isLive, size: 9)
             Text(stateText).font(.system(size: 12.5, weight: .semibold))
             if lip.isLive { Text("\(lip.systemName) · \(lip.prompt)").font(.system(size: 12)).foregroundStyle(Theme.muted) }
-            else if let e = lip.lastError, case .failed = lip.state { Text(e).font(.system(size: 12)).foregroundStyle(Theme.red).lineLimit(1) }
+            else if case .failed = lip.state { Text("see below").font(.system(size: 12)).foregroundStyle(Theme.red) }
+            else if lip.state == .connecting { Text("gives up after 10 s").font(.system(size: 12)).foregroundStyle(Theme.muted) }
         }
         .padding(.horizontal, 14).padding(.vertical, 8)
         .background(Capsule().fill(Theme.panel))

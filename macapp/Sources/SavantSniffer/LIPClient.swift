@@ -21,6 +21,7 @@ final class LIPClient: ObservableObject {
     var onEvent: ((MonitorEvent) -> Void)?
 
     private var conn: NWConnection?
+    private var generation = 0          // invalidates timeouts from earlier connects
     private var buffer = Data()
     private var phase: LoginPhase = .awaitLogin
     private var user = "lutron"
@@ -44,6 +45,8 @@ final class LIPClient: ObservableObject {
         }
         state = .connecting
         openLog()
+        generation += 1
+        let gen = generation
         let c = NWConnection(host: NWEndpoint.Host(host), port: nwPort, using: .tcp)
         conn = c
         c.stateUpdateHandler = { [weak self] st in
@@ -55,9 +58,11 @@ final class LIPClient: ObservableObject {
                     self.state = .authenticating
                     self.receiveLoop(on: c)
                 case .failed(let e):
-                    self.fail("\(e)")
+                    self.fail(Self.explain(e, host: host, port: port))
                 case .waiting(let e):
-                    self.lastError = "\(e)"        // still trying; surface the reason
+                    // A LAN processor answers at once. "Waiting" means refused or
+                    // unreachable, and NWConnection would retry silently forever.
+                    self.fail(Self.explain(e, host: host, port: port))
                 case .cancelled:
                     if case .failed = self.state {} else { self.state = .closed }
                 default:
@@ -66,6 +71,36 @@ final class LIPClient: ObservableObject {
             }
         }
         c.start(queue: .global())
+
+        // Hard stop: no login prompt within 10 s means nothing is talking LIP here.
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 10_000_000_000)
+            guard let self, self.generation == gen, self.conn === c else { return }
+            if self.state == .connecting || self.state == .authenticating {
+                let why = self.state == .connecting
+                    ? "no answer on \(host):\(port) within 10 s (port closed or filtered)"
+                    : "connected to \(host):\(port) but no login prompt arrived — not a LIP telnet service"
+                self.fail(why)
+            }
+        }
+    }
+
+    /// Turn an NWError into advice.
+    nonisolated private static func explain(_ e: NWError, host: String, port: UInt16) -> String {
+        let text = "\(e)"
+        if case .posix(let code) = e {
+            switch code {
+            case .ECONNREFUSED:
+                return "\(host) refused port \(port). No telnet (LIP) service here: a LEAP-generation device, or LIP integration is disabled on the processor."
+            case .EHOSTUNREACH, .ENETUNREACH:
+                return "\(host) is unreachable from this Mac (wrong subnet or VLAN?)."
+            case .ETIMEDOUT:
+                return "\(host):\(port) timed out (filtered, or asleep)."
+            default:
+                break
+            }
+        }
+        return text
     }
 
     func disconnect() {
