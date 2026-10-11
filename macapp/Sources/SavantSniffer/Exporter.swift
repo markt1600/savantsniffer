@@ -26,8 +26,14 @@ enum Exporter {
         o.append("|---|---|")
         o.append("| Lutron processor | `\(creds.host ?? map.processor ?? "unknown")` |")
         o.append("| System | \(creds.system ?? map.system ?? "unknown")\(creds.prompt.map { " (prompt `\($0)`)" } ?? "") |")
-        o.append("| Protocol | LIP over telnet, TCP port 23 |")
-        o.append("| Login | user `\(creds.user)` / password `\(creds.password ?? "(not stored)")` |")
+        if (map.system ?? "").uppercased().contains("LEAP") {
+            o.append("| Protocol | LEAP over TLS, port 8081 (paired once; certificates in ~/Library/Application Support/SavantSniffer/leap) |")
+        } else {
+            o.append("| Protocol | LIP over telnet, TCP port 23 |")
+            o.append("| Login | user `\(creds.user)` / password `\(creds.password ?? "(not stored)")` |")
+        }
+        if let s = map.savant, let mac = s.processorMAC, !mac.isEmpty { o.append("| Processor MAC | `\(mac)` (from Savant's configuration) |") }
+        if let s = map.savant, let b = s.bridgeIP, !b.isEmpty { o.append("| Savant LEAP bridge | `\(b)` (MAC `\(s.bridgeMAC ?? "?")`), Savant's own client of the processor; leave it alone |") }
         o.append("| Access verified | \((map.accessOK ?? false) ? "yes" : "no") |")
         o.append("| Savant host | `\(creds.savantHost ?? map.savantHost ?? "unknown")` |")
         o.append("")
@@ -57,6 +63,44 @@ enum Exporter {
         o.append("")
         o.append("\(coverage.captured) of \(coverage.total) buttons fully captured, \(coverage.identified) partial, \(coverage.pending) pending.")
         o.append("")
+        if let s = map.savant {
+            o.append("## Savant configuration findings")
+            o.append("")
+            o.append("| Item | Value |")
+            o.append("|---|---|")
+            o.append("| Savant system | \(s.systemName ?? "unknown") (imported \(s.importedAt ?? "")) |")
+            o.append("| Lighting | Lutron, driven over LEAP by Savant's LEAP Integration Bridge |")
+            o.append("| Savant LEAP bridge | IP `\(s.bridgeIP ?? "?")`, MAC `\(s.bridgeMAC ?? "?")` (hostname rpe-am335x). Savant's own client of the processor; leave it alone |")
+            o.append("| Lutron processor MAC | `\(s.processorMAC ?? "unknown")` (the host with TLS 8081 that carries this MAC) |")
+            if let c = s.counts { o.append("| Imported | \(c["rooms"] ?? 0) rooms, \(c["buttons"] ?? 0) keypad buttons, \(c["loads"] ?? 0) loads, \(c["shades"] ?? 0) shade groups |") }
+            o.append("")
+            if let la = s.lutronAreas, !la.isEmpty {
+                o.append("### Lutron areas per Savant room"); o.append("")
+                for k in la.keys.sorted() { o.append("- \(k): `\((la[k] ?? []).joined(separator: "`, `"))`") }
+                o.append("")
+            }
+            if let z = s.audioZones, !z.isEmpty {
+                o.append("### Audio zones"); o.append(""); o.append("| Amplifier output | Room |"); o.append("|---|---|")
+                for k in z.keys.sorted() { o.append("| \(k) | \(z[k] ?? "") |") }
+                o.append("")
+            }
+            if let d = s.devices, !d.isEmpty {
+                o.append("### AV and environment devices Savant controls"); o.append("")
+                o.append("| Device | Room | Address | Port | Protocol | Credentials in config |"); o.append("|---|---|---|---|---|---|")
+                for x in d { o.append("| \(x.name) | \(x.room) | `\(x.ip)` | \(x.port) | \(x.protocolHint) | \(x.credentials.isEmpty ? "" : "`\(x.credentials)`") |") }
+                o.append("")
+            }
+            if let w = s.workflows, !w.isEmpty {
+                o.append("### Savant workflows (what the non-lighting buttons do)"); o.append("")
+                for x in w {
+                    o.append("- **\(x.room) · \(x.name)** (\(x.service))")
+                    for a in x.actions.prefix(6) { o.append("  - \(a)") }
+                    if x.actions.count > 6 { o.append("  - … \(x.actions.count - 6) more") }
+                }
+                o.append("")
+            }
+            if let n = s.notes, !n.isEmpty { o.append("Notes: " + n.joined(separator: "; ")); o.append("") }
+        }
 
         for area in map.areas {
             o.append("## \(area.name.capitalized)")

@@ -104,6 +104,40 @@ struct DeviceMap: Codable {
     var lastExported: String?   // ISO date of the last report export (for the Guide)
     var areas: [Area]
     var customMacros: [CustomMacro]?
+    var savant: SavantInfo?     // what the Savant configuration import found
+
+    /// Facts read from the Savant host's own configuration (never from the network).
+    struct SavantInfo: Codable {
+        var importedAt: String?
+        var sourceFolder: String?
+        var systemName: String?
+        var bridgeIP: String?        // Savant's LEAP Integration Bridge (rpe-am335x)
+        var bridgeMAC: String?
+        var processorMAC: String?    // the Lutron processor the bridge talks to
+        var lutronAreas: [String: [String]]?   // Savant room -> LEAP /area hrefs
+        var audioZones: [String: String]?      // "Output Module:Audio Zone 3" -> room
+        var devices: [AVDevice]?
+        var workflows: [Workflow]?
+        var counts: [String: Int]?
+        var notes: [String]?
+
+        struct AVDevice: Codable, Identifiable, Hashable {
+            var id: String { name + ":" + port }
+            var name: String
+            var room: String
+            var ip: String
+            var port: String
+            var protocolHint: String
+            var credentials: String
+        }
+        struct Workflow: Codable, Identifiable, Hashable {
+            var id: String { room + "/" + name }
+            var room: String
+            var service: String
+            var name: String
+            var actions: [String]
+        }
+    }
 
     struct Area: Codable, Identifiable {
         var id: String { name }
@@ -135,9 +169,18 @@ struct DeviceMap: Codable {
         var savantNote: String?
         var audioZones: [String]?   // zones this button drives on the Savant side
         var audioSource: String?    // e.g. "home office input"
+        // From the Savant configuration import:
+        var href: String?           // LEAP button href, e.g. /button/2639
+        var ledHref: String?        // LEAP LED href for this button
+        var savantWorkflows: [String]?  // workflows linked by name (inferred)
+        var savantActions: [String]?    // what those workflows do, in words
+        var seenLive: Bool?         // a live press confirmed this href/id
+
+        /// Something identifies this button on the processor: a LIP id or a LEAP href.
+        var hasIdentity: Bool { button != nil || !(href ?? "").isEmpty }
 
         func status(keypadIdentified: Bool) -> CaptureStatus {
-            let hasComponent = (button != nil)
+            let hasComponent = hasIdentity
             switch kind {
             case "integration":
                 if hasComponent && (savantCaptured ?? false) { return .captured }
@@ -148,7 +191,8 @@ struct DeviceMap: Codable {
                 if hasComponent { return .identified }
                 return keypadIdentified ? .identified : .pending
             default:
-                if hasComponent { return .captured }
+                if button != nil || (seenLive ?? false) { return .captured }
+                if hasComponent { return .identified }
                 return keypadIdentified ? .identified : .pending
             }
         }
@@ -161,10 +205,13 @@ struct DeviceMap: Codable {
     struct Output: Codable, Identifiable {
         var id: String { "\(lutronID)-\(name)" }
         var name: String
-        var lutronID: Int
+        var lutronID: Int           // LIP integration id, or the LEAP zone number (/zone/1095 -> 1095)
         var kind: String
+        var href: String?           // LEAP zone href from the Savant import
+        var lutronArea: String?     // the area name in the Lutron design
+        var levelAtImport: Int?     // level when the Savant configuration was copied
         enum CodingKeys: String, CodingKey {
-            case name; case lutronID = "id"; case kind
+            case name; case lutronID = "id"; case kind; case href; case lutronArea; case levelAtImport
         }
     }
     struct Effect: Codable {

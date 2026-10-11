@@ -169,6 +169,52 @@ def cmd_set(args):
     print(f"Sent: {sent}")
 
 
+def cmd_import_savant(args):
+    """Read a copy of the Savant host's RacePointMedia folder into the device map."""
+    import json
+    from . import savantconfig
+    try:
+        imported, findings = savantconfig.import_folder(args.folder)
+    except FileNotFoundError as e:
+        print(f"Nothing to import: {e}")
+        print("Point this at the folder that contains userConfig.rpmConfig (a copy of the Mac mini's "
+              "~/Library/Application Support/RacePointMedia is ideal).")
+        return
+    dmap = DeviceMap.load(args.map)
+    has_captures = any(
+        (b.get("button") is not None or b.get("effect"))
+        for a in dmap.areas().values() for k in (a.get("keypads") or {}).values()
+        for b in (k.get("buttons") or {}).values() if isinstance(b, dict)
+    ) or any((a.get("outputs") or {}) for a in dmap.areas().values())
+    if has_captures and not args.replace:
+        added = dmap.merge_seed(imported)
+        for k in ("outputs",):
+            for aname, adata in imported["areas"].items():
+                dmap.areas().setdefault(aname, {}).setdefault(k, {})
+                for oname, od in (adata.get(k) or {}).items():
+                    dmap.areas()[aname][k].setdefault(oname, od)
+        dmap.data["savant"] = imported["savant"]
+        dmap.data["system"] = dmap.data.get("system") or imported["system"]
+        print(f"Merged into {args.map} (kept everything already captured): "
+              f"+{added['areas']} areas, +{added['keypads']} keypads, +{added['buttons']} buttons")
+    else:
+        dmap = DeviceMap(imported)
+        print(f"Wrote {args.map} from the Savant configuration.")
+    findings_path = args.findings
+    with open(findings_path, "w") as f:
+        json.dump(findings.as_dict(), f, indent=1)
+    dmap.data.setdefault("savant", {})["findings_file"] = findings_path
+    dmap.save(args.map)
+    c = findings.counts
+    print(f"  {c.get('rooms')} rooms, {c.get('buttons')} keypad buttons, {c.get('loads')} loads, "
+          f"{c.get('shades')} shade groups, {c.get('workflows')} workflows, {c.get('devices')} AV devices")
+    print(f"  Savant LEAP bridge: {findings.bridge_ip or '?'} ({findings.bridge_mac or '?'})")
+    print(f"  Lutron processor MAC: {findings.processor_mac or 'unknown'}  <- the LEAP host (TLS 8081) with this MAC")
+    print(f"  Findings saved to {findings_path}; 'export' folds them into the report.")
+    for n in findings.notes:
+        print("  note:", n)
+
+
 def cmd_export(args):
     from .report import build_markdown
     md = build_markdown(DeviceMap.load(args.map), _env_dict())
@@ -257,6 +303,13 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--fade", type=float, help="fade time in seconds (e.g. 2)")
     sp.add_argument("--yes", action="store_true", help="skip confirm (only after you say so)")
     sp.set_defaults(func=cmd_set)
+
+    sp = sub.add_parser("import-savant", help="read a copy of the Savant host's RacePointMedia folder into devices.yaml")
+    sp.add_argument("folder", help="folder containing userConfig.rpmConfig (and ideally lighting/ and statusfiles/)")
+    sp.add_argument("--map", default="devices.yaml")
+    sp.add_argument("--findings", default="savant_findings.json", help="where to save bridge/processor/AV/audio findings")
+    sp.add_argument("--replace", action="store_true", help="overwrite the map even if it holds captured values")
+    sp.set_defaults(func=cmd_import_savant)
 
     sp = sub.add_parser("export", help="write the integration report (Markdown) from devices.yaml + .env")
     sp.add_argument("--out", default="integration-report.md")

@@ -33,53 +33,73 @@ enum Guide {
         let hasProcessor = !(m.processor ?? "").isEmpty
         let isLEAP = (m.system ?? "").uppercased().contains("LEAP")
 
+        let sav = m.savant
+        let imported = sav != nil
+        let procMAC = (sav?.processorMAC ?? "").lowercased()
+        let bridge = sav?.bridgeIP ?? ""
+
         return [
-            GuideStep(id: 1, title: "Find the Lutron processor",
-                      what: "Click Run the sweep now. It needs nothing installed and no password. The processor is the host tagged LIP LOGIN (it answers on port 23 with a login prompt), usually with vendor Lutron. Click Use as processor on that row.",
+            GuideStep(id: 1, title: "Import your Savant configuration",
+                      what: "Pick the folder you copied from the Mac mini (RacePointMedia, or the part of it holding userConfig.rpmConfig). The app reads Savant's own files and fills in every room, every keypad button with its LEAP id, every load and shade, what the music, volume and broadcast buttons make Savant do, the audio-zone wiring and the AV devices. Nothing is sent anywhere.",
+                      doneWhen: "The import summary shows rooms, buttons and loads.",
+                      panel: .map, done: imported, optional: false,
+                      progress: imported ? "\(sav?.counts?["buttons"] ?? 0) buttons, \(sav?.counts?["loads"] ?? 0) loads" : ""),
+            GuideStep(id: 2, title: imported ? "Confirm the Lutron processor on the network" : "Find the Lutron processor",
+                      what: imported
+                        ? "Your lighting is Lutron, driven over LEAP by Savant's LEAP Integration Bridge (hostname rpe-am335x, IP \(bridge.isEmpty ? "unknown" : bridge)). The processor itself is the host whose MAC is \(procMAC.isEmpty ? "unknown" : procMAC); it answers on TLS port 8081 and its vendor reads Texas Instruments, not Lutron. Click Run the sweep now; the matching row is tagged and you click Use as processor. Only the processor's address is needed from this step."
+                        : "Click Run the sweep now. It needs nothing installed and no password. The processor is the host tagged LIP LOGIN (it answers on port 23 with a login prompt), usually with vendor Lutron. Click Use as processor on that row.",
                       doneWhen: "A processor IP is recorded.",
                       panel: .discover, done: hasProcessor, optional: false),
-            GuideStep(id: 2, title: "Confirm which Lutron system it is",
-                      what: "Click Check ports. Port 23 open means LIP: this app connects to it directly. Port 8081 means LEAP: the newer protocol, which pairs instead of logging in. Click Record this.",
+            GuideStep(id: 3, title: "Confirm which Lutron system it is",
+                      what: imported
+                        ? "Already known from the import: LEAP (TLS on 8081). Click Check ports once to confirm the processor answers, then Record this."
+                        : "Click Check ports. Port 23 open means LIP: this app connects to it directly. Port 8081 means LEAP: the newer protocol, which pairs instead of logging in. Click Record this.",
                       doneWhen: "The system type is recorded.",
-                      panel: .ports, done: !(m.system ?? "").isEmpty, optional: false),
+                      panel: .ports, done: !(m.system ?? "").isEmpty, optional: imported),
             isLEAP
-            ? GuideStep(id: 3, title: "Pair with the LEAP processor and go live",
-                        what: "Port check found LEAP (port 8081): the newer Lutron protocol, which pairs over TLS instead of logging in. Work down the four rows below: set up the Python helper once, pair (press the button on the processor when asked), import the device tree so every room, keypad, button and load appears with the dealer's names, then start monitoring. Everything after this works exactly as with telnet.",
+            ? GuideStep(id: 4, title: "Pair with the LEAP processor and go live",
+                        what: "LEAP pairs over TLS instead of logging in, and a second paired client does not disturb Savant's. Work down the four rows: set up the Python helper once, click Pair now, then press the pairing button on the Lutron processor within two minutes. The processor is not in the AV rack: look for the Lutron box in the electrical / lighting panel room (RadioRA 3 processor: small box with a button; HomeWorks QSX processor: module in the panel with a button on its face). Then import the device tree, which regroups the imported buttons under their real keypads, and start monitoring.",
                         doneWhen: "The live session is running.",
                         panel: .monitor, done: lip.isLive || ((m.accessOK ?? false) && (m.source ?? "").contains("LEAP")), optional: false)
-            : GuideStep(id: 3, title: "Connect and start monitoring",
+            : GuideStep(id: 4, title: "Connect and start monitoring",
                         what: "Leave lutron / integration as the login and click Connect. The pill turns green when logged in. Attempts give up after 10 seconds with a reason. If login is rejected, the real password can be recovered from your own traffic or from Savant's configuration bundle (see Credentials & LEAP).",
                         doneWhen: "A login has succeeded.",
                         panel: .monitor, done: (m.accessOK ?? false) || lip.isLive, optional: false),
-            GuideStep(id: 4, title: "Walk the house and label buttons",
-                      what: "Press each keypad button once. It appears as a DEVICE row below within a second. Click Label, pick the room, keypad and button name. Do one keypad at a time, top to bottom. Scene buttons (Home Off, Ambient, Movie) are captured properly in the next step.",
+            GuideStep(id: 5, title: imported ? "Walk the house and confirm buttons" : "Walk the house and label buttons",
+                      what: imported
+                        ? "Every button already has its LEAP id from the import. Press each one once: the DEVICE row below turns it from identified to captured and confirms which physical keypad it sits on. Scene buttons are captured properly in the next step."
+                        : "Press each keypad button once. It appears as a DEVICE row below within a second. Click Label, pick the room, keypad and button name. Do one keypad at a time, top to bottom. Scene buttons (Home Off, Ambient, Movie) are captured properly in the next step.",
                       doneWhen: "Every button is at least identified (no grey dots left on Coverage).",
                       panel: .monitor, done: cov.total > 0 && cov.pending == 0, optional: false,
                       progress: "\(cov.captured + cov.identified) of \(cov.total) buttons seen"),
-            GuideStep(id: 5, title: "Capture the scene buttons",
-                      what: "In the Capture a button panel: click Arm capture, press the physical scene button, wait until the burst stops, then Name & save. The app records every load the scene touched and the level it ended at.",
+            GuideStep(id: 6, title: "Capture the scene buttons",
+                      what: "In the Capture a button panel: click Arm capture, press the physical scene button, wait until the burst stops, then Name & save. The app records every load the scene touched and the level it ended at. The levels behind Ambient, Relaxed, Evening and the like live only in the Lutron processor, so this is the one way to learn them.",
                       doneWhen: "Every macro button has its loads recorded.",
                       panel: .monitor, done: macrosTotal > 0 && macrosLeft == 0, optional: false,
                       progress: "\(macrosTotal - macrosLeft) of \(macrosTotal) scenes captured"),
-            GuideStep(id: 6, title: "Name your loads",
-                      what: "Move a dimmer, or press a single-load button, and click Label on the OUTPUT row. Give the load a name like kitchen island. Named loads are what Control and Custom scenes let you drive directly.",
+            GuideStep(id: 7, title: "Name your loads",
+                      what: imported
+                        ? "All loads came named from the import. Move a dimmer or press a single-load button to see its OUTPUT row and confirm the name matches the light that moved."
+                        : "Move a dimmer, or press a single-load button, and click Label on the OUTPUT row. Give the load a name like kitchen island. Named loads are what Control and Custom scenes let you drive directly.",
                       doneWhen: "At least one load is named (more is better).",
                       panel: .monitor, done: outputs > 0, optional: false,
                       progress: "\(outputs) loads named"),
-            GuideStep(id: 7, title: "Find the Savant host",
+            GuideStep(id: 8, title: "Find the Savant host",
                       what: "Pick the Mac mini from the Apple candidates below. The wired one, often the one that also had a 169.254 address, is usually it. Needed only for the audio and AV steps.",
                       doneWhen: "A Savant host IP is recorded.",
                       panel: .discover, done: !(m.savantHost ?? "").isEmpty, optional: true),
-            GuideStep(id: 8, title: "Map audio zones and other Savant-side buttons",
-                      what: "Music, Broadcast and volume buttons produce no Lutron output; Savant does the work. Follow the four steps below, then record the zones on each button from the capture panel's Savant-side fields.",
+            GuideStep(id: 9, title: "Map audio zones and other Savant-side buttons",
+                      what: imported
+                        ? "The import already linked the music, volume and broadcast buttons to Savant's workflows and audio zones (by name within each room, so marked inferred). Use the capture panel below only to confirm or correct a button, or to record Savant scenes whose contents the export did not include."
+                        : "Music, Broadcast and volume buttons produce no Lutron output; Savant does the work. Follow the four steps below, then record the zones on each button from the capture panel's Savant-side fields.",
                       doneWhen: "No integration button is left pending.",
                       panel: .capture, done: savantLeft == 0, optional: true,
                       progress: "\(savantLeft) still pending"),
-            GuideStep(id: 9, title: "Export the integration report",
-                      what: "Click Export report. You get a Markdown file with credentials, the protocol cheat sheet, every button's exact command, every load and scene, plus the JSON map. Keep it private.",
+            GuideStep(id: 10, title: "Export the integration report",
+                      what: "Click Export report. You get a Markdown file with the connection facts, the protocol cheat sheet, every button's id and command, every load and scene, the Savant findings (bridge, processor, AV devices, audio zones, workflows), plus the JSON map. Keep it private.",
                       doneWhen: "A report has been exported.",
                       panel: .coverage, done: (m.lastExported ?? "").isEmpty == false, optional: false),
-            GuideStep(id: 10, title: "Build your own scenes",
+            GuideStep(id: 11, title: "Build your own scenes",
                       what: "Clone a captured button's loads, change the levels or add a fade, name it, and save. Run it from the saved list; each run asks for confirmation.",
                       doneWhen: "You have saved at least one scene.",
                       panel: .scenes, done: !(m.customMacros ?? []).isEmpty, optional: true),
@@ -158,29 +178,31 @@ struct GuideView: View {
     private func inline(_ s: GuideStep) -> some View {
         switch s.id {
         case 1:
-            InlineSweep()
+            SavantImportCard()
         case 2:
-            PortCheckCard()
+            InlineSweep()
         case 3:
+            PortCheckCard()
+        case 4:
             ConnectionCard()
-        case 4, 5, 6:
+        case 5, 6, 7:
             VStack(alignment: .leading, spacing: 12) {
                 HStack { ConnectionStatusPill(); Spacer() }
                 if !lip.isLive { ConnectionCard() }
                 MonitorWorkspace(eventsHeight: 340)
             }
-        case 7:
-            InlineSavantHost()
         case 8:
-            SavantCaptureCard()
+            InlineSavantHost()
         case 9:
+            SavantCaptureCard()
+        case 10:
             HStack(spacing: 12) {
                 Button("Export report…") { exportNote = Exporter.exportViaPanel(store: store, lip: lip) }
                     .buttonStyle(.borderedProminent).tint(Theme.accent)
                 if !exportNote.isEmpty { Text(exportNote).font(.caption).foregroundStyle(Theme.muted) }
                 if let last = store.map.lastExported, !last.isEmpty { Text("last export \(last)").font(.caption).foregroundStyle(Theme.muted) }
             }
-        case 10:
+        case 11:
             VStack(alignment: .leading, spacing: 12) {
                 SceneBuilder(name: $sceneName, steps: $sceneSteps)
                 SavedScenesList { m in sceneName = m.name; sceneSteps = m.steps }
@@ -273,10 +295,25 @@ struct NextStepBanner: View {
 struct InlineSweep: View {
     @EnvironmentObject var discovery: DiscoveryModel
     @EnvironmentObject var store: DeviceStore
-    private var candidates: [DiscoveredHost] { discovery.hosts.filter { $0.isLutronCandidate } }
+    private var procMAC: String { (store.map.savant?.processorMAC ?? "").lowercased() }
+    private var bridgeMAC: String { (store.map.savant?.bridgeMAC ?? "").lowercased() }
+    /// Full MAC, zero-padded per octet (arp -a prints "0:f:e7:…").
+    private func norm(_ mac: String) -> String {
+        mac.split(whereSeparator: { $0 == ":" || $0 == "-" }).map { $0.count == 1 ? "0" + $0 : String($0) }.joined(separator: ":").lowercased()
+    }
+    private func isProcessor(_ h: DiscoveredHost) -> Bool { !procMAC.isEmpty && norm(h.mac) == norm(procMAC) }
+    private func isBridge(_ h: DiscoveredHost) -> Bool { !bridgeMAC.isEmpty && norm(h.mac) == norm(bridgeMAC) }
+    private var candidates: [DiscoveredHost] {
+        discovery.hosts.filter { ($0.isLutronCandidate || isProcessor($0)) && !isBridge($0) }
+            .sorted { isProcessor($0) && !isProcessor($1) }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
+            if !procMAC.isEmpty {
+                Text("From the Savant import: the processor's MAC is \(procMAC); the row carrying it is tagged below. The Savant bridge (\(bridgeMAC.isEmpty ? "rpe-am335x" : bridgeMAC)) is hidden from this list on purpose.")
+                    .font(.system(size: 12.5)).foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true)
+            }
             HStack(spacing: 10) {
                 Button(discovery.scanning ? "Scanning…" : "Run the sweep now") { discovery.runSweep() }
                     .buttonStyle(.borderedProminent).tint(Theme.accent).disabled(discovery.scanning)
@@ -299,6 +336,7 @@ struct InlineSweep: View {
                             LED(color: Theme.purple)
                             Text(h.ip).mono(12.5)
                             Text(h.vendor.isEmpty ? h.classification : h.vendor).font(.system(size: 12)).foregroundStyle(Theme.muted).lineLimit(1)
+                            if isProcessor(h) { Chip(text: "MATCHES SAVANT'S PROCESSOR MAC", bg: Theme.greenTint, fg: Theme.greenInk) }
                             if h.lipLogin { Chip(text: "LIP LOGIN", bg: Theme.amberTint, fg: Theme.amberInk) }
                             else if h.lipOpen { Chip(text: "PORT 23", bg: Theme.greyTint, fg: Theme.muted) }
                             if h.leapOpen { Chip(text: "TLS 8081", bg: Theme.purpleTint, fg: Theme.purple) }
@@ -310,7 +348,7 @@ struct InlineSweep: View {
                         }
                         .padding(8).background(RoundedRectangle(cornerRadius: 8).fill(Theme.greyTint))
                     }
-                    let others = discovery.hosts.filter { $0.lipOpen && !$0.isLutronCandidate }
+                    let others = discovery.hosts.filter { $0.lipOpen && !$0.isLutronCandidate && !isBridge($0) }
                     if !others.isEmpty {
                         Text("Other hosts with port 23 open (AV gear, or a processor whose sessions are all taken):").font(.caption).foregroundStyle(Theme.muted)
                         ForEach(others) { h in

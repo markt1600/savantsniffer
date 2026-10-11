@@ -115,7 +115,7 @@ final class DeviceStore: ObservableObject {
         save()
     }
 
-    private func noteRecent(_ title: String, _ detail: String) {
+    func noteRecent(_ title: String, _ detail: String) {
         recentLabels.insert("\(title)|\(detail)", at: 0)
         if recentLabels.count > 8 { recentLabels.removeLast(recentLabels.count - 8) }
     }
@@ -185,10 +185,20 @@ final class DeviceStore: ObservableObject {
         let imported = areas.values.filter { !$0.keypads.isEmpty || !$0.outputs.isEmpty }.sorted { $0.name < $1.name }
 
         let hasCaptures = map.areas.contains { a in a.keypads.contains { k in k.buttons.contains { $0.button != nil } } || !a.outputs.isEmpty }
-            || !(map.customMacros ?? []).isEmpty
+            || !(map.customMacros ?? []).isEmpty || map.savant != nil
         if !hasCaptures {
             map.areas = imported
         } else {
+            // Savant-imported loads carry the LEAP zone number; the tree gives the device id
+            // the bridge controls. Re-key them by zone href so SET/PRESS use the right id.
+            for d in tree.devices {
+                guard let z = d.zone, let zid = Int(z), let did = Int(d.id) else { continue }
+                for ai in map.areas.indices {
+                    for oi in map.areas[ai].outputs.indices where map.areas[ai].outputs[oi].href == "/zone/\(zid)" {
+                        map.areas[ai].outputs[oi].lutronID = did
+                    }
+                }
+            }
             for ia in imported {
                 if let ai = map.areas.firstIndex(where: { $0.name == ia.name }) {
                     for kp in ia.keypads {
@@ -204,10 +214,18 @@ final class DeviceStore: ObservableObject {
                     }
                 } else { map.areas.append(ia) }
             }
+            // The Savant import files rooms by Savant zone name; the tree uses Lutron area names.
+            // Same device id in two rooms means the same load: keep the Savant-named one.
+            var seenIDs = Set<Int>()
+            for ai in map.areas.indices.sorted(by: { map.areas[$0].outputs.contains { $0.href != nil } && !map.areas[$1].outputs.contains { $0.href != nil } }) {
+                map.areas[ai].outputs.removeAll { o in !seenIDs.insert(o.lutronID).inserted && o.href == nil }
+            }
+            map.areas.removeAll { $0.keypads.isEmpty && $0.outputs.isEmpty }
         }
         map.system = "LEAP"
-        map.source = "LEAP device tree"
+        map.source = map.savant == nil ? "LEAP device tree" : "Savant configuration import + LEAP device tree"
         save()
+        if map.savant != nil { regroupByLEAPTree(tree) }
         return "Imported \(imported.count) rooms, \(nKeypads) keypads, \(nButtons) buttons, \(nOutputs) loads."
     }
 

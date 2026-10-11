@@ -37,6 +37,18 @@ from what has really been captured, the current one is expanded, and you can
 open any other by clicking it. The other screens remain for direct access; a
 "Next step" strip at the top of each links back to the Guide.
 
+## Step 1: import the Savant configuration
+
+Copy the Mac mini's `~/Library/Application Support/RacePointMedia` folder (or
+at least `userConfig.rpmConfig`, `lighting/shm` and `statusfiles`) to a drive
+and pick it in Guide step 1. The app reads it in place, read-only, and fills
+the map: every room, every Lutron keypad button with its LEAP id and LED,
+every load and shade group, the Savant workflow behind the music / volume /
+broadcast buttons (with the audio zones they drive), the AV devices with their
+addresses, and the MAC of the Lutron processor Savant talks to. The sweep then
+only has to confirm which host carries that MAC. Nothing is sent to the Savant
+host or anywhere else.
+
 ## Finding the processor without installing anything
 `arp -a` only lists devices your Mac has recently talked to, and a Lutron
 processor normally never talks to your laptop, so it won't be there. The built-in

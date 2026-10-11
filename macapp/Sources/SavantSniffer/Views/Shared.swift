@@ -86,7 +86,7 @@ struct LEAPPanel: View {
                         .disabled(leap.busy || leap.pythonPath == nil)
                 }
                 stepRow(ok: leap.paired, title: "Pairing",
-                        detail: leap.paired ? "paired" : "click, then press the pairing button on the processor within 30 seconds") {
+                        detail: leap.paired ? "paired" : "click, then press the pairing button on the Lutron processor within two minutes (it is in the lighting / electrical panel area, not the AV rack; Savant's rpe-am335x bridge has no such button)") {
                     Button(leap.busy ? "Working…" : (leap.paired ? "Pair again" : "Pair now")) {
                         leap.pair(host: host) { ok in
                             if ok { store.map.accessOK = true; store.map.system = "LEAP"; store.save() }

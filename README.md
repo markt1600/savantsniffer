@@ -39,6 +39,26 @@ This gives you two commands: `lutron` (CLI) and `savantsniffer-web` (the web UI)
 The native app's Guide screen walks these same steps in order and checks them off
 from real state. The CLI below is the same workflow by hand.
 
+### 0b. Fastest path: import the Savant host's own configuration
+
+If you can copy `~/Library/Application Support/RacePointMedia` off the Mac mini
+(or just `userConfig.rpmConfig`, `lighting/shm` and `statusfiles`), skip the
+guessing. Savant's files already hold every Lutron button with its LEAP id,
+every load and shade, what the music / volume / broadcast buttons make Savant
+do, the audio-zone wiring, the AV devices with their addresses, and the MAC of
+the Lutron processor Savant talks to:
+
+```bash
+lutron import-savant /Volumes/SSD/RacePointMedia          # read-only
+lutron list
+lutron export --out report.md                              # folds the findings in
+```
+
+Buttons arrive as *identified* (id known), loads as named. Walking the house
+then only confirms them. Button → workflow links are inferred by name within a
+room and say so; the exact binding lives in Savant's scene database, which is
+not part of the export. The Mac app's Guide has the same importer as step 1.
+
 ### 1. Discover the Lutron processor and the Savant Mac mini
 ```bash
 lutron doctor        # what discovery tools exist on your OS (installs nothing)
