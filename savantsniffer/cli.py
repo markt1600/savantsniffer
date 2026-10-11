@@ -306,7 +306,6 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp = sub.add_parser("import-savant", help="read a copy of the Savant host's RacePointMedia folder into devices.yaml")
     sp.add_argument("folder", help="folder containing userConfig.rpmConfig (and ideally lighting/ and statusfiles/)")
-    sp.add_argument("--map", default="devices.yaml")
     sp.add_argument("--findings", default="savant_findings.json", help="where to save bridge/processor/AV/audio findings")
     sp.add_argument("--replace", action="store_true", help="overwrite the map even if it holds captured values")
     sp.set_defaults(func=cmd_import_savant)
