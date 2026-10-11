@@ -55,4 +55,4 @@ def test_swift_prefill_shape():
     assert n_btn == 164 and n_out == 86
     linked = [b for a in m["areas"] for k in a["keypads"] for b in k["buttons"] if b.get("savantWorkflows")]
     assert len(linked) >= 25
-    assert any(b.get("audioZones") == ["Home Office"] for b in linked)
+    assert any(b.get("audioZones") == ["Kitchen"] for b in linked)   # Vol Up -> Output Module zone 6 -> Kitchen
