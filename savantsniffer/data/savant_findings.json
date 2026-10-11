@@ -1,0 +1,1583 @@
+{
+ "source_root": "bundled copy of the Savant configuration (Oct 2026)",
+ "system_name": "Mark's Residence",
+ "bridge_ip": "192.168.1.173",
+ "bridge_mac": "98:5d:ad:7c:c0:81",
+ "bridge_uid": "985DAD7CC0810042",
+ "processor_mac": "38:ab:41:ab:ec:cb",
+ "lutron_areas": {
+  "Dining Room": [
+   "/area/2710"
+  ],
+  "Entrance": [
+   "/area/2187"
+  ],
+  "Helper's Room": [
+   "/area/6143"
+  ],
+  "Home Office": [
+   "/area/2592"
+  ],
+  "Home Theatre": [
+   "/area/2233"
+  ],
+  "Kitchen": [
+   "/area/10269",
+   "/area/2809"
+  ],
+  "Living Room": [
+   "/area/2347"
+  ],
+  "Master Bathroom": [
+   "/area/1628"
+  ],
+  "Master Bedroom": [
+   "/area/2018",
+   "/area/1601"
+  ],
+  "Meditation Room": [
+   "/area/1655"
+  ],
+  "Penny's Bedroom": [
+   "/area/2088",
+   "/area/2076"
+  ],
+  "Powder Room": [
+   "/area/2393"
+  ],
+  "Wine Cellar": [
+   "/area/13062"
+  ]
+ },
+ "devices": [
+  {
+   "name": "CCTV 3",
+   "ip": "192.168.1.103",
+   "port": "80",
+   "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+   "protocol": "HTTP (Bond / Hue / camera APIs)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "CCTV 5",
+   "ip": "192.168.1.105",
+   "port": "80",
+   "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+   "protocol": "HTTP (Bond / Hue / camera APIs)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "Haiku Living",
+   "ip": "192.168.1.88",
+   "port": "31415",
+   "credentials": "",
+   "protocol": "Big Ass Fans SenseME UDP/TCP",
+   "room": "Living Room"
+  },
+  {
+   "name": "AVB Switch",
+   "ip": "192.168.1.64",
+   "port": "23",
+   "credentials": "",
+   "protocol": "telnet (plain text; capturable)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "Bond Bridge",
+   "ip": "192.168.1.59",
+   "port": "80",
+   "credentials": "",
+   "protocol": "HTTP (Bond / Hue / camera APIs)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "Denon AVR",
+   "ip": "192.168.1.80",
+   "port": "23",
+   "credentials": "",
+   "protocol": "telnet (plain text; capturable)",
+   "room": "Master Bedroom"
+  },
+  {
+   "name": "AV10",
+   "ip": "192.168.1.69",
+   "port": "23",
+   "credentials": "",
+   "protocol": "telnet (plain text; capturable)",
+   "room": "Home Theatre"
+  },
+  {
+   "name": "CCTV 2",
+   "ip": "192.168.1.102",
+   "port": "80",
+   "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+   "protocol": "HTTP (Bond / Hue / camera APIs)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "HT ATV US",
+   "ip": "192.168.1.65",
+   "port": "0",
+   "credentials": "",
+   "protocol": "Apple TV (HomeKit / Companion)",
+   "room": "Home Theatre"
+  },
+  {
+   "name": "HT ATV US",
+   "ip": "",
+   "port": "IR",
+   "credentials": "",
+   "room": "Home Theatre",
+   "protocol": "IR via SmartControl 12 IR(Serial PWM) Output 4"
+  },
+  {
+   "name": "CCTV 4",
+   "ip": "192.168.1.104",
+   "port": "80",
+   "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+   "protocol": "HTTP (Bond / Hue / camera APIs)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "SurgeX",
+   "ip": "192.168.1.68",
+   "port": "23",
+   "credentials": "",
+   "protocol": "telnet (plain text; capturable)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "JVC Projector",
+   "ip": "192.168.1.70",
+   "port": "20554",
+   "credentials": "",
+   "protocol": "JVC projector IP control",
+   "room": "Home Theatre"
+  },
+  {
+   "name": "Philips Hue",
+   "ip": "192.168.1.72",
+   "port": "80",
+   "credentials": "",
+   "protocol": "HTTP (Bond / Hue / camera APIs)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "CoolLink Hub 1",
+   "ip": "192.168.1.11",
+   "port": "10102",
+   "credentials": "",
+   "protocol": "CoolAutomation CoolLink TCP (plain text)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "Karaoke",
+   "ip": "",
+   "port": "IR",
+   "credentials": "",
+   "room": "Home Theatre",
+   "protocol": "IR via SmartControl 12 IR(Serial PWM) Output 1"
+  },
+  {
+   "name": "CoolLink Hub 2",
+   "ip": "192.168.1.10",
+   "port": "10102",
+   "credentials": "",
+   "protocol": "CoolAutomation CoolLink TCP (plain text)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "MBR ATV",
+   "ip": "",
+   "port": "0",
+   "credentials": "",
+   "protocol": "Apple TV (HomeKit / Companion)",
+   "room": "Master Bedroom"
+  },
+  {
+   "name": "Bond Bridge 2",
+   "ip": "192.168.1.58",
+   "port": "80",
+   "credentials": "",
+   "protocol": "HTTP (Bond / Hue / camera APIs)",
+   "room": "Server Rack"
+  },
+  {
+   "name": "HT ATV SG",
+   "ip": "192.168.1.66",
+   "port": "0",
+   "credentials": "",
+   "protocol": "Apple TV (HomeKit / Companion)",
+   "room": "Home Theatre"
+  },
+  {
+   "name": "HT ATV SG",
+   "ip": "",
+   "port": "IR",
+   "credentials": "",
+   "room": "Home Theatre",
+   "protocol": "IR via SmartControl 12 IR(Serial PWM) Output 6"
+  },
+  {
+   "name": "Door Station",
+   "ip": "",
+   "port": "443",
+   "credentials": "",
+   "protocol": "HTTPS",
+   "room": "Home Access"
+  },
+  {
+   "name": "Blu ray",
+   "ip": "",
+   "port": "IR",
+   "credentials": "",
+   "room": "Home Theatre",
+   "protocol": "IR via SmartControl 12 IR(Serial PWM) Output 2"
+  },
+  {
+   "name": "CCTV 1",
+   "ip": "192.168.1.101",
+   "port": "80",
+   "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+   "protocol": "HTTP (Bond / Hue / camera APIs)",
+   "room": "Server Rack"
+  }
+ ],
+ "audio_zones": {
+  "Single Input Output Module (Powder Room):Audio Zone 1": "Powder Room",
+  "Naim Amp:Analogue Outputs pre amp out": "Living Room",
+  "Single Input Output Module (Living):Audio Zone 1": "Living Room",
+  "Denon AVR:FRONT/CENTER/SURROUND/SURROUND BACK (ASSIGNABLE)": "Master Bedroom",
+  "AV10:PRE OUT": "Home Theatre",
+  "Output Module:Audio Zone 1": "Master Bathroom",
+  "Output Module:Audio Zone 2": "Penny's Bedroom",
+  "Output Module:Audio Zone 3": "Home Office",
+  "Output Module:Audio Zone 4": "Wine Cellar",
+  "Output Module:Audio Zone 5": "Meditation Room",
+  "Output Module:Audio Zone 6": "Kitchen",
+  "Output Module:Audio Zone 7": "Entrance",
+  "Output Module:Audio Zone 8": "Dining Room"
+ },
+ "workflows": [
+  {
+   "room": "Dining Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music Ambient (Dining)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Dining Music Ambient",
+     "zone": "Dining Room",
+     "text": "SendSavantScene 'Dining Music Ambient' in Dining Room"
+    }
+   ]
+  },
+  {
+   "room": "Dining Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music Off (Dining)",
+   "actions": []
+  },
+  {
+   "room": "Dining Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music Party (Dining)",
+   "actions": [
+    {
+     "kind": "shell",
+     "component": "",
+     "logical": "",
+     "command": "shell",
+     "text": "shell: ~/Applications/RacePointMedia/sclibridge activateScene 'Dining Music Party' '02AD51EF-477B-4338-9BC3-A19FC7365680' 'AVAutomation'"
+    }
+   ]
+  },
+  {
+   "room": "Dining Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Dining Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "test",
+   "actions": []
+  },
+  {
+   "room": "Dining Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Music On (Dining)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOn",
+     "text": "Media Server (Mark) / AVB Stream 1: PowerOn"
+    },
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "CommandPlayFavorite",
+     "text": "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)"
+    }
+   ]
+  },
+  {
+   "room": "Dining Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Room Off (Dining)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 8",
+     "command": "PowerOff",
+     "text": "Output Module / Audio Zone 8: PowerOff"
+    }
+   ]
+  },
+  {
+   "room": "Dining Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol Down (Dining)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 8",
+     "command": "DecreaseVolume",
+     "text": "Output Module / Audio Zone 8: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Dining Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol Up (Dining)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 8",
+     "command": "IncreaseVolume",
+     "text": "Output Module / Audio Zone 8: IncreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Entrance",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music Off (Entrance)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Entire Home Music Off",
+     "zone": "Entrance",
+     "text": "SendSavantScene 'Entire Home Music Off' in Entrance"
+    }
+   ]
+  },
+  {
+   "room": "Entrance",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music On (Entrance)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Entrance Music",
+     "zone": "Entrance",
+     "text": "SendSavantScene 'Entrance Music' in Entrance"
+    }
+   ]
+  },
+  {
+   "room": "Entrance",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Helper's Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Home Access",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Home Office",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Broadcast On (Home Office)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Broadcast Home Office",
+     "zone": "Home Office",
+     "text": "SendSavantScene 'Broadcast Home Office' in Home Office"
+    }
+   ]
+  },
+  {
+   "room": "Home Office",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music On (Home Office)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Home Office Music",
+     "zone": "Home Office",
+     "text": "SendSavantScene 'Home Office Music' in Home Office"
+    }
+   ]
+  },
+  {
+   "room": "Home Office",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Room Off (Home Office)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Home Office Broadcast Off",
+     "zone": "Home Office",
+     "text": "SendSavantScene 'Home Office Broadcast Off' in Home Office"
+    }
+   ]
+  },
+  {
+   "room": "Home Office",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Home Office",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Room Off (Home Office)",
+   "actions": []
+  },
+  {
+   "room": "Home Theatre",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Broadcast Off (HT)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Home Theatre Broadcast Off",
+     "zone": "Home Theatre",
+     "text": "SendSavantScene 'Home Theatre Broadcast Off' in Home Theatre"
+    }
+   ]
+  },
+  {
+   "room": "Home Theatre",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Broadcast On (HT)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Broadcast Home Theatre",
+     "zone": "Home Theatre",
+     "text": "SendSavantScene 'Broadcast Home Theatre' in Home Theatre"
+    }
+   ]
+  },
+  {
+   "room": "Home Theatre",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Movie Off (HT)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Home Theatre Media Off",
+     "zone": "Home Theatre",
+     "text": "SendSavantScene 'Home Theatre Media Off' in Home Theatre"
+    }
+   ]
+  },
+  {
+   "room": "Home Theatre",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Movie On (HT)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Home Theatre Movie On",
+     "zone": "Home Theatre",
+     "text": "SendSavantScene 'Home Theatre Movie On' in Home Theatre"
+    },
+    {
+     "kind": "device",
+     "component": "Bond Bridge",
+     "logical": "Lighting_controller",
+     "command": "ShadeDown",
+     "text": "Bond Bridge / Lighting_controller: ShadeDown Address1=960dff3f8de0d070"
+    },
+    {
+     "kind": "device",
+     "component": "Bond Bridge",
+     "logical": "Lighting_controller",
+     "command": "ShadeDown",
+     "text": "Bond Bridge / Lighting_controller: ShadeDown Address1=2409e57e3eb16933"
+    },
+    {
+     "kind": "device",
+     "component": "Bond Bridge",
+     "logical": "",
+     "command": "",
+     "text": "Bond Bridge / : "
+    }
+   ]
+  },
+  {
+   "room": "Home Theatre",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Room Off (HT)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Home Theatre Room Off",
+     "zone": "Home Theatre",
+     "text": "SendSavantScene 'Home Theatre Room Off' in Home Theatre"
+    }
+   ]
+  },
+  {
+   "room": "Home Theatre",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Home Theatre",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Zone 2",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "AV10",
+     "logical": "Receiver",
+     "command": "",
+     "text": "AV10 / Receiver: "
+    }
+   ]
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music On (Kitchen)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Kitchen Music",
+     "zone": "Kitchen",
+     "text": "SendSavantScene 'Kitchen Music' in Kitchen"
+    }
+   ]
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Room Off (Kitchen)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Kitchen Music Off",
+     "zone": "Kitchen",
+     "text": "SendSavantScene 'Kitchen Music Off' in Kitchen"
+    }
+   ]
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Vol Down (Kitchen)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 6",
+     "command": "DecreaseVolume",
+     "text": "Output Module / Audio Zone 6: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Vol up (Kitchen)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 6",
+     "command": "IncreaseVolume",
+     "text": "Output Module / Audio Zone 6: IncreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Music (Kitchen)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOn",
+     "text": "Media Server (Mark) / AVB Stream 1: PowerOn"
+    },
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "CommandPlayFavorite",
+     "text": "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)"
+    },
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 6",
+     "command": "PowerOn",
+     "text": "Output Module / Audio Zone 6: PowerOn"
+    }
+   ]
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Room Off (Kitchen)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 6",
+     "command": "PowerOff",
+     "text": "Output Module / Audio Zone 6: PowerOff"
+    }
+   ]
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol Down (Kitchen)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 6",
+     "command": "DecreaseVolume",
+     "text": "Output Module / Audio Zone 6: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Kitchen",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol up (Kitchen)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 6",
+     "command": "IncreaseVolume",
+     "text": "Output Module / Audio Zone 6: IncreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Living Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Broadcast Off (Living)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Living Broadcast Off",
+     "zone": "Living Room",
+     "text": "SendSavantScene 'Living Broadcast Off' in Living Room"
+    }
+   ]
+  },
+  {
+   "room": "Living Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Broadcast On (Living)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Broadcast Living Room",
+     "zone": "Living Room",
+     "text": "SendSavantScene 'Broadcast Living Room' in Living Room"
+    }
+   ]
+  },
+  {
+   "room": "Living Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Living Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Travel Mode Disable",
+   "actions": [
+    {
+     "kind": "state",
+     "component": "",
+     "logical": "",
+     "command": "set state",
+     "text": "set state travel mode = ['0']"
+    }
+   ]
+  },
+  {
+   "room": "Living Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Travel Mode Enable",
+   "actions": [
+    {
+     "kind": "state",
+     "component": "",
+     "logical": "",
+     "command": "set state",
+     "text": "set state travel mode = ['1']"
+    }
+   ]
+  },
+  {
+   "room": "Living Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Travel Mode Off Scene",
+   "actions": [
+    {
+     "kind": "shell",
+     "component": "",
+     "logical": "",
+     "command": "shell",
+     "text": "shell: ~/Applications/RacePointMedia/sclibridge activateScene 'Travel Mode Off' 'DD7C0258-7F2A-452B-BD7B-EAFEF8754DAA' 'hafiz@av-intelligence.sg'"
+    }
+   ]
+  },
+  {
+   "room": "Living Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Travel Mode On Scene",
+   "actions": [
+    {
+     "kind": "shell",
+     "component": "",
+     "logical": "",
+     "command": "shell",
+     "text": "shell: ~/Applications/RacePointMedia/sclibridge activateScene 'Travel Mode On' '95FFB30A-D97C-43F4-8EE4-A1B271DD5F41' 'AVAutomation'"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 2",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 2",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 1",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 1",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 2",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 2",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 2",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 1",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 1",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 1",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 2",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 2",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    },
+    {
+     "kind": "device",
+     "component": "CoolLink Hub 1",
+     "logical": "HVAC_controller",
+     "command": "SetHVACModeDehumidify",
+     "text": "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    }
+   ]
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music On (Master Bath)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Master Bathroom Music",
+     "zone": "Master Bathroom",
+     "text": "SendSavantScene 'Master Bathroom Music' in Master Bathroom"
+    }
+   ]
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Room Off (Master Bath)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Master Bathroom Music Off",
+     "zone": "Master Bathroom",
+     "text": "SendSavantScene 'Master Bathroom Music Off' in Master Bathroom"
+    }
+   ]
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Vol Down (Master Bath)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 1",
+     "command": "DecreaseVolume",
+     "text": "Output Module / Audio Zone 1: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Vol up (Master Bath)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 1",
+     "command": "IncreaseVolume",
+     "text": "Output Module / Audio Zone 1: IncreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Music (Master Bath)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOn",
+     "text": "Media Server (Mark) / AVB Stream 1: PowerOn"
+    },
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "CommandPlayFavorite",
+     "text": "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)"
+    },
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 1",
+     "command": "PowerOn",
+     "text": "Output Module / Audio Zone 1: PowerOn"
+    }
+   ]
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Room Off (Master Bath)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 1",
+     "command": "PowerOff",
+     "text": "Output Module / Audio Zone 1: PowerOff"
+    }
+   ]
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol Down (Master Bath)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 1",
+     "command": "DecreaseVolume",
+     "text": "Output Module / Audio Zone 1: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Master Bathroom",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol up (Master Bath)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 1",
+     "command": "IncreaseVolume",
+     "text": "Output Module / Audio Zone 1: IncreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Master Bedroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Home Off (MBR)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Home Music Off",
+     "zone": "Master Bedroom",
+     "text": "SendSavantScene 'Home Music Off' in Master Bedroom"
+    }
+   ]
+  },
+  {
+   "room": "Master Bedroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music Off (MBR)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Master Bedroom Music Off",
+     "zone": "Master Bedroom",
+     "text": "SendSavantScene 'Master Bedroom Music Off' in Master Bedroom"
+    }
+   ]
+  },
+  {
+   "room": "Master Bedroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Master Bedroom",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Home Off (MBR)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOff",
+     "text": "Media Server (Mark) / AVB Stream 1: PowerOff"
+    }
+   ]
+  },
+  {
+   "room": "Master Bedroom",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Room Off (MBR)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 1",
+     "command": "PowerOff",
+     "text": "Output Module / Audio Zone 1: PowerOff"
+    }
+   ]
+  },
+  {
+   "room": "Meditation Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music Off (Meditation)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Meditation Room Music Off",
+     "zone": "Meditation Room",
+     "text": "SendSavantScene 'Meditation Room Music Off' in Meditation Room"
+    }
+   ]
+  },
+  {
+   "room": "Meditation Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music On (Meditation)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Meditation Room Music",
+     "zone": "Meditation Room",
+     "text": "SendSavantScene 'Meditation Room Music' in Meditation Room"
+    }
+   ]
+  },
+  {
+   "room": "Meditation Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Meditation Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Music Off (Meditation)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 5",
+     "command": "PowerOff",
+     "text": "Output Module / Audio Zone 5: PowerOff"
+    }
+   ]
+  },
+  {
+   "room": "Meditation Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Music On (Meditation)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOn",
+     "text": "Media Server (Mark) / AVB Stream 1: PowerOn"
+    },
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "CommandPlayFavorite",
+     "text": "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)"
+    },
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 5",
+     "command": "PowerOn",
+     "text": "Output Module / Audio Zone 5: PowerOn"
+    }
+   ]
+  },
+  {
+   "room": "Penny's Bedroom",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music On (Powder Room)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Powder Room Music",
+     "zone": "Powder Room",
+     "text": "SendSavantScene 'Powder Room Music' in Powder Room"
+    }
+   ]
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Room Off (Powder Room)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Powder Room Music Off",
+     "zone": "Powder Room",
+     "text": "SendSavantScene 'Powder Room Music Off' in Powder Room"
+    }
+   ]
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Vol Down (Powder Room)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Single Input Output Module (Powder Room)",
+     "logical": "Audio Zone 1",
+     "command": "DecreaseVolume",
+     "text": "Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Vol up (Powder Room)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Single Input Output Module (Powder Room)",
+     "logical": "Audio Zone 1",
+     "command": "IncreaseVolume",
+     "text": "Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Music (Powder Room)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOn",
+     "text": "Media Server (Mark) / AVB Stream 1: PowerOn"
+    },
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "CommandPlayFavorite",
+     "text": "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)"
+    },
+    {
+     "kind": "device",
+     "component": "Single Input Output Module (Powder Room)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOn",
+     "text": "Single Input Output Module (Powder Room) / AVB Stream 1: PowerOn"
+    }
+   ]
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Room Off (Powder Room)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Single Input Output Module (Powder Room)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOff",
+     "text": "Single Input Output Module (Powder Room) / AVB Stream 1: PowerOff"
+    }
+   ]
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol Down (Powder Room)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Single Input Output Module (Powder Room)",
+     "logical": "Audio Zone 1",
+     "command": "DecreaseVolume",
+     "text": "Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Powder Room",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol up (Powder Room)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Single Input Output Module (Powder Room)",
+     "logical": "Audio Zone 1",
+     "command": "IncreaseVolume",
+     "text": "Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music Off (Wine Cellar)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Wine Cellar Music Off",
+     "zone": "Wine Cellar",
+     "text": "SendSavantScene 'Wine Cellar Music Off' in Wine Cellar"
+    }
+   ]
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Music On (Wine Cellar)",
+   "actions": [
+    {
+     "kind": "service",
+     "component": "",
+     "logical": "",
+     "command": "SendSavantScene",
+     "scene": "Wine Cellar Music",
+     "zone": "Wine Cellar",
+     "text": "SendSavantScene 'Wine Cellar Music' in Wine Cellar"
+    }
+   ]
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_GEN_GENERIC",
+   "name": "RunCLIProgram",
+   "actions": []
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Vol Down (Wine Cellar)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 4",
+     "command": "DecreaseVolume",
+     "text": "Output Module / Audio Zone 4: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_GEN_GENERIC",
+   "name": "Vol up (Wine Cellar)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 4",
+     "command": "IncreaseVolume",
+     "text": "Output Module / Audio Zone 4: IncreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Music (Wine Cellar)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "PowerOn",
+     "text": "Media Server (Mark) / AVB Stream 1: PowerOn"
+    },
+    {
+     "kind": "device",
+     "component": "Media Server (Mark)",
+     "logical": "AVB Stream 1",
+     "command": "CommandPlayFavorite",
+     "text": "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)"
+    },
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 4",
+     "command": "PowerOn",
+     "text": "Output Module / Audio Zone 4: PowerOn"
+    }
+   ]
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Room Off (Wine Cellar)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 4",
+     "command": "PowerOff",
+     "text": "Output Module / Audio Zone 4: PowerOff"
+    }
+   ]
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol Down (Wine Cellar)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 4",
+     "command": "DecreaseVolume",
+     "text": "Output Module / Audio Zone 4: DecreaseVolume"
+    }
+   ]
+  },
+  {
+   "room": "Wine Cellar",
+   "service": "SVC_ENV_LIGHTING",
+   "name": "Vol up (Wine Cellar)",
+   "actions": [
+    {
+     "kind": "device",
+     "component": "Output Module",
+     "logical": "Audio Zone 4",
+     "command": "IncreaseVolume",
+     "text": "Output Module / Audio Zone 4: IncreaseVolume"
+    }
+   ]
+  }
+ ],
+ "load_levels": {
+  "Dining Balcony Fan": 0,
+  "Office Downlight": 100,
+  "Home Theatre W": 0,
+  "Helper Toilet Downlight": 0,
+  "Dining Pendant": 100,
+  "Office Strip Light": 100,
+  "Daughter Bedroom Fan": 0,
+  "Zone 04": 0,
+  "Daughter's Bath Heater": 0,
+  "Meditation Room R": 0,
+  "L3S3 Z3": 0,
+  "Dish Washer": 100,
+  "Wine Cellar Hallway": 0,
+  "Home Theatre DMX": 0,
+  "Garbage Disposal": 0,
+  "Daughter Bath Mirror": 0,
+  "Zone 06": 0,
+  "Music 12": 0,
+  "Daughter Bath Shower Downlight": 0,
+  "Outer circle home theatre": 0,
+  "Music 3": 100,
+  "Kitchen Led": 0,
+  "Music 8": 0,
+  "Entrance Downlight": 0,
+  "Master Headboard LED": 0,
+  "Music 6": 100,
+  "Music 11": 0,
+  "Zone 22": 0,
+  "Washing Machine": 0,
+  "Living Landing": 100,
+  "Music 10": 0,
+  "Music 4": 0,
+  "Daughter Bath Main Downlight": 0,
+  "Daughter Bedroom Main": 0,
+  "Meditation Room B": 0,
+  "Meditation Room W": 0,
+  "W": 0,
+  "Entrance Hallway": 0,
+  "Wine Cellar 1": 0,
+  "Master toilet Downlight": 0,
+  "Home Theatre B": 0,
+  "B": 0,
+  "Kitchen Downlight": 0,
+  "Music 5": 100,
+  "Music 2": 100,
+  "Living Downlight": 100,
+  "Hob": 100,
+  "Yard Downlight": 0,
+  "Master Fan": 0,
+  "Inner circle home threater": 0,
+  "Meditation Room G": 0,
+  "Zone 23": 0,
+  "Wine Cellar 2": 0,
+  "Master Toilet Shower": 0,
+  "Steigen": 0,
+  "Lift Wall Light": 0,
+  "Dryer": 0,
+  "Home Theatre R": 0,
+  "R": 0,
+  "Zone 51": 0,
+  "Master Living Downlight": 0,
+  "Master Downlight": 0,
+  "Living Balcony": 0,
+  "Meditation Downlight": 0,
+  "Meditation DMX": 0,
+  "Hood": 0,
+  "Lift Downlight": 0,
+  "Master Wardrobe": 0,
+  "Bedroom Hallway": 0,
+  "Dining Downlight": 100,
+  "Zone 02": 0,
+  "Shoe Cabinet Downlight": 0,
+  "Home Theatre G": 0,
+  "G": 0,
+  "Entrance Wall Light": 0,
+  "Music 1": 100,
+  "Powder Strip Light": 0,
+  "Kitchen Bath Heater": 0,
+  "Powder Downlight": 0,
+  "Music 9": 0,
+  "Master Heater": 100,
+  "Powder Room Heater": 0,
+  "Master Bath Vanity": 0,
+  "Living Fan": 0,
+  "Zone 59": 0,
+  "Music 7": 100
+ },
+ "counts": {
+  "rooms": 14,
+  "loads": 82,
+  "shades": 4,
+  "buttons": 164,
+  "workflows": 80,
+  "devices": 24
+ },
+ "notes": []
+}

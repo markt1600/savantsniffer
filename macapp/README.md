@@ -49,6 +49,13 @@ addresses, and the MAC of the Lutron processor Savant talks to. The sweep then
 only has to confirm which host carries that MAC. Nothing is sent to the Savant
 host or anywhere else.
 
+A pre-filled copy of that import is bundled (`Resources/savant.prefill.json`,
+camera passwords removed), so a fresh launch already shows every room, button,
+load and zone with the processor at 192.168.1.201 and LEAP recorded. The Guide
+therefore opens at the pairing step. Importing your own copy restores the
+credentials and refreshes everything. The pairing itself cannot be bundled: the
+certificate is issued by your processor when its button is pressed.
+
 ## Finding the processor without installing anything
 `arp -a` only lists devices your Mac has recently talked to, and a Lutron
 processor normally never talks to your laptop, so it won't be there. The built-in

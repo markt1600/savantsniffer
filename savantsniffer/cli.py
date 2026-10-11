@@ -217,7 +217,14 @@ def cmd_import_savant(args):
 
 def cmd_export(args):
     from .report import build_markdown
-    md = build_markdown(DeviceMap.load(args.map), _env_dict())
+    dmap = DeviceMap.load(args.map)
+    sav = dmap.data.get("savant") or {}
+    fp = sav.get("findings_file")
+    if fp and not os.path.isabs(fp) and not os.path.exists(fp):
+        beside = os.path.join(os.path.dirname(os.path.abspath(args.map)), fp)
+        if os.path.exists(beside):
+            sav["findings_file"] = beside
+    md = build_markdown(dmap, _env_dict())
     with open(args.out, "w") as f:
         f.write(md)
     print(f"Wrote {args.out} (contains credentials — keep it private)")

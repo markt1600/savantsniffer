@@ -9,7 +9,14 @@ final class DeviceStore: ObservableObject {
     @Published var recentLabels: [String] = []
 
     init() {
-        if let loaded = DeviceStore.loadFromDisk() {
+        // Precedence: a map with real work in it on disk; else the bundled pre-fill built
+        // from the Savant configuration (every button, load, zone, the processor address);
+        // else the PDF scaffold.
+        if let loaded = DeviceStore.loadFromDisk(), DeviceStore.hasWork(loaded) || loaded.savant != nil {
+            map = loaded
+        } else if let pre = DeviceStore.loadPrefill() {
+            map = pre
+        } else if let loaded = DeviceStore.loadFromDisk() {
             map = loaded
         } else if let seed = DeviceStore.loadSeed() {
             map = seed
@@ -23,6 +30,17 @@ final class DeviceStore: ObservableObject {
     static func loadFromDisk() -> DeviceMap? {
         guard let data = try? Data(contentsOf: AppPaths.deviceMap) else { return nil }
         return try? JSONDecoder().decode(DeviceMap.self, from: data)
+    }
+    /// The map built from the Savant configuration and shipped with the app (no credentials).
+    static func loadPrefill() -> DeviceMap? {
+        guard let url = Bundle.module.url(forResource: "savant.prefill", withExtension: "json"),
+              let data = try? Data(contentsOf: url) else { return nil }
+        return try? JSONDecoder().decode(DeviceMap.self, from: data)
+    }
+    /// True when the map holds anything captured by hand: ids, effects, live confirmations, scenes.
+    static func hasWork(_ m: DeviceMap) -> Bool {
+        m.areas.contains { a in a.keypads.contains { k in k.buttons.contains { $0.button != nil || ($0.effect?.isEmpty == false) || ($0.seenLive ?? false) } } }
+            || !(m.customMacros ?? []).isEmpty || (m.accessOK ?? false)
     }
     static func loadSeed() -> DeviceMap? {
         guard let url = Bundle.module.url(forResource: "layout.seed", withExtension: "json"),

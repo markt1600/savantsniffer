@@ -54,6 +54,15 @@ lutron list
 lutron export --out report.md                              # folds the findings in
 ```
 
+A pre-filled copy of that import ships in `savantsniffer/data/` (camera passwords
+removed). To start from it without the import:
+
+```bash
+cp savantsniffer/data/devices.savant.yaml devices.yaml
+cp savantsniffer/data/savant_findings.json .
+lutron list
+```
+
 Buttons arrive as *identified* (id known), loads as named. Walking the house
 then only confirms them. Button → workflow links are inferred by name within a
 room and say so; the exact binding lives in Savant's scene database, which is

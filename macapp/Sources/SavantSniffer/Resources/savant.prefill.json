@@ -1,0 +1,3465 @@
+{
+ "accessOK": null,
+ "areas": [
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/2759",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/2730",
+       "position": 810
+      },
+      {
+       "audioZones": [
+        "Dining Room"
+       ],
+       "button": null,
+       "href": "/button/2750",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2736",
+       "position": 843,
+       "savantActions": [
+        "Output Module / Audio Zone 8: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (Dining) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (Dining) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2796",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Fan",
+       "ledHref": "/led/2789",
+       "position": 868
+      },
+      {
+       "button": null,
+       "href": "/button/2738",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2733",
+       "position": 870
+      },
+      {
+       "button": null,
+       "href": "/button/2763",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Focused",
+       "ledHref": "/led/2731",
+       "position": 872
+      },
+      {
+       "audioSource": "Savant Music (Spotify preset on the media server)",
+       "button": null,
+       "href": "/button/2767",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Music",
+       "ledHref": "/led/2732",
+       "position": 878,
+       "savantActions": [
+        "Media Server (Mark) / AVB Stream 1: PowerOn",
+        "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Music On (Dining) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Music On (Dining) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2742",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Fan",
+       "ledHref": "/led/2734",
+       "position": 895
+      },
+      {
+       "button": null,
+       "href": "/button/2800",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Balcony Off",
+       "ledHref": "/led/2790",
+       "position": 906
+      },
+      {
+       "button": null,
+       "href": "/button/2746",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/2735",
+       "position": 923
+      },
+      {
+       "button": null,
+       "href": "/button/2755",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2729",
+       "position": 955
+      },
+      {
+       "button": null,
+       "href": "/button/2792",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2788",
+       "position": 960
+      }
+     ],
+     "id": null,
+     "name": "dining room keypads"
+    }
+   ],
+   "name": "dining room",
+   "outputs": [
+    {
+     "href": "/zone/1230",
+     "id": 1230,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Dining",
+     "name": "Dining Balcony Fan"
+    },
+    {
+     "href": "/zone/1203",
+     "id": 1203,
+     "kind": "switch",
+     "levelAtImport": 100,
+     "lutronArea": "Dining",
+     "name": "Dining Pendant"
+    },
+    {
+     "href": "/zone/1212",
+     "id": 1212,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Dining",
+     "name": "Dining Downlight"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/2684",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Home Light",
+       "ledHref": "/led/2658",
+       "position": 802
+      },
+      {
+       "button": null,
+       "href": "/button/2563",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Vol Down",
+       "ledHref": "/led/2557",
+       "position": 805
+      },
+      {
+       "button": null,
+       "href": "/button/2688",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Home Ambient",
+       "ledHref": "/led/2659",
+       "position": 808
+      },
+      {
+       "button": null,
+       "href": "/button/2559",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Vol Up",
+       "ledHref": "/led/2556",
+       "position": 812
+      },
+      {
+       "button": null,
+       "href": "/button/2211",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2206",
+       "position": 816
+      },
+      {
+       "button": null,
+       "href": "/button/10743",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "On",
+       "position": 824
+      },
+      {
+       "button": null,
+       "href": "/button/2219",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/2208",
+       "position": 826
+      },
+      {
+       "button": null,
+       "href": "/button/10746",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Off",
+       "position": 828
+      },
+      {
+       "button": null,
+       "href": "/button/2215",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2207",
+       "position": 829
+      },
+      {
+       "button": null,
+       "href": "/button/2223",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Hallway Off",
+       "ledHref": "/led/2209",
+       "position": 834
+      },
+      {
+       "button": null,
+       "href": "/button/2568",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2552",
+       "position": 887
+      },
+      {
+       "button": null,
+       "href": "/button/2675",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Lift",
+       "ledHref": "/led/2664",
+       "position": 888
+      },
+      {
+       "button": null,
+       "href": "/button/2696",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "Home AC",
+       "ledHref": "/led/2661",
+       "position": 897
+      },
+      {
+       "button": null,
+       "href": "/button/2580",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2555",
+       "position": 900
+      },
+      {
+       "button": null,
+       "href": "/button/2679",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Home Off",
+       "ledHref": "/led/2665",
+       "position": 901
+      },
+      {
+       "button": null,
+       "href": "/button/2576",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Music",
+       "ledHref": "/led/2554",
+       "position": 904,
+       "savantActions": [
+        "SendSavantScene 'Entrance Music' in Entrance"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Music On (Entrance) [SVC_GEN_GENERIC] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Music On (Entrance) [SVC_GEN_GENERIC]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2667",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Hallway Light",
+       "ledHref": "/led/2662",
+       "position": 929
+      },
+      {
+       "button": null,
+       "href": "/button/2671",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "Hallway AC",
+       "ledHref": "/led/2663",
+       "position": 932
+      },
+      {
+       "button": null,
+       "href": "/button/2692",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Music",
+       "ledHref": "/led/2660",
+       "position": 948,
+       "savantActions": [
+        "SendSavantScene 'Entrance Music' in Entrance"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Music On (Entrance) [SVC_GEN_GENERIC] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Music On (Entrance) [SVC_GEN_GENERIC]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2572",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2553",
+       "position": 964
+      }
+     ],
+     "id": null,
+     "name": "entrance keypads"
+    }
+   ],
+   "name": "entrance",
+   "outputs": [
+    {
+     "href": "/zone/9247",
+     "id": 9247,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Entrance/Hallway/Lobby",
+     "name": "Wine Cellar Hallway"
+    },
+    {
+     "href": "/zone/1131",
+     "id": 1131,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Entrance/Hallway/Lobby",
+     "name": "Entrance Downlight"
+    },
+    {
+     "href": "/zone/1140",
+     "id": 1140,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Entrance/Hallway/Lobby",
+     "name": "Entrance Hallway"
+    },
+    {
+     "href": "/zone/1122",
+     "id": 1122,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Entrance/Hallway/Lobby",
+     "name": "Lift Wall Light"
+    },
+    {
+     "href": "/zone/1113",
+     "id": 1113,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Entrance/Hallway/Lobby",
+     "name": "Lift Downlight"
+    },
+    {
+     "href": "/zone/1176",
+     "id": 1176,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Entrance/Hallway/Lobby",
+     "name": "Bedroom Hallway"
+    },
+    {
+     "href": "/zone/1149",
+     "id": 1149,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Entrance/Hallway/Lobby",
+     "name": "Shoe Cabinet Downlight"
+    },
+    {
+     "href": "/zone/1158",
+     "id": 1158,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Entrance/Hallway/Lobby",
+     "name": "Entrance Wall Light"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/2963",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "Room AC",
+       "ledHref": "/led/2935",
+       "position": 811
+      },
+      {
+       "button": null,
+       "href": "/button/2942",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Hallway Light",
+       "ledHref": "/led/2938",
+       "position": 813
+      },
+      {
+       "button": null,
+       "href": "/button/2959",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2934",
+       "position": 817
+      },
+      {
+       "button": null,
+       "href": "/button/2967",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2936",
+       "position": 836
+      },
+      {
+       "button": null,
+       "href": "/button/2946",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Hallway Off",
+       "ledHref": "/led/2939",
+       "position": 849
+      },
+      {
+       "button": null,
+       "href": "/button/2971",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Bathroom Light",
+       "ledHref": "/led/2937",
+       "position": 854
+      },
+      {
+       "button": null,
+       "href": "/button/2950",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Steigen",
+       "ledHref": "/led/2940",
+       "position": 881
+      }
+     ],
+     "id": null,
+     "name": "helper's room keypads"
+    }
+   ],
+   "name": "helper's room",
+   "outputs": []
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/2622",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2616",
+       "position": 871,
+       "savantActions": [
+        "SendSavantScene 'Home Office Broadcast Off' in Home Office"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (Home Office) [SVC_GEN_GENERIC] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (Home Office) [SVC_GEN_GENERIC]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2635",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/2613",
+       "position": 889
+      },
+      {
+       "button": null,
+       "href": "/button/2627",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/2611",
+       "position": 893
+      },
+      {
+       "button": null,
+       "href": "/button/2639",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Broadcast",
+       "ledHref": "/led/2614",
+       "position": 902,
+       "savantActions": [
+        "SendSavantScene 'Broadcast Home Office' in Home Office"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Broadcast On (Home Office) [SVC_GEN_GENERIC] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Broadcast On (Home Office) [SVC_GEN_GENERIC]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2631",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2612",
+       "position": 910
+      },
+      {
+       "button": null,
+       "href": "/button/2618",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2615",
+       "position": 917
+      }
+     ],
+     "id": null,
+     "name": "home office keypads"
+    }
+   ],
+   "name": "home office",
+   "outputs": [
+    {
+     "href": "/zone/1095",
+     "id": 1095,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Home Office",
+     "name": "Office Downlight"
+    },
+    {
+     "href": "/zone/1104",
+     "id": 1104,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Home Office",
+     "name": "Office Strip Light"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/2295",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/2287",
+       "position": 819
+      },
+      {
+       "button": null,
+       "href": "/button/2325",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2320",
+       "position": 820
+      },
+      {
+       "button": null,
+       "href": "/button/2261",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Entrance Curtain",
+       "ledHref": "/led/2253",
+       "position": 830
+      },
+      {
+       "button": null,
+       "href": "/button/2291",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2286",
+       "position": 833
+      },
+      {
+       "button": null,
+       "href": "/button/11674",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Open",
+       "position": 845
+      },
+      {
+       "button": null,
+       "href": "/button/2337",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Broadcast",
+       "ledHref": "/led/2323",
+       "position": 862,
+       "savantActions": [
+        "SendSavantScene 'Home Theatre Broadcast Off' in Home Theatre",
+        "SendSavantScene 'Broadcast Home Theatre' in Home Theatre"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Broadcast Off (HT) [SVC_GEN_GENERIC], Broadcast On (HT) [SVC_GEN_GENERIC] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Broadcast Off (HT) [SVC_GEN_GENERIC]",
+        "Broadcast On (HT) [SVC_GEN_GENERIC]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/3686",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Close",
+       "position": 866
+      },
+      {
+       "button": null,
+       "href": "/button/2269",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Night Curtain",
+       "ledHref": "/led/2255",
+       "position": 873
+      },
+      {
+       "button": null,
+       "href": "/button/2333",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2322",
+       "position": 884,
+       "savantActions": [
+        "SendSavantScene 'Home Theatre Room Off' in Home Theatre"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (HT) [SVC_GEN_GENERIC] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (HT) [SVC_GEN_GENERIC]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/11677",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Close",
+       "position": 898
+      },
+      {
+       "button": null,
+       "href": "/button/2265",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Day Curtain",
+       "ledHref": "/led/2254",
+       "position": 913
+      },
+      {
+       "button": null,
+       "href": "/button/2329",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/2321",
+       "position": 915
+      },
+      {
+       "button": null,
+       "href": "/button/2299",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Focused",
+       "ledHref": "/led/2288",
+       "position": 918
+      },
+      {
+       "button": null,
+       "href": "/button/2257",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Movie",
+       "ledHref": "/led/2252",
+       "position": 934,
+       "savantActions": [
+        "SendSavantScene 'Home Theatre Media Off' in Home Theatre",
+        "SendSavantScene 'Home Theatre Movie On' in Home Theatre",
+        "Bond Bridge / Lighting_controller: ShadeDown Address1=960dff3f8de0d070",
+        "Bond Bridge / Lighting_controller: ShadeDown Address1=2409e57e3eb16933",
+        "Bond Bridge / : "
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Movie Off (HT) [SVC_GEN_GENERIC], Movie On (HT) [SVC_GEN_GENERIC] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Movie Off (HT) [SVC_GEN_GENERIC]",
+        "Movie On (HT) [SVC_GEN_GENERIC]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2303",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Color",
+       "ledHref": "/led/2289",
+       "position": 939
+      },
+      {
+       "button": null,
+       "href": "/button/3683",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Open",
+       "position": 943
+      }
+     ],
+     "id": null,
+     "name": "home theatre keypads"
+    }
+   ],
+   "name": "home theatre",
+   "outputs": [
+    {
+     "href": "/zone/5426",
+     "id": 5426,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Home Theatre",
+     "name": "W"
+    },
+    {
+     "href": "/zone/878",
+     "id": 878,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Home Theatre",
+     "name": "Outer circle home theatre"
+    },
+    {
+     "href": "/zone/11327",
+     "id": 11327,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Home Theatre",
+     "name": "B"
+    },
+    {
+     "href": "/zone/888",
+     "id": 888,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Home Theatre",
+     "name": "Inner circle home threater"
+    },
+    {
+     "href": "/zone/11309",
+     "id": 11309,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Home Theatre",
+     "name": "R"
+    },
+    {
+     "href": "/zone/11318",
+     "id": 11318,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Home Theatre",
+     "name": "G"
+    },
+    {
+     "href": "/zone/3617",
+     "id": 3617,
+     "kind": "shade",
+     "name": "Curtain"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/2888",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Garbage Disposal",
+       "ledHref": "/led/2880",
+       "position": 803
+      },
+      {
+       "button": null,
+       "href": "/button/2913",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Appliance",
+       "ledHref": "/led/2878",
+       "position": 807
+      },
+      {
+       "button": null,
+       "href": "/button/2896",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Dryer",
+       "ledHref": "/led/2882",
+       "position": 815
+      },
+      {
+       "button": null,
+       "href": "/button/2848",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/2829",
+       "position": 823
+      },
+      {
+       "button": null,
+       "href": "/button/2892",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Washer",
+       "ledHref": "/led/2881",
+       "position": 857
+      },
+      {
+       "button": null,
+       "href": "/button/2909",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Dishwasher",
+       "ledHref": "/led/2877",
+       "position": 861
+      },
+      {
+       "audioZones": [
+        "Kitchen"
+       ],
+       "button": null,
+       "href": "/button/2835",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Vol Up",
+       "ledHref": "/led/2832",
+       "position": 863,
+       "savantActions": [
+        "Output Module / Audio Zone 6: IncreaseVolume",
+        "Output Module / Audio Zone 6: IncreaseVolume"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Vol up (Kitchen) [SVC_GEN_GENERIC], Vol up (Kitchen) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Vol up (Kitchen) [SVC_GEN_GENERIC]",
+        "Vol up (Kitchen) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "audioZones": [
+        "Kitchen"
+       ],
+       "button": null,
+       "href": "/button/2839",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Vol Down",
+       "ledHref": "/led/2833",
+       "position": 876,
+       "savantActions": [
+        "Output Module / Audio Zone 6: DecreaseVolume",
+        "Output Module / Audio Zone 6: DecreaseVolume"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Vol Down (Kitchen) [SVC_GEN_GENERIC], Vol Down (Kitchen) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Vol Down (Kitchen) [SVC_GEN_GENERIC]",
+        "Vol Down (Kitchen) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "audioZones": [
+        "Kitchen"
+       ],
+       "button": null,
+       "href": "/button/2856",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2831",
+       "position": 880,
+       "savantActions": [
+        "SendSavantScene 'Kitchen Music Off' in Kitchen",
+        "Output Module / Audio Zone 6: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (Kitchen) [SVC_GEN_GENERIC], Room Off (Kitchen) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (Kitchen) [SVC_GEN_GENERIC]",
+        "Room Off (Kitchen) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2844",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2828",
+       "position": 890
+      },
+      {
+       "audioSource": "Savant Music (Spotify preset on the media server)",
+       "audioZones": [
+        "Kitchen"
+       ],
+       "button": null,
+       "href": "/button/2852",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Music",
+       "ledHref": "/led/2830",
+       "position": 922,
+       "savantActions": [
+        "SendSavantScene 'Kitchen Music' in Kitchen",
+        "Media Server (Mark) / AVB Stream 1: PowerOn",
+        "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+        "Output Module / Audio Zone 6: PowerOn"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Music On (Kitchen) [SVC_GEN_GENERIC], Music (Kitchen) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Music On (Kitchen) [SVC_GEN_GENERIC]",
+        "Music (Kitchen) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2884",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Steigen",
+       "ledHref": "/led/2879",
+       "position": 926
+      },
+      {
+       "button": null,
+       "href": "/button/2901",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Hood",
+       "ledHref": "/led/2875",
+       "position": 941
+      },
+      {
+       "button": null,
+       "href": "/button/2905",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Oven",
+       "ledHref": "/led/2876",
+       "position": 942
+      }
+     ],
+     "id": null,
+     "name": "kitchen keypads"
+    }
+   ],
+   "name": "kitchen",
+   "outputs": [
+    {
+     "href": "/zone/10290",
+     "id": 10290,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Helper Toilet Downlight"
+    },
+    {
+     "href": "/zone/1500",
+     "id": 1500,
+     "kind": "switch",
+     "levelAtImport": 100,
+     "lutronArea": "Kitchen",
+     "name": "Dish Washer"
+    },
+    {
+     "href": "/zone/1446",
+     "id": 1446,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Kitchen",
+     "name": "Garbage Disposal"
+    },
+    {
+     "href": "/zone/13410",
+     "id": 13410,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Music 12"
+    },
+    {
+     "href": "/zone/13329",
+     "id": 13329,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Yard",
+     "name": "Music 3"
+    },
+    {
+     "href": "/zone/1194",
+     "id": 1194,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Kitchen",
+     "name": "Kitchen Led"
+    },
+    {
+     "href": "/zone/13374",
+     "id": 13374,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Music 8"
+    },
+    {
+     "href": "/zone/13356",
+     "id": 13356,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Yard",
+     "name": "Music 6"
+    },
+    {
+     "href": "/zone/13401",
+     "id": 13401,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Music 11"
+    },
+    {
+     "href": "/zone/10299",
+     "id": 10299,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Washing Machine"
+    },
+    {
+     "href": "/zone/13392",
+     "id": 13392,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Music 10"
+    },
+    {
+     "href": "/zone/13338",
+     "id": 13338,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Music 4"
+    },
+    {
+     "href": "/zone/1185",
+     "id": 1185,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Kitchen",
+     "name": "Kitchen Downlight"
+    },
+    {
+     "href": "/zone/13347",
+     "id": 13347,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Yard",
+     "name": "Music 5"
+    },
+    {
+     "href": "/zone/13320",
+     "id": 13320,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Yard",
+     "name": "Music 2"
+    },
+    {
+     "href": "/zone/1509",
+     "id": 1509,
+     "kind": "switch",
+     "levelAtImport": 100,
+     "lutronArea": "Kitchen",
+     "name": "Hob"
+    },
+    {
+     "href": "/zone/10281",
+     "id": 10281,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Yard Downlight"
+    },
+    {
+     "href": "/zone/13278",
+     "id": 13278,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Steigen"
+    },
+    {
+     "href": "/zone/10308",
+     "id": 10308,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Dryer"
+    },
+    {
+     "href": "/zone/7432",
+     "id": 7432,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Kitchen",
+     "name": "Hood"
+    },
+    {
+     "href": "/zone/13311",
+     "id": 13311,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Yard",
+     "name": "Music 1"
+    },
+    {
+     "href": "/zone/1491",
+     "id": 1491,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Kitchen",
+     "name": "Kitchen Bath Heater"
+    },
+    {
+     "href": "/zone/13383",
+     "id": 13383,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Yard",
+     "name": "Music 9"
+    },
+    {
+     "href": "/zone/13365",
+     "id": 13365,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Yard",
+     "name": "Music 7"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/3086",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Hallway Light",
+       "ledHref": "/led/3085",
+       "position": 814
+      },
+      {
+       "button": null,
+       "href": "/button/2523",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/2494",
+       "position": 821
+      },
+      {
+       "button": null,
+       "href": "/button/2476",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Balcony Off",
+       "ledHref": "/led/2462",
+       "position": 827
+      },
+      {
+       "button": null,
+       "href": "/button/2468",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Fan",
+       "ledHref": "/led/2460",
+       "position": 832
+      },
+      {
+       "button": null,
+       "href": "/button/2464",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2459",
+       "position": 837
+      },
+      {
+       "button": null,
+       "href": "/button/2506",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Fan",
+       "ledHref": "/led/2498",
+       "position": 840
+      },
+      {
+       "button": null,
+       "href": "/button/2502",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2497",
+       "position": 853
+      },
+      {
+       "button": null,
+       "href": "/button/2371",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Living Room Light",
+       "ledHref": "/led/2366",
+       "position": 860
+      },
+      {
+       "button": null,
+       "href": "/button/2379",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Living Room Fan",
+       "ledHref": "/led/2368",
+       "position": 903
+      },
+      {
+       "button": null,
+       "href": "/button/2514",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2500",
+       "position": 912
+      },
+      {
+       "button": null,
+       "href": "/button/2527",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Focused",
+       "ledHref": "/led/2495",
+       "position": 914
+      },
+      {
+       "button": null,
+       "href": "/button/2375",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Living Room Ambient",
+       "ledHref": "/led/2367",
+       "position": 928
+      },
+      {
+       "button": null,
+       "href": "/button/3104",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Hallway Off",
+       "ledHref": "/led/3103",
+       "position": 930
+      },
+      {
+       "button": null,
+       "href": "/button/2519",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2493",
+       "position": 933
+      },
+      {
+       "button": null,
+       "href": "/button/2531",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Broadcast",
+       "ledHref": "/led/2496",
+       "position": 940,
+       "savantActions": [
+        "SendSavantScene 'Living Broadcast Off' in Living Room",
+        "SendSavantScene 'Broadcast Living Room' in Living Room"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Broadcast Off (Living) [SVC_GEN_GENERIC], Broadcast On (Living) [SVC_GEN_GENERIC] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Broadcast Off (Living) [SVC_GEN_GENERIC]",
+        "Broadcast On (Living) [SVC_GEN_GENERIC]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2383",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Living Room Off",
+       "ledHref": "/led/2369",
+       "position": 945
+      },
+      {
+       "button": null,
+       "href": "/button/3092",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Hallway Ambient",
+       "ledHref": "/led/3091",
+       "position": 946
+      },
+      {
+       "button": null,
+       "href": "/button/2472",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Balcony Power",
+       "ledHref": "/led/2461",
+       "position": 947
+      },
+      {
+       "button": null,
+       "href": "/button/3098",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/3097",
+       "position": 951
+      },
+      {
+       "button": null,
+       "href": "/button/2510",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/2499",
+       "position": 954
+      }
+     ],
+     "id": null,
+     "name": "living room keypads"
+    }
+   ],
+   "name": "living room",
+   "outputs": [
+    {
+     "href": "/zone/1311",
+     "id": 1311,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Living",
+     "name": "Living Landing"
+    },
+    {
+     "href": "/zone/1383",
+     "id": 1383,
+     "kind": "dimmer",
+     "levelAtImport": 100,
+     "lutronArea": "Living",
+     "name": "Living Downlight"
+    },
+    {
+     "href": "/zone/1410",
+     "id": 1410,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Living",
+     "name": "Living Balcony"
+    },
+    {
+     "href": "/zone/1392",
+     "id": 1392,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Living",
+     "name": "Living Fan"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/1956",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/1949",
+       "position": 835
+      },
+      {
+       "audioZones": [
+        "Master Bathroom"
+       ],
+       "button": null,
+       "href": "/button/1988",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Vol Down",
+       "ledHref": "/led/1982",
+       "position": 847,
+       "savantActions": [
+        "Output Module / Audio Zone 1: DecreaseVolume",
+        "Output Module / Audio Zone 1: DecreaseVolume"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Vol Down (Master Bath) [SVC_GEN_GENERIC], Vol Down (Master Bath) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Vol Down (Master Bath) [SVC_GEN_GENERIC]",
+        "Vol Down (Master Bath) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/1960",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Off",
+       "ledHref": "/led/1950",
+       "position": 856
+      },
+      {
+       "button": null,
+       "href": "/button/1952",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/1948",
+       "position": 869
+      },
+      {
+       "button": null,
+       "href": "/button/1997",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/1978",
+       "position": 882
+      },
+      {
+       "button": null,
+       "href": "/button/1993",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/1977",
+       "position": 896
+      },
+      {
+       "audioZones": [
+        "Master Bathroom"
+       ],
+       "button": null,
+       "href": "/button/1984",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Vol Up",
+       "ledHref": "/led/1981",
+       "position": 916,
+       "savantActions": [
+        "Output Module / Audio Zone 1: IncreaseVolume",
+        "Output Module / Audio Zone 1: IncreaseVolume"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Vol up (Master Bath) [SVC_GEN_GENERIC], Vol up (Master Bath) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Vol up (Master Bath) [SVC_GEN_GENERIC]",
+        "Vol up (Master Bath) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "audioSource": "Savant Music (Spotify preset on the media server)",
+       "audioZones": [
+        "Master Bathroom"
+       ],
+       "button": null,
+       "href": "/button/2001",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Music",
+       "ledHref": "/led/1979",
+       "position": 949,
+       "savantActions": [
+        "SendSavantScene 'Master Bathroom Music' in Master Bathroom",
+        "Media Server (Mark) / AVB Stream 1: PowerOn",
+        "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+        "Output Module / Audio Zone 1: PowerOn"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Music On (Master Bath) [SVC_GEN_GENERIC], Music (Master Bath) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Music On (Master Bath) [SVC_GEN_GENERIC]",
+        "Music (Master Bath) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "audioZones": [
+        "Master Bathroom"
+       ],
+       "button": null,
+       "href": "/button/2005",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/1980",
+       "position": 961,
+       "savantActions": [
+        "SendSavantScene 'Master Bathroom Music Off' in Master Bathroom",
+        "Output Module / Audio Zone 1: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (Master Bath) [SVC_GEN_GENERIC], Room Off (Master Bath) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (Master Bath) [SVC_GEN_GENERIC]",
+        "Room Off (Master Bath) [SVC_ENV_LIGHTING]"
+       ]
+      }
+     ],
+     "id": null,
+     "name": "master bathroom keypads"
+    }
+   ],
+   "name": "master bathroom",
+   "outputs": [
+    {
+     "href": "/zone/996",
+     "id": 996,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "MBR Bathroom",
+     "name": "Master toilet Downlight"
+    },
+    {
+     "href": "/zone/987",
+     "id": 987,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "MBR Bathroom",
+     "name": "Master Toilet Shower"
+    },
+    {
+     "href": "/zone/10317",
+     "id": 10317,
+     "kind": "switch",
+     "levelAtImport": 100,
+     "lutronArea": "MBR Bathroom",
+     "name": "Master Heater"
+    },
+    {
+     "href": "/zone/1005",
+     "id": 1005,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "MBR Bathroom",
+     "name": "Master Bath Vanity"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/1752",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Evening",
+       "ledHref": "/led/1744",
+       "position": 801
+      },
+      {
+       "button": null,
+       "href": "/button/1931",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Night Curtain",
+       "ledHref": "/led/1917",
+       "position": 804
+      },
+      {
+       "button": null,
+       "href": "/button/1748",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Morning",
+       "ledHref": "/led/1743",
+       "position": 809
+      },
+      {
+       "audioZones": [
+        "Master Bathroom"
+       ],
+       "button": null,
+       "href": "/button/7627",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/7613",
+       "position": 818,
+       "savantActions": [
+        "Output Module / Audio Zone 1: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (MBR) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (MBR) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/1893",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Night Light",
+       "ledHref": "/led/1882",
+       "position": 838
+      },
+      {
+       "button": null,
+       "href": "/button/7632",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/7606",
+       "position": 839
+      },
+      {
+       "button": null,
+       "href": "/button/2050",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "Dehumidify",
+       "ledHref": "/led/2039",
+       "position": 841
+      },
+      {
+       "button": null,
+       "href": "/button/1760",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Night Curtain",
+       "ledHref": "/led/1746",
+       "position": 844
+      },
+      {
+       "button": null,
+       "href": "/button/1821",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Fan",
+       "ledHref": "/led/1813",
+       "position": 850
+      },
+      {
+       "button": null,
+       "href": "/button/1817",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/1812",
+       "position": 851
+      },
+      {
+       "button": null,
+       "href": "/button/1855",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Fan",
+       "ledHref": "/led/1847",
+       "position": 855
+      },
+      {
+       "button": null,
+       "href": "/button/1756",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Day Curtain",
+       "ledHref": "/led/1745",
+       "position": 858
+      },
+      {
+       "button": null,
+       "href": "/button/2042",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2037",
+       "position": 859
+      },
+      {
+       "button": null,
+       "href": "/button/1919",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Morning",
+       "ledHref": "/led/1914",
+       "position": 864
+      },
+      {
+       "button": null,
+       "href": "/button/1859",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/1848",
+       "position": 865
+      },
+      {
+       "button": null,
+       "href": "/button/7644",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Night Curtain",
+       "ledHref": "/led/7609",
+       "position": 874
+      },
+      {
+       "audioZones": [
+        "Master Bathroom"
+       ],
+       "button": null,
+       "href": "/button/2054",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2040",
+       "position": 886,
+       "savantActions": [
+        "Output Module / Audio Zone 1: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (MBR) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (MBR) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/1851",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/1846",
+       "position": 891
+      },
+      {
+       "button": null,
+       "href": "/button/1889",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/1881",
+       "position": 892
+      },
+      {
+       "button": null,
+       "href": "/button/2046",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/2038",
+       "position": 899
+      },
+      {
+       "button": null,
+       "href": "/button/7640",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Day Curtain",
+       "ledHref": "/led/7608",
+       "position": 905
+      },
+      {
+       "button": null,
+       "href": "/button/7615",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/7610",
+       "position": 908
+      },
+      {
+       "button": null,
+       "href": "/button/1897",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Home Off",
+       "ledHref": "/led/1883",
+       "position": 909,
+       "savantActions": [
+        "SendSavantScene 'Home Music Off' in Master Bedroom",
+        "Media Server (Mark) / AVB Stream 1: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Home Off (MBR) [SVC_GEN_GENERIC], Home Off (MBR) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Home Off (MBR) [SVC_GEN_GENERIC]",
+        "Home Off (MBR) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/1783",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/1778",
+       "position": 911
+      },
+      {
+       "button": null,
+       "href": "/button/1791",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Night Light",
+       "ledHref": "/led/1780",
+       "position": 920
+      },
+      {
+       "button": null,
+       "href": "/button/7623",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/7612",
+       "position": 921
+      },
+      {
+       "button": null,
+       "href": "/button/7636",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/7607",
+       "position": 925
+      },
+      {
+       "button": null,
+       "href": "/button/1825",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/1814",
+       "position": 935
+      },
+      {
+       "button": null,
+       "href": "/button/7619",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Fan",
+       "ledHref": "/led/7611",
+       "position": 936
+      },
+      {
+       "button": null,
+       "href": "/button/1787",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/1779",
+       "position": 937
+      },
+      {
+       "button": null,
+       "href": "/button/1795",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Home Off",
+       "ledHref": "/led/1781",
+       "position": 938,
+       "savantActions": [
+        "SendSavantScene 'Home Music Off' in Master Bedroom",
+        "Media Server (Mark) / AVB Stream 1: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Home Off (MBR) [SVC_GEN_GENERIC], Home Off (MBR) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Home Off (MBR) [SVC_GEN_GENERIC]",
+        "Home Off (MBR) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/1885",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/1880",
+       "position": 944
+      },
+      {
+       "audioZones": [
+        "Master Bathroom"
+       ],
+       "button": null,
+       "href": "/button/1863",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/1849",
+       "position": 953,
+       "savantActions": [
+        "Output Module / Audio Zone 1: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (MBR) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (MBR) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "audioZones": [
+        "Master Bathroom"
+       ],
+       "button": null,
+       "href": "/button/1829",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/1815",
+       "position": 957,
+       "savantActions": [
+        "Output Module / Audio Zone 1: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (MBR) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (MBR) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/1923",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Evening",
+       "ledHref": "/led/1915",
+       "position": 958
+      },
+      {
+       "button": null,
+       "href": "/button/1927",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Day Curtain",
+       "ledHref": "/led/1916",
+       "position": 963
+      }
+     ],
+     "id": null,
+     "name": "master bedroom keypads"
+    }
+   ],
+   "name": "master bedroom",
+   "outputs": [
+    {
+     "href": "/zone/933",
+     "id": 933,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "MBR Bedroom",
+     "name": "Master Headboard LED"
+    },
+    {
+     "href": "/zone/951",
+     "id": 951,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "MBR Bedroom",
+     "name": "Master Fan"
+    },
+    {
+     "href": "/zone/960",
+     "id": 960,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "MBR Bedroom",
+     "name": "Master Living Downlight"
+    },
+    {
+     "href": "/zone/7466",
+     "id": 7466,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "MBR Bedroom",
+     "name": "Master Downlight"
+    },
+    {
+     "href": "/zone/1059",
+     "id": 1059,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "MBR Walk-in Wardrobe",
+     "name": "Master Wardrobe"
+    },
+    {
+     "href": "/zone/3574",
+     "id": 3574,
+     "kind": "shade",
+     "name": "Bedroom Night Curtain"
+    },
+    {
+     "href": "/zone/3553",
+     "id": 3553,
+     "kind": "shade",
+     "name": "Bedroom Day Curtain"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/1695",
+       "intent": "Lutron shade group",
+       "kind": "shade",
+       "label": "Shade",
+       "ledHref": "/led/1687",
+       "position": 831
+      },
+      {
+       "button": null,
+       "href": "/button/1691",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/1686",
+       "position": 885
+      },
+      {
+       "button": null,
+       "href": "/button/1708",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/1682",
+       "position": 907
+      },
+      {
+       "button": null,
+       "href": "/button/1703",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/1689",
+       "position": 950
+      },
+      {
+       "button": null,
+       "href": "/button/1699",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/1688",
+       "position": 952
+      },
+      {
+       "audioSource": "Savant Music (Spotify preset on the media server)",
+       "audioZones": [
+        "Meditation Room"
+       ],
+       "button": null,
+       "href": "/button/1720",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Music",
+       "ledHref": "/led/1685",
+       "position": 956,
+       "savantActions": [
+        "SendSavantScene 'Meditation Room Music' in Meditation Room",
+        "Media Server (Mark) / AVB Stream 1: PowerOn",
+        "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+        "Output Module / Audio Zone 5: PowerOn"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Music On (Meditation) [SVC_GEN_GENERIC], Music On (Meditation) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Music On (Meditation) [SVC_GEN_GENERIC]",
+        "Music On (Meditation) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/1716",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Color",
+       "ledHref": "/led/1684",
+       "position": 959
+      },
+      {
+       "button": null,
+       "href": "/button/1712",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/1683",
+       "position": 962
+      }
+     ],
+     "id": null,
+     "name": "meditation room keypads"
+    }
+   ],
+   "name": "meditation room",
+   "outputs": [
+    {
+     "href": "/zone/11726",
+     "id": 11726,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Meditation",
+     "name": "R"
+    },
+    {
+     "href": "/zone/11744",
+     "id": 11744,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Meditation",
+     "name": "B"
+    },
+    {
+     "href": "/zone/4601",
+     "id": 4601,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Meditation",
+     "name": "W"
+    },
+    {
+     "href": "/zone/11735",
+     "id": 11735,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Meditation",
+     "name": "G"
+    },
+    {
+     "href": "/zone/915",
+     "id": 915,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Meditation",
+     "name": "Meditation Downlight"
+    },
+    {
+     "href": "/zone/3595",
+     "id": 3595,
+     "kind": "shade",
+     "name": "Shades"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "button": null,
+       "href": "/button/2174",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2167",
+       "position": 806
+      },
+      {
+       "button": null,
+       "href": "/button/2145",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Night Light",
+       "ledHref": "/led/2110",
+       "position": 842
+      },
+      {
+       "button": null,
+       "href": "/button/2170",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2166",
+       "position": 846
+      },
+      {
+       "button": null,
+       "href": "/button/2116",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2111",
+       "position": 848
+      },
+      {
+       "button": null,
+       "href": "/button/2141",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Focused",
+       "ledHref": "/led/2109",
+       "position": 867
+      },
+      {
+       "button": null,
+       "href": "/button/2133",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2107",
+       "position": 875
+      },
+      {
+       "button": null,
+       "href": "/button/2124",
+       "intent": "Savant: HVAC",
+       "kind": "hvac",
+       "label": "AC",
+       "ledHref": "/led/2113",
+       "position": 877
+      },
+      {
+       "button": null,
+       "href": "/button/2178",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2168",
+       "position": 883
+      },
+      {
+       "button": null,
+       "href": "/button/2120",
+       "intent": "Lutron relay (fan)",
+       "kind": "fan",
+       "label": "Fan",
+       "ledHref": "/led/2112",
+       "position": 919
+      },
+      {
+       "button": null,
+       "href": "/button/2137",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Relaxed",
+       "ledHref": "/led/2108",
+       "position": 924
+      },
+      {
+       "button": null,
+       "href": "/button/2128",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2114",
+       "position": 931
+      }
+     ],
+     "id": null,
+     "name": "penny's bedroom keypads"
+    }
+   ],
+   "name": "penny's bedroom",
+   "outputs": [
+    {
+     "href": "/zone/1248",
+     "id": 1248,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Daughter Bedroom",
+     "name": "Daughter Bedroom Fan"
+    },
+    {
+     "href": "/zone/1473",
+     "id": 1473,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Daughter Bathroom",
+     "name": "Daughter's Bath Heater"
+    },
+    {
+     "href": "/zone/1374",
+     "id": 1374,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Daughter Bathroom",
+     "name": "Daughter Bath Mirror"
+    },
+    {
+     "href": "/zone/1347",
+     "id": 1347,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Daughter Bathroom",
+     "name": "Daughter Bath Shower Downlight"
+    },
+    {
+     "href": "/zone/1356",
+     "id": 1356,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Daughter Bathroom",
+     "name": "Daughter Bath Main Downlight"
+    },
+    {
+     "href": "/zone/1239",
+     "id": 1239,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Daughter Bedroom",
+     "name": "Daughter Bedroom Main"
+    }
+   ]
+  },
+  {
+   "keypads": [
+    {
+     "buttons": [
+      {
+       "audioZones": [
+        "Powder Room"
+       ],
+       "button": null,
+       "href": "/button/2423",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Vol Down",
+       "ledHref": "/led/2417",
+       "position": 822,
+       "savantActions": [
+        "Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume",
+        "Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Vol Down (Powder Room) [SVC_GEN_GENERIC], Vol Down (Powder Room) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Vol Down (Powder Room) [SVC_GEN_GENERIC]",
+        "Vol Down (Powder Room) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2428",
+       "intent": "Lutron load",
+       "kind": "output",
+       "label": "Light",
+       "ledHref": "/led/2412",
+       "position": 825
+      },
+      {
+       "button": null,
+       "href": "/button/2440",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Room Off",
+       "ledHref": "/led/2415",
+       "position": 852,
+       "savantActions": [
+        "SendSavantScene 'Powder Room Music Off' in Powder Room",
+        "Single Input Output Module (Powder Room) / AVB Stream 1: PowerOff"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Room Off (Powder Room) [SVC_GEN_GENERIC], Room Off (Powder Room) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Room Off (Powder Room) [SVC_GEN_GENERIC]",
+        "Room Off (Powder Room) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "button": null,
+       "href": "/button/2432",
+       "intent": "Lutron scene (several loads)",
+       "kind": "macro",
+       "label": "Ambient",
+       "ledHref": "/led/2413",
+       "position": 879
+      },
+      {
+       "audioZones": [
+        "Powder Room"
+       ],
+       "button": null,
+       "href": "/button/2419",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Vol Up",
+       "ledHref": "/led/2416",
+       "position": 894,
+       "savantActions": [
+        "Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume",
+        "Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Vol up (Powder Room) [SVC_GEN_GENERIC], Vol up (Powder Room) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Vol up (Powder Room) [SVC_GEN_GENERIC]",
+        "Vol up (Powder Room) [SVC_ENV_LIGHTING]"
+       ]
+      },
+      {
+       "audioSource": "Savant Music (Spotify preset on the media server)",
+       "button": null,
+       "href": "/button/2436",
+       "intent": "Savant: audio / media",
+       "kind": "integration",
+       "label": "Music",
+       "ledHref": "/led/2414",
+       "position": 927,
+       "savantActions": [
+        "SendSavantScene 'Powder Room Music' in Powder Room",
+        "Media Server (Mark) / AVB Stream 1: PowerOn",
+        "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+        "Single Input Output Module (Powder Room) / AVB Stream 1: PowerOn"
+       ],
+       "savantCaptured": true,
+       "savantNote": "from the Savant configuration: Music On (Powder Room) [SVC_GEN_GENERIC], Music (Powder Room) [SVC_ENV_LIGHTING] (linked by name; confirm live)",
+       "savantWorkflows": [
+        "Music On (Powder Room) [SVC_GEN_GENERIC]",
+        "Music (Powder Room) [SVC_ENV_LIGHTING]"
+       ]
+      }
+     ],
+     "id": null,
+     "name": "powder room keypads"
+    }
+   ],
+   "name": "powder room",
+   "outputs": [
+    {
+     "href": "/zone/1338",
+     "id": 1338,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Powder Room",
+     "name": "Powder Strip Light"
+    },
+    {
+     "href": "/zone/1320",
+     "id": 1320,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Powder Room",
+     "name": "Powder Downlight"
+    },
+    {
+     "href": "/zone/1419",
+     "id": 1419,
+     "kind": "switch",
+     "levelAtImport": 0,
+     "lutronArea": "Powder Room",
+     "name": "Powder Room Heater"
+    }
+   ]
+  },
+  {
+   "keypads": [],
+   "name": "unsorted",
+   "outputs": [
+    {
+     "href": "/zone/7484",
+     "id": 7484,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Zone 04"
+    },
+    {
+     "href": "/zone/9256",
+     "id": 9256,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "L3S3 Z3"
+    },
+    {
+     "href": "/zone/897",
+     "id": 897,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Home Theatre DMX"
+    },
+    {
+     "href": "/zone/7502",
+     "id": 7502,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Zone 06"
+    },
+    {
+     "href": "/zone/1068",
+     "id": 1068,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Zone 22"
+    },
+    {
+     "href": "/zone/1077",
+     "id": 1077,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Zone 23"
+    },
+    {
+     "href": "/zone/1329",
+     "id": 1329,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Zone 51"
+    },
+    {
+     "href": "/zone/1257",
+     "id": 1257,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Meditation DMX"
+    },
+    {
+     "href": "/zone/7475",
+     "id": 7475,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Zone 02"
+    },
+    {
+     "href": "/zone/1401",
+     "id": 1401,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Area 001",
+     "name": "Zone 59"
+    }
+   ]
+  },
+  {
+   "keypads": [],
+   "name": "wine cellar",
+   "outputs": [
+    {
+     "href": "/zone/1023",
+     "id": 1023,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Wine Cellar",
+     "name": "Wine Cellar 1"
+    },
+    {
+     "href": "/zone/1032",
+     "id": 1032,
+     "kind": "dimmer",
+     "levelAtImport": 0,
+     "lutronArea": "Wine Cellar",
+     "name": "Wine Cellar 2"
+    }
+   ]
+  }
+ ],
+ "customMacros": [],
+ "processor": "192.168.1.201",
+ "savant": {
+  "audioZones": {
+   "AV10:PRE OUT": "Home Theatre",
+   "Denon AVR:FRONT/CENTER/SURROUND/SURROUND BACK (ASSIGNABLE)": "Master Bedroom",
+   "Naim Amp:Analogue Outputs pre amp out": "Living Room",
+   "Output Module:Audio Zone 1": "Master Bathroom",
+   "Output Module:Audio Zone 2": "Penny's Bedroom",
+   "Output Module:Audio Zone 3": "Home Office",
+   "Output Module:Audio Zone 4": "Wine Cellar",
+   "Output Module:Audio Zone 5": "Meditation Room",
+   "Output Module:Audio Zone 6": "Kitchen",
+   "Output Module:Audio Zone 7": "Entrance",
+   "Output Module:Audio Zone 8": "Dining Room",
+   "Single Input Output Module (Living):Audio Zone 1": "Living Room",
+   "Single Input Output Module (Powder Room):Audio Zone 1": "Powder Room"
+  },
+  "bridgeIP": "192.168.1.173",
+  "bridgeMAC": "98:5d:ad:7c:c0:81",
+  "counts": {
+   "buttons": 164,
+   "devices": 24,
+   "loads": 82,
+   "rooms": 14,
+   "shades": 4,
+   "workflows": 80
+  },
+  "devices": [
+   {
+    "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+    "ip": "192.168.1.103",
+    "name": "CCTV 3",
+    "port": "80",
+    "protocolHint": "HTTP (Bond / Hue / camera APIs)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+    "ip": "192.168.1.105",
+    "name": "CCTV 5",
+    "port": "80",
+    "protocolHint": "HTTP (Bond / Hue / camera APIs)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.88",
+    "name": "Haiku Living",
+    "port": "31415",
+    "protocolHint": "Big Ass Fans SenseME UDP/TCP",
+    "room": "Living Room"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.64",
+    "name": "AVB Switch",
+    "port": "23",
+    "protocolHint": "telnet (plain text; capturable)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.59",
+    "name": "Bond Bridge",
+    "port": "80",
+    "protocolHint": "HTTP (Bond / Hue / camera APIs)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.80",
+    "name": "Denon AVR",
+    "port": "23",
+    "protocolHint": "telnet (plain text; capturable)",
+    "room": "Master Bedroom"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.69",
+    "name": "AV10",
+    "port": "23",
+    "protocolHint": "telnet (plain text; capturable)",
+    "room": "Home Theatre"
+   },
+   {
+    "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+    "ip": "192.168.1.102",
+    "name": "CCTV 2",
+    "port": "80",
+    "protocolHint": "HTTP (Bond / Hue / camera APIs)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.65",
+    "name": "HT ATV US",
+    "port": "0",
+    "protocolHint": "Apple TV (HomeKit / Companion)",
+    "room": "Home Theatre"
+   },
+   {
+    "credentials": "",
+    "ip": "",
+    "name": "HT ATV US",
+    "port": "IR",
+    "protocolHint": "IR via SmartControl 12 IR(Serial PWM) Output 4",
+    "room": "Home Theatre"
+   },
+   {
+    "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+    "ip": "192.168.1.104",
+    "name": "CCTV 4",
+    "port": "80",
+    "protocolHint": "HTTP (Bond / Hue / camera APIs)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.68",
+    "name": "SurgeX",
+    "port": "23",
+    "protocolHint": "telnet (plain text; capturable)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.70",
+    "name": "JVC Projector",
+    "port": "20554",
+    "protocolHint": "JVC projector IP control",
+    "room": "Home Theatre"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.72",
+    "name": "Philips Hue",
+    "port": "80",
+    "protocolHint": "HTTP (Bond / Hue / camera APIs)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.11",
+    "name": "CoolLink Hub 1",
+    "port": "10102",
+    "protocolHint": "CoolAutomation CoolLink TCP (plain text)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "",
+    "name": "Karaoke",
+    "port": "IR",
+    "protocolHint": "IR via SmartControl 12 IR(Serial PWM) Output 1",
+    "room": "Home Theatre"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.10",
+    "name": "CoolLink Hub 2",
+    "port": "10102",
+    "protocolHint": "CoolAutomation CoolLink TCP (plain text)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "",
+    "name": "MBR ATV",
+    "port": "0",
+    "protocolHint": "Apple TV (HomeKit / Companion)",
+    "room": "Master Bedroom"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.58",
+    "name": "Bond Bridge 2",
+    "port": "80",
+    "protocolHint": "HTTP (Bond / Hue / camera APIs)",
+    "room": "Server Rack"
+   },
+   {
+    "credentials": "",
+    "ip": "192.168.1.66",
+    "name": "HT ATV SG",
+    "port": "0",
+    "protocolHint": "Apple TV (HomeKit / Companion)",
+    "room": "Home Theatre"
+   },
+   {
+    "credentials": "",
+    "ip": "",
+    "name": "HT ATV SG",
+    "port": "IR",
+    "protocolHint": "IR via SmartControl 12 IR(Serial PWM) Output 6",
+    "room": "Home Theatre"
+   },
+   {
+    "credentials": "",
+    "ip": "",
+    "name": "Door Station",
+    "port": "443",
+    "protocolHint": "HTTPS",
+    "room": "Home Access"
+   },
+   {
+    "credentials": "",
+    "ip": "",
+    "name": "Blu ray",
+    "port": "IR",
+    "protocolHint": "IR via SmartControl 12 IR(Serial PWM) Output 2",
+    "room": "Home Theatre"
+   },
+   {
+    "credentials": "(in the Savant config; run import-savant on your copy to see it)",
+    "ip": "192.168.1.101",
+    "name": "CCTV 1",
+    "port": "80",
+    "protocolHint": "HTTP (Bond / Hue / camera APIs)",
+    "room": "Server Rack"
+   }
+  ],
+  "importedAt": "2026-10-11T15:29:59Z",
+  "lutronAreas": {
+   "Dining Room": [
+    "/area/2710"
+   ],
+   "Entrance": [
+    "/area/2187"
+   ],
+   "Helper's Room": [
+    "/area/6143"
+   ],
+   "Home Office": [
+    "/area/2592"
+   ],
+   "Home Theatre": [
+    "/area/2233"
+   ],
+   "Kitchen": [
+    "/area/10269",
+    "/area/2809"
+   ],
+   "Living Room": [
+    "/area/2347"
+   ],
+   "Master Bathroom": [
+    "/area/1628"
+   ],
+   "Master Bedroom": [
+    "/area/2018",
+    "/area/1601"
+   ],
+   "Meditation Room": [
+    "/area/1655"
+   ],
+   "Penny's Bedroom": [
+    "/area/2088",
+    "/area/2076"
+   ],
+   "Powder Room": [
+    "/area/2393"
+   ],
+   "Wine Cellar": [
+    "/area/13062"
+   ]
+  },
+  "notes": [
+   "bundled pre-fill: camera passwords removed; import your own copy to restore them"
+  ],
+  "processorMAC": "38:ab:41:ab:ec:cb",
+  "sourceFolder": "bundled copy of the Savant configuration (Oct 2026)",
+  "systemName": "Mark's Residence",
+  "workflows": [
+   {
+    "actions": [
+     "SendSavantScene 'Dining Music Ambient' in Dining Room"
+    ],
+    "name": "Music Ambient (Dining)",
+    "room": "Dining Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "shell: ~/Applications/RacePointMedia/sclibridge activateScene 'Dining Music Party' '02AD51EF-477B-4338-9BC3-A19FC7365680' 'AVAutomation'"
+    ],
+    "name": "Music Party (Dining)",
+    "room": "Dining Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Media Server (Mark) / AVB Stream 1: PowerOn",
+     "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)"
+    ],
+    "name": "Music On (Dining)",
+    "room": "Dining Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 8: PowerOff"
+    ],
+    "name": "Room Off (Dining)",
+    "room": "Dining Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 8: DecreaseVolume"
+    ],
+    "name": "Vol Down (Dining)",
+    "room": "Dining Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 8: IncreaseVolume"
+    ],
+    "name": "Vol Up (Dining)",
+    "room": "Dining Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Entire Home Music Off' in Entrance"
+    ],
+    "name": "Music Off (Entrance)",
+    "room": "Entrance",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Entrance Music' in Entrance"
+    ],
+    "name": "Music On (Entrance)",
+    "room": "Entrance",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Broadcast Home Office' in Home Office"
+    ],
+    "name": "Broadcast On (Home Office)",
+    "room": "Home Office",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Home Office Music' in Home Office"
+    ],
+    "name": "Music On (Home Office)",
+    "room": "Home Office",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Home Office Broadcast Off' in Home Office"
+    ],
+    "name": "Room Off (Home Office)",
+    "room": "Home Office",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Home Theatre Broadcast Off' in Home Theatre"
+    ],
+    "name": "Broadcast Off (HT)",
+    "room": "Home Theatre",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Broadcast Home Theatre' in Home Theatre"
+    ],
+    "name": "Broadcast On (HT)",
+    "room": "Home Theatre",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Home Theatre Media Off' in Home Theatre"
+    ],
+    "name": "Movie Off (HT)",
+    "room": "Home Theatre",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Home Theatre Movie On' in Home Theatre",
+     "Bond Bridge / Lighting_controller: ShadeDown Address1=960dff3f8de0d070",
+     "Bond Bridge / Lighting_controller: ShadeDown Address1=2409e57e3eb16933",
+     "Bond Bridge / : "
+    ],
+    "name": "Movie On (HT)",
+    "room": "Home Theatre",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Home Theatre Room Off' in Home Theatre"
+    ],
+    "name": "Room Off (HT)",
+    "room": "Home Theatre",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "AV10 / Receiver: "
+    ],
+    "name": "Zone 2",
+    "room": "Home Theatre",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Kitchen Music' in Kitchen"
+    ],
+    "name": "Music On (Kitchen)",
+    "room": "Kitchen",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Kitchen Music Off' in Kitchen"
+    ],
+    "name": "Room Off (Kitchen)",
+    "room": "Kitchen",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 6: DecreaseVolume"
+    ],
+    "name": "Vol Down (Kitchen)",
+    "room": "Kitchen",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 6: IncreaseVolume"
+    ],
+    "name": "Vol up (Kitchen)",
+    "room": "Kitchen",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Media Server (Mark) / AVB Stream 1: PowerOn",
+     "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+     "Output Module / Audio Zone 6: PowerOn"
+    ],
+    "name": "Music (Kitchen)",
+    "room": "Kitchen",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 6: PowerOff"
+    ],
+    "name": "Room Off (Kitchen)",
+    "room": "Kitchen",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 6: DecreaseVolume"
+    ],
+    "name": "Vol Down (Kitchen)",
+    "room": "Kitchen",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 6: IncreaseVolume"
+    ],
+    "name": "Vol up (Kitchen)",
+    "room": "Kitchen",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Living Broadcast Off' in Living Room"
+    ],
+    "name": "Broadcast Off (Living)",
+    "room": "Living Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Broadcast Living Room' in Living Room"
+    ],
+    "name": "Broadcast On (Living)",
+    "room": "Living Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "set state travel mode = ['0']"
+    ],
+    "name": "Travel Mode Disable",
+    "room": "Living Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "set state travel mode = ['1']"
+    ],
+    "name": "Travel Mode Enable",
+    "room": "Living Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "shell: ~/Applications/RacePointMedia/sclibridge activateScene 'Travel Mode Off' 'DD7C0258-7F2A-452B-BD7B-EAFEF8754DAA' 'hafiz@av-intelligence.sg'"
+    ],
+    "name": "Travel Mode Off Scene",
+    "room": "Living Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "shell: ~/Applications/RacePointMedia/sclibridge activateScene 'Travel Mode On' '95FFB30A-D97C-43F4-8EE4-A1B271DD5F41' 'AVAutomation'",
+     "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 2 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2",
+     "CoolLink Hub 1 / HVAC_controller: SetHVACModeDehumidify ThermostatAddress=2"
+    ],
+    "name": "Travel Mode On Scene",
+    "room": "Living Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Master Bathroom Music' in Master Bathroom"
+    ],
+    "name": "Music On (Master Bath)",
+    "room": "Master Bathroom",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Master Bathroom Music Off' in Master Bathroom"
+    ],
+    "name": "Room Off (Master Bath)",
+    "room": "Master Bathroom",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 1: DecreaseVolume"
+    ],
+    "name": "Vol Down (Master Bath)",
+    "room": "Master Bathroom",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 1: IncreaseVolume"
+    ],
+    "name": "Vol up (Master Bath)",
+    "room": "Master Bathroom",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Media Server (Mark) / AVB Stream 1: PowerOn",
+     "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+     "Output Module / Audio Zone 1: PowerOn"
+    ],
+    "name": "Music (Master Bath)",
+    "room": "Master Bathroom",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 1: PowerOff"
+    ],
+    "name": "Room Off (Master Bath)",
+    "room": "Master Bathroom",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 1: DecreaseVolume"
+    ],
+    "name": "Vol Down (Master Bath)",
+    "room": "Master Bathroom",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 1: IncreaseVolume"
+    ],
+    "name": "Vol up (Master Bath)",
+    "room": "Master Bathroom",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Home Music Off' in Master Bedroom"
+    ],
+    "name": "Home Off (MBR)",
+    "room": "Master Bedroom",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Master Bedroom Music Off' in Master Bedroom"
+    ],
+    "name": "Music Off (MBR)",
+    "room": "Master Bedroom",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Media Server (Mark) / AVB Stream 1: PowerOff"
+    ],
+    "name": "Home Off (MBR)",
+    "room": "Master Bedroom",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 1: PowerOff"
+    ],
+    "name": "Room Off (MBR)",
+    "room": "Master Bedroom",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Meditation Room Music Off' in Meditation Room"
+    ],
+    "name": "Music Off (Meditation)",
+    "room": "Meditation Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Meditation Room Music' in Meditation Room"
+    ],
+    "name": "Music On (Meditation)",
+    "room": "Meditation Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 5: PowerOff"
+    ],
+    "name": "Music Off (Meditation)",
+    "room": "Meditation Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Media Server (Mark) / AVB Stream 1: PowerOn",
+     "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+     "Output Module / Audio Zone 5: PowerOn"
+    ],
+    "name": "Music On (Meditation)",
+    "room": "Meditation Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Powder Room Music' in Powder Room"
+    ],
+    "name": "Music On (Powder Room)",
+    "room": "Powder Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Powder Room Music Off' in Powder Room"
+    ],
+    "name": "Room Off (Powder Room)",
+    "room": "Powder Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume"
+    ],
+    "name": "Vol Down (Powder Room)",
+    "room": "Powder Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume"
+    ],
+    "name": "Vol up (Powder Room)",
+    "room": "Powder Room",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Media Server (Mark) / AVB Stream 1: PowerOn",
+     "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+     "Single Input Output Module (Powder Room) / AVB Stream 1: PowerOn"
+    ],
+    "name": "Music (Powder Room)",
+    "room": "Powder Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Single Input Output Module (Powder Room) / AVB Stream 1: PowerOff"
+    ],
+    "name": "Room Off (Powder Room)",
+    "room": "Powder Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume"
+    ],
+    "name": "Vol Down (Powder Room)",
+    "room": "Powder Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume"
+    ],
+    "name": "Vol up (Powder Room)",
+    "room": "Powder Room",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Wine Cellar Music Off' in Wine Cellar"
+    ],
+    "name": "Music Off (Wine Cellar)",
+    "room": "Wine Cellar",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "SendSavantScene 'Wine Cellar Music' in Wine Cellar"
+    ],
+    "name": "Music On (Wine Cellar)",
+    "room": "Wine Cellar",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 4: DecreaseVolume"
+    ],
+    "name": "Vol Down (Wine Cellar)",
+    "room": "Wine Cellar",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 4: IncreaseVolume"
+    ],
+    "name": "Vol up (Wine Cellar)",
+    "room": "Wine Cellar",
+    "service": "SVC_GEN_GENERIC"
+   },
+   {
+    "actions": [
+     "Media Server (Mark) / AVB Stream 1: PowerOn",
+     "Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)",
+     "Output Module / Audio Zone 4: PowerOn"
+    ],
+    "name": "Music (Wine Cellar)",
+    "room": "Wine Cellar",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 4: PowerOff"
+    ],
+    "name": "Room Off (Wine Cellar)",
+    "room": "Wine Cellar",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 4: DecreaseVolume"
+    ],
+    "name": "Vol Down (Wine Cellar)",
+    "room": "Wine Cellar",
+    "service": "SVC_ENV_LIGHTING"
+   },
+   {
+    "actions": [
+     "Output Module / Audio Zone 4: IncreaseVolume"
+    ],
+    "name": "Vol up (Wine Cellar)",
+    "room": "Wine Cellar",
+    "service": "SVC_ENV_LIGHTING"
+   }
+  ]
+ },
+ "savantHost": null,
+ "source": "bundled Savant configuration (pre-filled)",
+ "system": "LEAP"
+}

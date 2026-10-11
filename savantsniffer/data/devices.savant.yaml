@@ -1,0 +1,2090 @@
+system: LEAP
+processor: 192.168.1.201
+source: bundled Savant configuration (pre-filled)
+savant:
+  bridge_ip: 192.168.1.173
+  bridge_mac: 98:5d:ad:7c:c0:81
+  bridge_uid: 985DAD7CC0810042
+  processor_mac: 38:ab:41:ab:ec:cb
+  system_name: Mark's Residence
+  findings_file: savant_findings.json
+areas:
+  dining room:
+    outputs:
+      Dining Balcony Fan:
+        id: 1230
+        kind: switch
+        href: /zone/1230
+        savant_load_id: C951BEFD-9435-4CA7-BE98-1C4018C6CFF4
+        lutron_area: Dining
+        level_at_export: 0
+      Dining Pendant:
+        id: 1203
+        kind: switch
+        href: /zone/1203
+        savant_load_id: D1355C55-58B2-40A4-88D4-765B5060BB46
+        lutron_area: Dining
+        level_at_export: 100
+      Dining Downlight:
+        id: 1212
+        kind: dimmer
+        href: /zone/1212
+        savant_load_id: 4619AA89-6F78-436E-9720-E2E3197D4772
+        lutron_area: Dining
+        level_at_export: 100
+    keypads:
+      dining room keypads:
+        id: null
+        buttons:
+          2759:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2759
+            led: /led/2730
+            savant_offset: '810'
+          2750:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2750
+            led: /led/2736
+            savant_offset: '843'
+            savant_workflows:
+            - Room Off (Dining) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 8: PowerOff'
+            audio_zones:
+            - Dining Room
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2796:
+            label: Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/2796
+            led: /led/2789
+            savant_offset: '868'
+          2738:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2738
+            led: /led/2733
+            savant_offset: '870'
+          2763:
+            label: Focused
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2763
+            led: /led/2731
+            savant_offset: '872'
+          2767:
+            label: Music
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2767
+            led: /led/2732
+            savant_offset: '878'
+            savant_workflows:
+            - Music On (Dining) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Media Server (Mark) / AVB Stream 1: PowerOn'
+            - 'Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)'
+            audio_source: Savant Music (Spotify preset on the media server)
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2742:
+            label: Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/2742
+            led: /led/2734
+            savant_offset: '895'
+          2800:
+            label: Balcony Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2800
+            led: /led/2790
+            savant_offset: '906'
+          2746:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2746
+            led: /led/2735
+            savant_offset: '923'
+          2755:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2755
+            led: /led/2729
+            savant_offset: '955'
+          2792:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2792
+            led: /led/2788
+            savant_offset: '960'
+  home office:
+    outputs:
+      Office Downlight:
+        id: 1095
+        kind: dimmer
+        href: /zone/1095
+        savant_load_id: 9C8AE7A0-6CBF-4608-A3B3-BED109EC36EB
+        lutron_area: Home Office
+        level_at_export: 100
+      Office Strip Light:
+        id: 1104
+        kind: dimmer
+        href: /zone/1104
+        savant_load_id: 7A6BAC71-446D-425C-9127-A4B636720AA6
+        lutron_area: Home Office
+        level_at_export: 100
+    keypads:
+      home office keypads:
+        id: null
+        buttons:
+          2622:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2622
+            led: /led/2616
+            savant_offset: '871'
+            savant_workflows:
+            - Room Off (Home Office) [SVC_GEN_GENERIC]
+            savant_actions:
+            - SendSavantScene 'Home Office Broadcast Off' in Home Office
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2635:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2635
+            led: /led/2613
+            savant_offset: '889'
+          2627:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2627
+            led: /led/2611
+            savant_offset: '893'
+          2639:
+            label: Broadcast
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2639
+            led: /led/2614
+            savant_offset: '902'
+            savant_workflows:
+            - Broadcast On (Home Office) [SVC_GEN_GENERIC]
+            savant_actions:
+            - SendSavantScene 'Broadcast Home Office' in Home Office
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2631:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2631
+            led: /led/2612
+            savant_offset: '910'
+          2618:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2618
+            led: /led/2615
+            savant_offset: '917'
+  home theatre:
+    outputs:
+      W:
+        id: 5426
+        kind: dimmer
+        href: /zone/5426
+        savant_load_id: FA3D130F-1B81-4BED-A31F-60EA42F517CD
+        lutron_area: Home Theatre
+        level_at_export: 0
+      Outer circle home theatre:
+        id: 878
+        kind: dimmer
+        href: /zone/878
+        savant_load_id: 37CDFF5C-78FB-49BE-A12D-050FC3E233D9
+        lutron_area: Home Theatre
+        level_at_export: 0
+      B:
+        id: 11327
+        kind: dimmer
+        href: /zone/11327
+        savant_load_id: 292780E6-C6DA-4F21-B5D4-9E2D56C8FD69
+        lutron_area: Home Theatre
+        level_at_export: 0
+      Inner circle home threater:
+        id: 888
+        kind: dimmer
+        href: /zone/888
+        savant_load_id: 072BAB19-1446-4842-A56E-CDD41BA00D9C
+        lutron_area: Home Theatre
+        level_at_export: 0
+      R:
+        id: 11309
+        kind: dimmer
+        href: /zone/11309
+        savant_load_id: A357F9F5-DA92-4A1B-B1CA-E84FE84CDCC1
+        lutron_area: Home Theatre
+        level_at_export: 0
+      G:
+        id: 11318
+        kind: dimmer
+        href: /zone/11318
+        savant_load_id: 8FCCAC2A-D0E7-46E3-A611-0E801C8EA9AF
+        lutron_area: Home Theatre
+        level_at_export: 0
+      Curtain:
+        id: 3617
+        kind: shade
+        href: /zone/3617
+        savant_load_id: 760C3819-AD02-4C21-8C78-5D106C33D18B
+    keypads:
+      home theatre keypads:
+        id: null
+        buttons:
+          2295:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2295
+            led: /led/2287
+            savant_offset: '819'
+          2325:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2325
+            led: /led/2320
+            savant_offset: '820'
+          2261:
+            label: Entrance Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/2261
+            led: /led/2253
+            savant_offset: '830'
+          2291:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2291
+            led: /led/2286
+            savant_offset: '833'
+          11674:
+            label: Open
+            kind: shade
+            intent: Lutron shade group
+            href: /button/11674
+            led: ''
+            savant_offset: '845'
+          2337:
+            label: Broadcast
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2337
+            led: /led/2323
+            savant_offset: '862'
+            savant_workflows:
+            - Broadcast Off (HT) [SVC_GEN_GENERIC]
+            - Broadcast On (HT) [SVC_GEN_GENERIC]
+            savant_actions:
+            - SendSavantScene 'Home Theatre Broadcast Off' in Home Theatre
+            - SendSavantScene 'Broadcast Home Theatre' in Home Theatre
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          3686:
+            label: Close
+            kind: shade
+            intent: Lutron shade group
+            href: /button/3686
+            led: ''
+            savant_offset: '866'
+          2269:
+            label: Night Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/2269
+            led: /led/2255
+            savant_offset: '873'
+          2333:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2333
+            led: /led/2322
+            savant_offset: '884'
+            savant_workflows:
+            - Room Off (HT) [SVC_GEN_GENERIC]
+            savant_actions:
+            - SendSavantScene 'Home Theatre Room Off' in Home Theatre
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          11677:
+            label: Close
+            kind: shade
+            intent: Lutron shade group
+            href: /button/11677
+            led: ''
+            savant_offset: '898'
+          2265:
+            label: Day Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/2265
+            led: /led/2254
+            savant_offset: '913'
+          2329:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2329
+            led: /led/2321
+            savant_offset: '915'
+          2299:
+            label: Focused
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2299
+            led: /led/2288
+            savant_offset: '918'
+          2257:
+            label: Movie
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2257
+            led: /led/2252
+            savant_offset: '934'
+            savant_workflows:
+            - Movie Off (HT) [SVC_GEN_GENERIC]
+            - Movie On (HT) [SVC_GEN_GENERIC]
+            savant_actions:
+            - SendSavantScene 'Home Theatre Media Off' in Home Theatre
+            - SendSavantScene 'Home Theatre Movie On' in Home Theatre
+            - 'Bond Bridge / Lighting_controller: ShadeDown Address1=960dff3f8de0d070'
+            - 'Bond Bridge / Lighting_controller: ShadeDown Address1=2409e57e3eb16933'
+            - 'Bond Bridge / : '
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2303:
+            label: Color
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2303
+            led: /led/2289
+            savant_offset: '939'
+          3683:
+            label: Open
+            kind: shade
+            intent: Lutron shade group
+            href: /button/3683
+            led: ''
+            savant_offset: '943'
+  kitchen:
+    outputs:
+      Helper Toilet Downlight:
+        id: 10290
+        kind: switch
+        href: /zone/10290
+        savant_load_id: 005C3E57-BAA1-4988-AA17-F7E62E7AA177
+        lutron_area: Yard
+        level_at_export: 0
+      Dish Washer:
+        id: 1500
+        kind: switch
+        href: /zone/1500
+        savant_load_id: 93EF0EFB-4412-43C3-A6C7-7DFC58B7D669
+        lutron_area: Kitchen
+        level_at_export: 100
+      Garbage Disposal:
+        id: 1446
+        kind: switch
+        href: /zone/1446
+        savant_load_id: 6DE37B61-E3EB-44E1-BAEC-31F8C93E269A
+        lutron_area: Kitchen
+        level_at_export: 0
+      Music 12:
+        id: 13410
+        kind: dimmer
+        href: /zone/13410
+        savant_load_id: 61798437-302F-4931-9E22-23BCFD61AF84
+        lutron_area: Yard
+        level_at_export: 0
+      Music 3:
+        id: 13329
+        kind: dimmer
+        href: /zone/13329
+        savant_load_id: 36987762-5334-41D1-802F-24DC8963423E
+        lutron_area: Yard
+        level_at_export: 100
+      Kitchen Led:
+        id: 1194
+        kind: switch
+        href: /zone/1194
+        savant_load_id: C067988C-EA79-48B3-9408-7A021F8AF879
+        lutron_area: Kitchen
+        level_at_export: 0
+      Music 8:
+        id: 13374
+        kind: dimmer
+        href: /zone/13374
+        savant_load_id: 97420D9C-AE9F-48CC-8D26-D2CBFB310C3C
+        lutron_area: Yard
+        level_at_export: 0
+      Music 6:
+        id: 13356
+        kind: dimmer
+        href: /zone/13356
+        savant_load_id: 8537B25E-AEF3-4F01-98EE-02652B4AA1F5
+        lutron_area: Yard
+        level_at_export: 100
+      Music 11:
+        id: 13401
+        kind: dimmer
+        href: /zone/13401
+        savant_load_id: B7866BC1-FD49-438D-876D-57BBE11E7D9A
+        lutron_area: Yard
+        level_at_export: 0
+      Washing Machine:
+        id: 10299
+        kind: switch
+        href: /zone/10299
+        savant_load_id: 9D642790-F6BA-4289-9CAD-CB8D3C73F513
+        lutron_area: Yard
+        level_at_export: 0
+      Music 10:
+        id: 13392
+        kind: dimmer
+        href: /zone/13392
+        savant_load_id: 57567FE7-6B4F-4AFB-A297-42977C7D2ACF
+        lutron_area: Yard
+        level_at_export: 0
+      Music 4:
+        id: 13338
+        kind: dimmer
+        href: /zone/13338
+        savant_load_id: 814FEC86-F511-4585-9479-A2CB0FE991C5
+        lutron_area: Yard
+        level_at_export: 0
+      Kitchen Downlight:
+        id: 1185
+        kind: dimmer
+        href: /zone/1185
+        savant_load_id: 241BDCB3-4A41-45AD-AFE0-048C18B1125F
+        lutron_area: Kitchen
+        level_at_export: 0
+      Music 5:
+        id: 13347
+        kind: dimmer
+        href: /zone/13347
+        savant_load_id: 62974608-3278-4A9A-B848-F69A4FEB3FAA
+        lutron_area: Yard
+        level_at_export: 100
+      Music 2:
+        id: 13320
+        kind: dimmer
+        href: /zone/13320
+        savant_load_id: 2BE87FF5-8145-419B-B423-92A6976A82D6
+        lutron_area: Yard
+        level_at_export: 100
+      Hob:
+        id: 1509
+        kind: switch
+        href: /zone/1509
+        savant_load_id: F7103E83-3FA9-4BF9-9E04-0B8C991EE041
+        lutron_area: Kitchen
+        level_at_export: 100
+      Yard Downlight:
+        id: 10281
+        kind: switch
+        href: /zone/10281
+        savant_load_id: 8FABD7DA-A0DA-4BC9-A8A7-9D4DFD1D8247
+        lutron_area: Yard
+        level_at_export: 0
+      Steigen:
+        id: 13278
+        kind: switch
+        href: /zone/13278
+        savant_load_id: A6E9A434-1C4A-4747-B947-B41A6C51A645
+        lutron_area: Yard
+        level_at_export: 0
+      Dryer:
+        id: 10308
+        kind: switch
+        href: /zone/10308
+        savant_load_id: 2A62F184-F747-4E1E-8F39-88703A68B170
+        lutron_area: Yard
+        level_at_export: 0
+      Hood:
+        id: 7432
+        kind: switch
+        href: /zone/7432
+        savant_load_id: 4C96E584-5F87-4623-B016-518AABFA42DA
+        lutron_area: Kitchen
+        level_at_export: 0
+      Music 1:
+        id: 13311
+        kind: dimmer
+        href: /zone/13311
+        savant_load_id: 2CA4F4C2-B2E6-4AF3-BAE4-CD0979727F46
+        lutron_area: Yard
+        level_at_export: 100
+      Kitchen Bath Heater:
+        id: 1491
+        kind: switch
+        href: /zone/1491
+        savant_load_id: 1D0646D5-1F62-4E14-B53B-1BD0C7067EBB
+        lutron_area: Kitchen
+        level_at_export: 0
+      Music 9:
+        id: 13383
+        kind: dimmer
+        href: /zone/13383
+        savant_load_id: 9907AA4C-F207-46AC-A9A7-0F93DAFE4E36
+        lutron_area: Yard
+        level_at_export: 0
+      Music 7:
+        id: 13365
+        kind: dimmer
+        href: /zone/13365
+        savant_load_id: FB49F071-BC20-44C0-B44B-0493770F3678
+        lutron_area: Yard
+        level_at_export: 100
+    keypads:
+      kitchen keypads:
+        id: null
+        buttons:
+          2888:
+            label: Garbage Disposal
+            kind: output
+            intent: Lutron load
+            href: /button/2888
+            led: /led/2880
+            savant_offset: '803'
+          2913:
+            label: Appliance
+            kind: output
+            intent: Lutron load
+            href: /button/2913
+            led: /led/2878
+            savant_offset: '807'
+          2896:
+            label: Dryer
+            kind: output
+            intent: Lutron load
+            href: /button/2896
+            led: /led/2882
+            savant_offset: '815'
+          2848:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2848
+            led: /led/2829
+            savant_offset: '823'
+          2892:
+            label: Washer
+            kind: output
+            intent: Lutron load
+            href: /button/2892
+            led: /led/2881
+            savant_offset: '857'
+          2909:
+            label: Dishwasher
+            kind: output
+            intent: Lutron load
+            href: /button/2909
+            led: /led/2877
+            savant_offset: '861'
+          2835:
+            label: Vol Up
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2835
+            led: /led/2832
+            savant_offset: '863'
+            savant_workflows:
+            - Vol up (Kitchen) [SVC_GEN_GENERIC]
+            - Vol up (Kitchen) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 6: IncreaseVolume'
+            - 'Output Module / Audio Zone 6: IncreaseVolume'
+            audio_zones:
+            - Kitchen
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2839:
+            label: Vol Down
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2839
+            led: /led/2833
+            savant_offset: '876'
+            savant_workflows:
+            - Vol Down (Kitchen) [SVC_GEN_GENERIC]
+            - Vol Down (Kitchen) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 6: DecreaseVolume'
+            - 'Output Module / Audio Zone 6: DecreaseVolume'
+            audio_zones:
+            - Kitchen
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2856:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2856
+            led: /led/2831
+            savant_offset: '880'
+            savant_workflows:
+            - Room Off (Kitchen) [SVC_GEN_GENERIC]
+            - Room Off (Kitchen) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Kitchen Music Off' in Kitchen
+            - 'Output Module / Audio Zone 6: PowerOff'
+            audio_zones:
+            - Kitchen
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2844:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2844
+            led: /led/2828
+            savant_offset: '890'
+          2852:
+            label: Music
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2852
+            led: /led/2830
+            savant_offset: '922'
+            savant_workflows:
+            - Music On (Kitchen) [SVC_GEN_GENERIC]
+            - Music (Kitchen) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Kitchen Music' in Kitchen
+            - 'Media Server (Mark) / AVB Stream 1: PowerOn'
+            - 'Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)'
+            - 'Output Module / Audio Zone 6: PowerOn'
+            audio_zones:
+            - Kitchen
+            audio_source: Savant Music (Spotify preset on the media server)
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2884:
+            label: Steigen
+            kind: output
+            intent: Lutron load
+            href: /button/2884
+            led: /led/2879
+            savant_offset: '926'
+          2901:
+            label: Hood
+            kind: output
+            intent: Lutron load
+            href: /button/2901
+            led: /led/2875
+            savant_offset: '941'
+          2905:
+            label: Oven
+            kind: output
+            intent: Lutron load
+            href: /button/2905
+            led: /led/2876
+            savant_offset: '942'
+  penny's bedroom:
+    outputs:
+      Daughter Bedroom Fan:
+        id: 1248
+        kind: switch
+        href: /zone/1248
+        savant_load_id: 4A2BBAA4-CA74-49AE-8292-5DA172C189B6
+        lutron_area: Daughter Bedroom
+        level_at_export: 0
+      Daughter's Bath Heater:
+        id: 1473
+        kind: switch
+        href: /zone/1473
+        savant_load_id: 37EE928E-8E76-42B7-AF6C-10D0FE0A10AC
+        lutron_area: Daughter Bathroom
+        level_at_export: 0
+      Daughter Bath Mirror:
+        id: 1374
+        kind: switch
+        href: /zone/1374
+        savant_load_id: 76166D57-9E62-4D55-8877-DC679F64FB21
+        lutron_area: Daughter Bathroom
+        level_at_export: 0
+      Daughter Bath Shower Downlight:
+        id: 1347
+        kind: dimmer
+        href: /zone/1347
+        savant_load_id: 896A8B75-71E2-4A26-87DC-55DD74C69E0C
+        lutron_area: Daughter Bathroom
+        level_at_export: 0
+      Daughter Bath Main Downlight:
+        id: 1356
+        kind: dimmer
+        href: /zone/1356
+        savant_load_id: D3480282-78DF-4540-A95B-B6539C0AA980
+        lutron_area: Daughter Bathroom
+        level_at_export: 0
+      Daughter Bedroom Main:
+        id: 1239
+        kind: dimmer
+        href: /zone/1239
+        savant_load_id: 4AEA6EB7-344C-477A-8F12-87FB735395A5
+        lutron_area: Daughter Bedroom
+        level_at_export: 0
+    keypads:
+      penny's bedroom keypads:
+        id: null
+        buttons:
+          2174:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2174
+            led: /led/2167
+            savant_offset: '806'
+          2145:
+            label: Night Light
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2145
+            led: /led/2110
+            savant_offset: '842'
+          2170:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2170
+            led: /led/2166
+            savant_offset: '846'
+          2116:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2116
+            led: /led/2111
+            savant_offset: '848'
+          2141:
+            label: Focused
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2141
+            led: /led/2109
+            savant_offset: '867'
+          2133:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2133
+            led: /led/2107
+            savant_offset: '875'
+          2124:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2124
+            led: /led/2113
+            savant_offset: '877'
+          2178:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2178
+            led: /led/2168
+            savant_offset: '883'
+          2120:
+            label: Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/2120
+            led: /led/2112
+            savant_offset: '919'
+          2137:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2137
+            led: /led/2108
+            savant_offset: '924'
+          2128:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2128
+            led: /led/2114
+            savant_offset: '931'
+  unsorted:
+    outputs:
+      Zone 04:
+        id: 7484
+        kind: dimmer
+        href: /zone/7484
+        savant_load_id: 724C0A01-2608-4E84-913E-E6966D361CCF
+        lutron_area: Area 001
+        level_at_export: 0
+      L3S3 Z3:
+        id: 9256
+        kind: dimmer
+        href: /zone/9256
+        savant_load_id: 67D17757-3336-4595-A895-B5A2020D34AC
+        lutron_area: Area 001
+        level_at_export: 0
+      Home Theatre DMX:
+        id: 897
+        kind: dimmer
+        href: /zone/897
+        savant_load_id: 1430E7E7-0AA0-4F38-BAEB-FC6735A49A6F
+        lutron_area: Area 001
+        level_at_export: 0
+      Zone 06:
+        id: 7502
+        kind: dimmer
+        href: /zone/7502
+        savant_load_id: C67B4676-615C-431B-90D1-DB10EA0F0A16
+        lutron_area: Area 001
+        level_at_export: 0
+      Zone 22:
+        id: 1068
+        kind: dimmer
+        href: /zone/1068
+        savant_load_id: 95EA67AA-C024-425A-8C43-918AB6893539
+        lutron_area: Area 001
+        level_at_export: 0
+      Zone 23:
+        id: 1077
+        kind: dimmer
+        href: /zone/1077
+        savant_load_id: 14486C14-2760-4334-883A-0FED4BDD6439
+        lutron_area: Area 001
+        level_at_export: 0
+      Zone 51:
+        id: 1329
+        kind: dimmer
+        href: /zone/1329
+        savant_load_id: D66F0AEA-EB8E-4E38-9ABE-7AA513B2FD26
+        lutron_area: Area 001
+        level_at_export: 0
+      Meditation DMX:
+        id: 1257
+        kind: dimmer
+        href: /zone/1257
+        savant_load_id: E9AED981-0608-4A8D-8FBF-9FA1ABADBD3C
+        lutron_area: Area 001
+        level_at_export: 0
+      Zone 02:
+        id: 7475
+        kind: dimmer
+        href: /zone/7475
+        savant_load_id: DAD32FE4-C2DF-4863-B73B-C89A3DB8F9FE
+        lutron_area: Area 001
+        level_at_export: 0
+      Zone 59:
+        id: 1401
+        kind: dimmer
+        href: /zone/1401
+        savant_load_id: 718E4799-FB41-4B74-8387-7BD1150DCE1B
+        lutron_area: Area 001
+        level_at_export: 0
+    keypads: {}
+  meditation room:
+    outputs:
+      R:
+        id: 11726
+        kind: dimmer
+        href: /zone/11726
+        savant_load_id: 12886B31-FED5-4EFB-9886-5D0B9E43B709
+        lutron_area: Meditation
+        level_at_export: 0
+      B:
+        id: 11744
+        kind: dimmer
+        href: /zone/11744
+        savant_load_id: AAA29E28-60AE-454D-B8D3-4B0499240973
+        lutron_area: Meditation
+        level_at_export: 0
+      W:
+        id: 4601
+        kind: dimmer
+        href: /zone/4601
+        savant_load_id: 319886E9-1DCC-446B-9FA2-DFEBE15E2C75
+        lutron_area: Meditation
+        level_at_export: 0
+      G:
+        id: 11735
+        kind: dimmer
+        href: /zone/11735
+        savant_load_id: 85CC9AE2-00A9-44D0-9772-72E19BAFB2E7
+        lutron_area: Meditation
+        level_at_export: 0
+      Meditation Downlight:
+        id: 915
+        kind: switch
+        href: /zone/915
+        savant_load_id: 2E92A35D-982A-4A0A-A2F8-36C9E2EAFF6A
+        lutron_area: Meditation
+        level_at_export: 0
+      Shades:
+        id: 3595
+        kind: shade
+        href: /zone/3595
+        savant_load_id: 96BA3CF3-A8E3-4CA7-B7D7-6D9426E4D5E3
+    keypads:
+      meditation room keypads:
+        id: null
+        buttons:
+          1695:
+            label: Shade
+            kind: shade
+            intent: Lutron shade group
+            href: /button/1695
+            led: /led/1687
+            savant_offset: '831'
+          1691:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/1691
+            led: /led/1686
+            savant_offset: '885'
+          1708:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1708
+            led: /led/1682
+            savant_offset: '907'
+          1703:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1703
+            led: /led/1689
+            savant_offset: '950'
+          1699:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/1699
+            led: /led/1688
+            savant_offset: '952'
+          1720:
+            label: Music
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/1720
+            led: /led/1685
+            savant_offset: '956'
+            savant_workflows:
+            - Music On (Meditation) [SVC_GEN_GENERIC]
+            - Music On (Meditation) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Meditation Room Music' in Meditation Room
+            - 'Media Server (Mark) / AVB Stream 1: PowerOn'
+            - 'Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)'
+            - 'Output Module / Audio Zone 5: PowerOn'
+            audio_zones:
+            - Meditation Room
+            audio_source: Savant Music (Spotify preset on the media server)
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          1716:
+            label: Color
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1716
+            led: /led/1684
+            savant_offset: '959'
+          1712:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1712
+            led: /led/1683
+            savant_offset: '962'
+  entrance:
+    outputs:
+      Wine Cellar Hallway:
+        id: 9247
+        kind: dimmer
+        href: /zone/9247
+        savant_load_id: 4E8C5F8E-516C-4E80-8D9A-0B88EF5CD486
+        lutron_area: Entrance/Hallway/Lobby
+        level_at_export: 0
+      Entrance Downlight:
+        id: 1131
+        kind: dimmer
+        href: /zone/1131
+        savant_load_id: C406281F-0B93-4C93-9BEE-FC0336673B14
+        lutron_area: Entrance/Hallway/Lobby
+        level_at_export: 0
+      Entrance Hallway:
+        id: 1140
+        kind: dimmer
+        href: /zone/1140
+        savant_load_id: 73A6A378-4E6A-47CE-95A4-5201DB58732C
+        lutron_area: Entrance/Hallway/Lobby
+        level_at_export: 0
+      Lift Wall Light:
+        id: 1122
+        kind: switch
+        href: /zone/1122
+        savant_load_id: B41CFA9B-AB0E-4EEF-962C-FD4B4C486DB5
+        lutron_area: Entrance/Hallway/Lobby
+        level_at_export: 0
+      Lift Downlight:
+        id: 1113
+        kind: dimmer
+        href: /zone/1113
+        savant_load_id: 89BFC5CD-CA2E-4A17-8C5D-5A4D1CF1B7C6
+        lutron_area: Entrance/Hallway/Lobby
+        level_at_export: 0
+      Bedroom Hallway:
+        id: 1176
+        kind: dimmer
+        href: /zone/1176
+        savant_load_id: 5EAA8DF5-A928-4BA1-A086-E90230FD4FCF
+        lutron_area: Entrance/Hallway/Lobby
+        level_at_export: 0
+      Shoe Cabinet Downlight:
+        id: 1149
+        kind: dimmer
+        href: /zone/1149
+        savant_load_id: 149B5E6F-0A7A-4400-8AFC-1A2B1C6E5758
+        lutron_area: Entrance/Hallway/Lobby
+        level_at_export: 0
+      Entrance Wall Light:
+        id: 1158
+        kind: switch
+        href: /zone/1158
+        savant_load_id: 762D401F-AF75-4E7E-ADE5-033934D30E8E
+        lutron_area: Entrance/Hallway/Lobby
+        level_at_export: 0
+    keypads:
+      entrance keypads:
+        id: null
+        buttons:
+          2684:
+            label: Home Light
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2684
+            led: /led/2658
+            savant_offset: '802'
+          2563:
+            label: Vol Down
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2563
+            led: /led/2557
+            savant_offset: '805'
+          2688:
+            label: Home Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2688
+            led: /led/2659
+            savant_offset: '808'
+          2559:
+            label: Vol Up
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2559
+            led: /led/2556
+            savant_offset: '812'
+          2211:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2211
+            led: /led/2206
+            savant_offset: '816'
+          10743:
+            label: 'On'
+            kind: output
+            intent: Lutron load
+            href: /button/10743
+            led: ''
+            savant_offset: '824'
+          2219:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2219
+            led: /led/2208
+            savant_offset: '826'
+          10746:
+            label: 'Off'
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/10746
+            led: ''
+            savant_offset: '828'
+          2215:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2215
+            led: /led/2207
+            savant_offset: '829'
+          2223:
+            label: Hallway Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2223
+            led: /led/2209
+            savant_offset: '834'
+          2568:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2568
+            led: /led/2552
+            savant_offset: '887'
+          2675:
+            label: Lift
+            kind: output
+            intent: Lutron load
+            href: /button/2675
+            led: /led/2664
+            savant_offset: '888'
+          2696:
+            label: Home AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2696
+            led: /led/2661
+            savant_offset: '897'
+          2580:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2580
+            led: /led/2555
+            savant_offset: '900'
+          2679:
+            label: Home Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2679
+            led: /led/2665
+            savant_offset: '901'
+          2576:
+            label: Music
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2576
+            led: /led/2554
+            savant_offset: '904'
+            savant_workflows:
+            - Music On (Entrance) [SVC_GEN_GENERIC]
+            savant_actions:
+            - SendSavantScene 'Entrance Music' in Entrance
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2667:
+            label: Hallway Light
+            kind: output
+            intent: Lutron load
+            href: /button/2667
+            led: /led/2662
+            savant_offset: '929'
+          2671:
+            label: Hallway AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2671
+            led: /led/2663
+            savant_offset: '932'
+          2692:
+            label: Music
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2692
+            led: /led/2660
+            savant_offset: '948'
+            savant_workflows:
+            - Music On (Entrance) [SVC_GEN_GENERIC]
+            savant_actions:
+            - SendSavantScene 'Entrance Music' in Entrance
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2572:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2572
+            led: /led/2553
+            savant_offset: '964'
+  master bedroom:
+    outputs:
+      Master Headboard LED:
+        id: 933
+        kind: switch
+        href: /zone/933
+        savant_load_id: 9D797681-AD87-4F02-9486-F520BBD79B19
+        lutron_area: MBR Bedroom
+        level_at_export: 0
+      Master Fan:
+        id: 951
+        kind: switch
+        href: /zone/951
+        savant_load_id: 5370E56A-7947-470D-AD4F-34B8038BB226
+        lutron_area: MBR Bedroom
+        level_at_export: 0
+      Master Living Downlight:
+        id: 960
+        kind: dimmer
+        href: /zone/960
+        savant_load_id: 0D6CCE7A-E3B3-4C39-8710-435D222E9A9A
+        lutron_area: MBR Bedroom
+        level_at_export: 0
+      Master Downlight:
+        id: 7466
+        kind: dimmer
+        href: /zone/7466
+        savant_load_id: D8FCF169-DE42-415B-97EB-1F737E7318AF
+        lutron_area: MBR Bedroom
+        level_at_export: 0
+      Master Wardrobe:
+        id: 1059
+        kind: dimmer
+        href: /zone/1059
+        savant_load_id: E232E722-1C42-4591-A035-EA2CE08855D9
+        lutron_area: MBR Walk-in Wardrobe
+        level_at_export: 0
+      Bedroom Night Curtain:
+        id: 3574
+        kind: shade
+        href: /zone/3574
+        savant_load_id: 7FE68353-7D56-42A5-8281-F4D0A8F43690
+      Bedroom Day Curtain:
+        id: 3553
+        kind: shade
+        href: /zone/3553
+        savant_load_id: 0BEF184D-3F53-42EB-882D-2DEA043D232A
+    keypads:
+      master bedroom keypads:
+        id: null
+        buttons:
+          1752:
+            label: Evening
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1752
+            led: /led/1744
+            savant_offset: '801'
+          1931:
+            label: Night Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/1931
+            led: /led/1917
+            savant_offset: '804'
+          1748:
+            label: Morning
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1748
+            led: /led/1743
+            savant_offset: '809'
+          7627:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/7627
+            led: /led/7613
+            savant_offset: '818'
+            savant_workflows:
+            - Room Off (MBR) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 1: PowerOff'
+            audio_zones:
+            - Master Bathroom
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          1893:
+            label: Night Light
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1893
+            led: /led/1882
+            savant_offset: '838'
+          7632:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/7632
+            led: /led/7606
+            savant_offset: '839'
+          2050:
+            label: Dehumidify
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2050
+            led: /led/2039
+            savant_offset: '841'
+          1760:
+            label: Night Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/1760
+            led: /led/1746
+            savant_offset: '844'
+          1821:
+            label: Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/1821
+            led: /led/1813
+            savant_offset: '850'
+          1817:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/1817
+            led: /led/1812
+            savant_offset: '851'
+          1855:
+            label: Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/1855
+            led: /led/1847
+            savant_offset: '855'
+          1756:
+            label: Day Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/1756
+            led: /led/1745
+            savant_offset: '858'
+          2042:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2042
+            led: /led/2037
+            savant_offset: '859'
+          1919:
+            label: Morning
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1919
+            led: /led/1914
+            savant_offset: '864'
+          1859:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/1859
+            led: /led/1848
+            savant_offset: '865'
+          7644:
+            label: Night Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/7644
+            led: /led/7609
+            savant_offset: '874'
+          2054:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2054
+            led: /led/2040
+            savant_offset: '886'
+            savant_workflows:
+            - Room Off (MBR) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 1: PowerOff'
+            audio_zones:
+            - Master Bathroom
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          1851:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/1851
+            led: /led/1846
+            savant_offset: '891'
+          1889:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1889
+            led: /led/1881
+            savant_offset: '892'
+          2046:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2046
+            led: /led/2038
+            savant_offset: '899'
+          7640:
+            label: Day Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/7640
+            led: /led/7608
+            savant_offset: '905'
+          7615:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/7615
+            led: /led/7610
+            savant_offset: '908'
+          1897:
+            label: Home Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1897
+            led: /led/1883
+            savant_offset: '909'
+            savant_workflows:
+            - Home Off (MBR) [SVC_GEN_GENERIC]
+            - Home Off (MBR) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Home Music Off' in Master Bedroom
+            - 'Media Server (Mark) / AVB Stream 1: PowerOff'
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          1783:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1783
+            led: /led/1778
+            savant_offset: '911'
+          1791:
+            label: Night Light
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1791
+            led: /led/1780
+            savant_offset: '920'
+          7623:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/7623
+            led: /led/7612
+            savant_offset: '921'
+          7636:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/7636
+            led: /led/7607
+            savant_offset: '925'
+          1825:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/1825
+            led: /led/1814
+            savant_offset: '935'
+          7619:
+            label: Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/7619
+            led: /led/7611
+            savant_offset: '936'
+          1787:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1787
+            led: /led/1779
+            savant_offset: '937'
+          1795:
+            label: Home Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1795
+            led: /led/1781
+            savant_offset: '938'
+            savant_workflows:
+            - Home Off (MBR) [SVC_GEN_GENERIC]
+            - Home Off (MBR) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Home Music Off' in Master Bedroom
+            - 'Media Server (Mark) / AVB Stream 1: PowerOff'
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          1885:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1885
+            led: /led/1880
+            savant_offset: '944'
+          1863:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1863
+            led: /led/1849
+            savant_offset: '953'
+            savant_workflows:
+            - Room Off (MBR) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 1: PowerOff'
+            audio_zones:
+            - Master Bathroom
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          1829:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1829
+            led: /led/1815
+            savant_offset: '957'
+            savant_workflows:
+            - Room Off (MBR) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 1: PowerOff'
+            audio_zones:
+            - Master Bathroom
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          1923:
+            label: Evening
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1923
+            led: /led/1915
+            savant_offset: '958'
+          1927:
+            label: Day Curtain
+            kind: shade
+            intent: Lutron shade group
+            href: /button/1927
+            led: /led/1916
+            savant_offset: '963'
+  living room:
+    outputs:
+      Living Landing:
+        id: 1311
+        kind: dimmer
+        href: /zone/1311
+        savant_load_id: B3948347-8B7D-4D7B-8585-44ED0FBEE1CB
+        lutron_area: Living
+        level_at_export: 100
+      Living Downlight:
+        id: 1383
+        kind: dimmer
+        href: /zone/1383
+        savant_load_id: BB0F1DCC-CC2C-4CBD-99DB-CB86E664075A
+        lutron_area: Living
+        level_at_export: 100
+      Living Balcony:
+        id: 1410
+        kind: dimmer
+        href: /zone/1410
+        savant_load_id: 235A0A3D-1B74-4994-895D-316BCA687CFF
+        lutron_area: Living
+        level_at_export: 0
+      Living Fan:
+        id: 1392
+        kind: switch
+        href: /zone/1392
+        savant_load_id: 60A744E8-BBDC-4985-9D3E-C29598216ACF
+        lutron_area: Living
+        level_at_export: 0
+    keypads:
+      living room keypads:
+        id: null
+        buttons:
+          3086:
+            label: Hallway Light
+            kind: output
+            intent: Lutron load
+            href: /button/3086
+            led: /led/3085
+            savant_offset: '814'
+          2523:
+            label: Relaxed
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2523
+            led: /led/2494
+            savant_offset: '821'
+          2476:
+            label: Balcony Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2476
+            led: /led/2462
+            savant_offset: '827'
+          2468:
+            label: Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/2468
+            led: /led/2460
+            savant_offset: '832'
+          2464:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2464
+            led: /led/2459
+            savant_offset: '837'
+          2506:
+            label: Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/2506
+            led: /led/2498
+            savant_offset: '840'
+          2502:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2502
+            led: /led/2497
+            savant_offset: '853'
+          2371:
+            label: Living Room Light
+            kind: output
+            intent: Lutron load
+            href: /button/2371
+            led: /led/2366
+            savant_offset: '860'
+          2379:
+            label: Living Room Fan
+            kind: fan
+            intent: Lutron relay (fan)
+            href: /button/2379
+            led: /led/2368
+            savant_offset: '903'
+          2514:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2514
+            led: /led/2500
+            savant_offset: '912'
+          2527:
+            label: Focused
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2527
+            led: /led/2495
+            savant_offset: '914'
+          2375:
+            label: Living Room Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2375
+            led: /led/2367
+            savant_offset: '928'
+          3104:
+            label: Hallway Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/3104
+            led: /led/3103
+            savant_offset: '930'
+          2519:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2519
+            led: /led/2493
+            savant_offset: '933'
+          2531:
+            label: Broadcast
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2531
+            led: /led/2496
+            savant_offset: '940'
+            savant_workflows:
+            - Broadcast Off (Living) [SVC_GEN_GENERIC]
+            - Broadcast On (Living) [SVC_GEN_GENERIC]
+            savant_actions:
+            - SendSavantScene 'Living Broadcast Off' in Living Room
+            - SendSavantScene 'Broadcast Living Room' in Living Room
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2383:
+            label: Living Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2383
+            led: /led/2369
+            savant_offset: '945'
+          3092:
+            label: Hallway Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/3092
+            led: /led/3091
+            savant_offset: '946'
+          2472:
+            label: Balcony Power
+            kind: output
+            intent: Lutron load
+            href: /button/2472
+            led: /led/2461
+            savant_offset: '947'
+          3098:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/3098
+            led: /led/3097
+            savant_offset: '951'
+          2510:
+            label: AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2510
+            led: /led/2499
+            savant_offset: '954'
+  wine cellar:
+    outputs:
+      Wine Cellar 1:
+        id: 1023
+        kind: dimmer
+        href: /zone/1023
+        savant_load_id: 3959600B-CA6E-4A67-944E-BE5D5DE87B78
+        lutron_area: Wine Cellar
+        level_at_export: 0
+      Wine Cellar 2:
+        id: 1032
+        kind: dimmer
+        href: /zone/1032
+        savant_load_id: D1A24504-4532-4BAC-B6B1-E8E85ECE685E
+        lutron_area: Wine Cellar
+        level_at_export: 0
+    keypads: {}
+  master bathroom:
+    outputs:
+      Master toilet Downlight:
+        id: 996
+        kind: dimmer
+        href: /zone/996
+        savant_load_id: 88087CA9-DF04-4364-8450-34571165B19E
+        lutron_area: MBR Bathroom
+        level_at_export: 0
+      Master Toilet Shower:
+        id: 987
+        kind: dimmer
+        href: /zone/987
+        savant_load_id: AA1C78CD-6EEF-4A0C-AFA7-2A9D1DC5914B
+        lutron_area: MBR Bathroom
+        level_at_export: 0
+      Master Heater:
+        id: 10317
+        kind: switch
+        href: /zone/10317
+        savant_load_id: E8E35323-42E8-42D7-8D64-925243F811AF
+        lutron_area: MBR Bathroom
+        level_at_export: 100
+      Master Bath Vanity:
+        id: 1005
+        kind: dimmer
+        href: /zone/1005
+        savant_load_id: 2646B5A2-5B6B-4208-A5C9-AFB2C7950ECB
+        lutron_area: MBR Bathroom
+        level_at_export: 0
+    keypads:
+      master bathroom keypads:
+        id: null
+        buttons:
+          1956:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1956
+            led: /led/1949
+            savant_offset: '835'
+          1988:
+            label: Vol Down
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/1988
+            led: /led/1982
+            savant_offset: '847'
+            savant_workflows:
+            - Vol Down (Master Bath) [SVC_GEN_GENERIC]
+            - Vol Down (Master Bath) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 1: DecreaseVolume'
+            - 'Output Module / Audio Zone 1: DecreaseVolume'
+            audio_zones:
+            - Master Bathroom
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          1960:
+            label: 'Off'
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1960
+            led: /led/1950
+            savant_offset: '856'
+          1952:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/1952
+            led: /led/1948
+            savant_offset: '869'
+          1997:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/1997
+            led: /led/1978
+            savant_offset: '882'
+          1993:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/1993
+            led: /led/1977
+            savant_offset: '896'
+          1984:
+            label: Vol Up
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/1984
+            led: /led/1981
+            savant_offset: '916'
+            savant_workflows:
+            - Vol up (Master Bath) [SVC_GEN_GENERIC]
+            - Vol up (Master Bath) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Output Module / Audio Zone 1: IncreaseVolume'
+            - 'Output Module / Audio Zone 1: IncreaseVolume'
+            audio_zones:
+            - Master Bathroom
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2001:
+            label: Music
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2001
+            led: /led/1979
+            savant_offset: '949'
+            savant_workflows:
+            - Music On (Master Bath) [SVC_GEN_GENERIC]
+            - Music (Master Bath) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Master Bathroom Music' in Master Bathroom
+            - 'Media Server (Mark) / AVB Stream 1: PowerOn'
+            - 'Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)'
+            - 'Output Module / Audio Zone 1: PowerOn'
+            audio_zones:
+            - Master Bathroom
+            audio_source: Savant Music (Spotify preset on the media server)
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2005:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2005
+            led: /led/1980
+            savant_offset: '961'
+            savant_workflows:
+            - Room Off (Master Bath) [SVC_GEN_GENERIC]
+            - Room Off (Master Bath) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Master Bathroom Music Off' in Master Bathroom
+            - 'Output Module / Audio Zone 1: PowerOff'
+            audio_zones:
+            - Master Bathroom
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+  powder room:
+    outputs:
+      Powder Strip Light:
+        id: 1338
+        kind: dimmer
+        href: /zone/1338
+        savant_load_id: E52E8153-D799-4DB3-872D-87672FB54CED
+        lutron_area: Powder Room
+        level_at_export: 0
+      Powder Downlight:
+        id: 1320
+        kind: dimmer
+        href: /zone/1320
+        savant_load_id: 7790E62B-C4CB-46A5-BADD-A5CD53E8A3F7
+        lutron_area: Powder Room
+        level_at_export: 0
+      Powder Room Heater:
+        id: 1419
+        kind: switch
+        href: /zone/1419
+        savant_load_id: DCEB3779-2595-43B9-9AF0-3242E65ABC31
+        lutron_area: Powder Room
+        level_at_export: 0
+    keypads:
+      powder room keypads:
+        id: null
+        buttons:
+          2423:
+            label: Vol Down
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2423
+            led: /led/2417
+            savant_offset: '822'
+            savant_workflows:
+            - Vol Down (Powder Room) [SVC_GEN_GENERIC]
+            - Vol Down (Powder Room) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume'
+            - 'Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume'
+            audio_zones:
+            - Powder Room
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2428:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2428
+            led: /led/2412
+            savant_offset: '825'
+          2440:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2440
+            led: /led/2415
+            savant_offset: '852'
+            savant_workflows:
+            - Room Off (Powder Room) [SVC_GEN_GENERIC]
+            - Room Off (Powder Room) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Powder Room Music Off' in Powder Room
+            - 'Single Input Output Module (Powder Room) / AVB Stream 1: PowerOff'
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2432:
+            label: Ambient
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2432
+            led: /led/2413
+            savant_offset: '879'
+          2419:
+            label: Vol Up
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2419
+            led: /led/2416
+            savant_offset: '894'
+            savant_workflows:
+            - Vol up (Powder Room) [SVC_GEN_GENERIC]
+            - Vol up (Powder Room) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - 'Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume'
+            - 'Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume'
+            audio_zones:
+            - Powder Room
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+          2436:
+            label: Music
+            kind: integration
+            intent: 'Savant: audio / media'
+            href: /button/2436
+            led: /led/2414
+            savant_offset: '927'
+            savant_workflows:
+            - Music On (Powder Room) [SVC_GEN_GENERIC]
+            - Music (Powder Room) [SVC_ENV_LIGHTING]
+            savant_actions:
+            - SendSavantScene 'Powder Room Music' in Powder Room
+            - 'Media Server (Mark) / AVB Stream 1: PowerOn'
+            - 'Media Server (Mark) / AVB Stream 1: CommandPlayFavorite (Spotify preset)'
+            - 'Single Input Output Module (Powder Room) / AVB Stream 1: PowerOn'
+            audio_source: Savant Music (Spotify preset on the media server)
+            savant_captured: true
+            note: linked to the Savant workflow by name (inferred); confirm live
+  helper's room:
+    outputs: {}
+    keypads:
+      helper's room keypads:
+        id: null
+        buttons:
+          2963:
+            label: Room AC
+            kind: hvac
+            intent: 'Savant: HVAC'
+            href: /button/2963
+            led: /led/2935
+            savant_offset: '811'
+          2942:
+            label: Hallway Light
+            kind: output
+            intent: Lutron load
+            href: /button/2942
+            led: /led/2938
+            savant_offset: '813'
+          2959:
+            label: Light
+            kind: output
+            intent: Lutron load
+            href: /button/2959
+            led: /led/2934
+            savant_offset: '817'
+          2967:
+            label: Room Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2967
+            led: /led/2936
+            savant_offset: '836'
+          2946:
+            label: Hallway Off
+            kind: macro
+            intent: Lutron scene (several loads)
+            href: /button/2946
+            led: /led/2939
+            savant_offset: '849'
+          2971:
+            label: Bathroom Light
+            kind: output
+            intent: Lutron load
+            href: /button/2971
+            led: /led/2937
+            savant_offset: '854'
+          2950:
+            label: Steigen
+            kind: output
+            intent: Lutron load
+            href: /button/2950
+            led: /led/2940
+            savant_offset: '881'
