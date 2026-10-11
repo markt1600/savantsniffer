@@ -23,9 +23,10 @@ final class PortCheckModel: ObservableObject {
                 let (open, detail) = await Self.probe(host: host, port: p)
                 found.append(PortResult(port: p, open: open, detail: detail))
             }
-            let (label, why) = Self.identify(found)
+            let finished = found
+            let (label, why) = Self.identify(finished)
             await MainActor.run {
-                self.results = found
+                self.results = finished
                 self.likelySystem = label
                 self.reasoning = why
                 self.checking = false

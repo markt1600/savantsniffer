@@ -194,17 +194,30 @@ final class LEAPBridge: ObservableObject {
 
     /// Deliver complete lines to the main actor as they arrive.
     private func attachLineReader(_ handle: FileHandle, _ onLine: @escaping @MainActor (String) -> Void) {
-        var buffer = Data()
+        let buffer = LineBuffer()
         handle.readabilityHandler = { h in
             let data = h.availableData
             if data.isEmpty { h.readabilityHandler = nil; return }
-            buffer.append(data)
-            while let nl = buffer.firstIndex(of: 0x0A) {
-                let line = String(decoding: buffer[buffer.startIndex..<nl], as: UTF8.self)
-                    .trimmingCharacters(in: CharacterSet(charactersIn: "\r "))
-                buffer = Data(buffer[(nl + 1)...])
-                if !line.isEmpty { Task { @MainActor in onLine(line) } }
-            }
+            for line in buffer.append(data) { Task { @MainActor in onLine(line) } }
         }
+    }
+}
+
+/// Accumulates pipe output and hands back complete lines. Only ever touched from
+/// the file handle's own reader queue, so a plain lock is enough.
+final class LineBuffer: @unchecked Sendable {
+    private var data = Data()
+    private let lock = NSLock()
+    func append(_ chunk: Data) -> [String] {
+        lock.lock(); defer { lock.unlock() }
+        data.append(chunk)
+        var lines: [String] = []
+        while let nl = data.firstIndex(of: 0x0A) {
+            let line = String(decoding: data[data.startIndex..<nl], as: UTF8.self)
+                .trimmingCharacters(in: CharacterSet(charactersIn: "\r "))
+            data = Data(data[(nl + 1)...])
+            if !line.isEmpty { lines.append(line) }
+        }
+        return lines
     }
 }

@@ -19,7 +19,7 @@ final class LIPClient: ObservableObject {
     @Published var connectedSince: Date?
 
     let recorder = MacroRecorder()
-    var onEvent: ((MonitorEvent) -> Void)?
+    var onEvent: (@MainActor (MonitorEvent) -> Void)?
     private(set) var transport: Transport = .telnet
     var externalSend: ((String) -> Bool)?   // set by the LEAP bridge
     var externalStop: (() -> Void)?

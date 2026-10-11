@@ -463,23 +463,6 @@ extension DeviceStore {
         return result.summary
     }
 
-    /// A live ~DEVICE press that lands on a button we already know (keypad id + number)
-    /// confirms it without any labelling: identified -> captured.
-    func confirmLive(_ ev: MonitorEvent) {
-        guard ev.kind == .device, ev.action == "3", let kid = ev.integrationID, let num = ev.component else { return }
-        for ai in map.areas.indices {
-            for ki in map.areas[ai].keypads.indices where map.areas[ai].keypads[ki].lutronID == kid {
-                if let bi = map.areas[ai].keypads[ki].buttons.firstIndex(where: { $0.button == num }),
-                   map.areas[ai].keypads[ki].buttons[bi].seenLive != true {
-                    map.areas[ai].keypads[ki].buttons[bi].seenLive = true
-                    noteRecent("\(map.areas[ai].name) · \(map.areas[ai].keypads[ki].buttons[bi].label)", "confirmed live · keypad \(kid) · btn \(num)")
-                    save()
-                    return
-                }
-            }
-        }
-    }
-
     /// After a LEAP device-tree import: regroup Savant-imported buttons under their
     /// real keypads (button hrefs match the tree's button ids) and carry labels over.
     func regroupByLEAPTree(_ tree: LEAPTree) {

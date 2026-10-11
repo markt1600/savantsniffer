@@ -247,6 +247,23 @@ final class DeviceStore: ObservableObject {
         return "Imported \(imported.count) rooms, \(nKeypads) keypads, \(nButtons) buttons, \(nOutputs) loads."
     }
 
+    /// A live ~DEVICE press that lands on a button we already know (keypad id + number)
+    /// confirms it without any labelling: identified -> captured.
+    func confirmLive(_ ev: MonitorEvent) {
+        guard ev.kind == .device, ev.action == "3", let kid = ev.integrationID, let num = ev.component else { return }
+        for ai in map.areas.indices {
+            for ki in map.areas[ai].keypads.indices where map.areas[ai].keypads[ki].lutronID == kid {
+                if let bi = map.areas[ai].keypads[ki].buttons.firstIndex(where: { $0.button == num }),
+                   map.areas[ai].keypads[ki].buttons[bi].seenLive != true {
+                    map.areas[ai].keypads[ki].buttons[bi].seenLive = true
+                    noteRecent("\(map.areas[ai].name) · \(map.areas[ai].keypads[ki].buttons[bi].label)", "confirmed live · keypad \(kid) · btn \(num)")
+                    save()
+                    return
+                }
+            }
+        }
+    }
+
     // MARK: - coverage
 
     struct Coverage {

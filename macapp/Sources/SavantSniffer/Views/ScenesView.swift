@@ -255,7 +255,7 @@ struct StepRow: View {
 
 // Binding helper to edit optional values with non-optional controls.
 extension Binding {
-    init<T>(_ source: Binding<T?>, replacingNilWith def: T) where Value == T {
+    init(_ source: Binding<Value?>, replacingNilWith def: Value) {
         self.init(get: { source.wrappedValue ?? def },
                   set: { source.wrappedValue = $0 })
     }

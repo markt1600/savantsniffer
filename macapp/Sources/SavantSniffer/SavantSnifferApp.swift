@@ -106,7 +106,10 @@ struct ContentView: View {
             }
             .background(Theme.ground)
         }
-        .onAppear { lip.onEvent = { [weak store] ev in store?.confirmLive(ev) } }
+        .onAppear {
+            let s = store
+            lip.onEvent = { @MainActor ev in s.confirmLive(ev) }
+        }
     }
 
     private func row(_ p: Panel) -> some View {
