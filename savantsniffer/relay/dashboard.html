@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lutron Relay</title>
+<style>
+  :root {
+    --bg: #f4f5f7; --panel: #ffffff; --ink: #1c2230; --muted: #6b7280; --border: #e3e6ec;
+    --accent: #2b6cb0; --accent-tint: #e8f0fb; --green: #15803d; --green-tint: #e7f6ec;
+    --amber: #b45309; --amber-tint: #fff4e0; --red: #b91c1c; --red-tint: #fdecec; --purple: #6d28d9; --purple-tint: #f0eafd;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #0f1218; --panel: #171b24; --ink: #e8eaf0; --muted: #98a0b3; --border: #2a3040;
+    --accent: #6ea8ff; --accent-tint: #1a2740; --green: #4ade80; --green-tint: #15301f;
+    --amber: #fbbf24; --amber-tint: #3a2a0c; --red: #f87171; --red-tint: #3b1515; --purple: #c4b5fd; --purple-tint: #2a1f45;
+  } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  header { display: flex; align-items: center; gap: 14px; padding: 14px 20px; background: var(--panel); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 2; flex-wrap: wrap; }
+  header h1 { font-size: 16px; margin: 0; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .ok { background: var(--green-tint); color: var(--green); }
+  .warn { background: var(--amber-tint); color: var(--amber); }
+  .bad { background: var(--red-tint); color: var(--red); }
+  .info { background: var(--accent-tint); color: var(--accent); }
+  .pur { background: var(--purple-tint); color: var(--purple); }
+  main { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; padding: 12px 16px; } }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+  .card h2 { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .wide { grid-column: 1 / -1; }
+  .kv { display: grid; grid-template-columns: 150px 1fr; gap: 4px 12px; font-size: 13px; }
+  .kv b { font-weight: 500; color: var(--muted); }
+  .mono { font-family: var(--mono); font-size: 12px; }
+  .feed { max-height: 360px; overflow: auto; font-family: var(--mono); font-size: 12px; }
+  .feed div { padding: 3px 0; border-bottom: 1px dashed var(--border); display: flex; gap: 10px; }
+  .feed .ts { color: var(--muted); flex: 0 0 95px; }
+  .feed .k { flex: 0 0 68px; font-weight: 700; }
+  .k-event { color: var(--green); } .k-command { color: var(--accent); } .k-denied { color: var(--amber); } .k-error { color: var(--red); } .k-system { color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  button { font: inherit; padding: 5px 11px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); cursor: pointer; }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.danger { background: var(--red); color: #fff; border-color: var(--red); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  input[type=text], input[type=number], select { font: inherit; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--ink); }
+  input[type=range] { width: 120px; vertical-align: middle; }
+  .room { border-top: 1px solid var(--border); padding: 8px 0; }
+  .room h3 { font-size: 13px; margin: 4px 0 6px; text-transform: capitalize; }
+  .row { display: flex; align-items: center; gap: 10px; padding: 3px 0; flex-wrap: wrap; }
+  .row .name { flex: 1 1 160px; }
+  .lvl { font-family: var(--mono); font-size: 12px; color: var(--muted); width: 48px; text-align: right; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--accent-tint); color: var(--accent); }
+  .chip.macro { background: var(--amber-tint); color: var(--amber); } .chip.integration { background: var(--purple-tint); color: var(--purple); }
+  .small { color: var(--muted); font-size: 12px; }
+  #toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 10px; display: none; }
+  details summary { cursor: pointer; }
+  .switch { display: inline-flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Lutron Relay</h1>
+  <span id="conn" class="pill warn"><span class="dot"></span>connecting…</span>
+  <span id="ctrl" class="pill info"><span class="dot"></span>control off</span>
+  <span class="small" id="uptime"></span>
+  <span style="flex:1"></span>
+  <label class="switch small"><input type="checkbox" id="ctrlToggle"> allow commands</label>
+  <button id="tokenBtn" title="change the token">token</button>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Status</h2>
+    <div class="kv" id="status"></div>
+  </section>
+
+  <section class="card">
+    <h2>Connected clients</h2>
+    <table id="clients"><thead><tr><th>Client</th><th>Address</th><th>Requests</th><th>Commands</th><th>Last seen</th></tr></thead><tbody></tbody></table>
+    <p class="small">Anything that calls the API shows up here. Send an <code>X-Client-Name</code> header to name a device.</p>
+  </section>
+
+  <section class="card wide">
+    <h2>Live feed <span class="small" id="feedNote">(button presses, level changes, commands)</span></h2>
+    <div class="feed" id="feed"></div>
+  </section>
+
+  <section class="card wide">
+    <h2>Rooms, loads and buttons</h2>
+    <div class="row" style="margin-bottom:8px">
+      <input type="text" id="filter" placeholder="filter by room, load or button…" style="flex:1 1 240px">
+      <span class="small">Sliders and press buttons only work while "allow commands" is on.</span>
+    </div>
+    <div id="rooms"></div>
+  </section>
+
+  <section class="card wide">
+    <h2>Scenes</h2>
+    <div id="scenes"></div>
+    <details style="margin-top:10px"><summary class="small">Add a scene (JSON steps)</summary>
+      <div class="row">
+        <input type="text" id="sceneName" placeholder="scene name" style="width:200px">
+        <input type="text" id="sceneSteps" placeholder='[{"set":"home office office downlight","level":20,"fade":2},{"press":"home office / broadcast"}]' style="flex:1 1 400px">
+        <button id="sceneSave">Save</button>
+      </div>
+    </details>
+  </section>
+
+  <section class="card wide">
+    <h2>Command log <span class="small">(commands, denials, errors, system)</span></h2>
+    <div class="feed" id="log"></div>
+  </section>
+</main>
+<div id="toast"></div>
+
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  let token = "";
+  try { token = localStorage.getItem("relayToken") || ""; } catch (e) {}
+  if (!token) askToken();
+  function askToken() {
+    const t = prompt("Relay token (from relay.yaml on the PC):", token || "");
+    if (t !== null) { token = t.trim(); try { localStorage.setItem("relayToken", token); } catch (e) {} }
+  }
+  $("#tokenBtn").onclick = () => { askToken(); boot(); };
+
+  const headers = () => ({ "X-Relay-Token": token, "X-Client-Name": "dashboard", "Content-Type": "application/json" });
+  async function api(path, opts) {
+    const r = await fetch(path, Object.assign({ headers: headers() }, opts || {}));
+    if (r.status === 401) { toast("wrong token"); askToken(); throw new Error("unauthorized"); }
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok && j.error) toast(j.error);
+    return j;
+  }
+  function toast(msg) { const t = $("#toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 3500); }
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const hhmm = (ts) => (ts || "").slice(11, 23);
+
+  let controlOn = false, connected = false, devices = null;
+
+  function renderStatus(s) {
+    connected = !!s.connected; controlOn = !!s.control_enabled;
+    const c = $("#conn"); c.className = "pill " + (connected ? "ok" : "bad"); c.innerHTML = '<span class="dot"></span>' + (connected ? "connected to " + esc(s.processor || s.backend) : "not connected");
+    const k = $("#ctrl"); k.className = "pill " + (controlOn ? "pur" : "info"); k.innerHTML = '<span class="dot"></span>' + (controlOn ? "control ON" : "observe only");
+    $("#ctrlToggle").checked = controlOn;
+    const up = s.uptime_s || 0; $("#uptime").textContent = "up " + Math.floor(up / 3600) + "h " + Math.floor(up % 3600 / 60) + "m";
+    $("#status").innerHTML = [
+      ["Relay", esc(s.name)], ["Processor", esc(s.processor || "(demo)")], ["Link", esc(s.backend) + (connected ? " · connected" : " · down")],
+      ["Map", esc((s.map || {}).source || "") + " · " + (s.map || {}).areas + " rooms · " + (s.map || {}).outputs + " loads · " + (s.map || {}).buttons + " buttons"],
+      ["Processor tree", s.tree ? (s.tree.devices + " devices · " + s.tree.buttons + " buttons") : "—"],
+      ["Clients", s.clients], ["Scenes", s.scenes]
+    ].map(([k, v]) => "<b>" + k + "</b><span>" + v + "</span>").join("");
+    document.querySelectorAll(".needsctl").forEach(el => el.disabled = !(controlOn && connected));
+  }
+
+  async function loadStatus() { renderStatus(await api("/api/status")); }
+  async function loadClients() {
+    const rows = await api("/api/clients");
+    $("#clients tbody").innerHTML = (rows || []).map(c => "<tr><td>" + esc(c.name || "(unnamed)") + "<div class='small'>" + esc(c.agent) + "</div></td><td class='mono'>" + esc(c.ip) + "</td><td>" + c.requests + "</td><td>" + c.commands + "</td><td class='mono'>" + hhmm(c.last_seen) + "</td></tr>").join("") || "<tr><td colspan=5 class='small'>nobody yet</td></tr>";
+  }
+  async function loadLog() {
+    const rows = await api("/api/log?limit=200&kinds=command,denied,error,system");
+    $("#log").innerHTML = (rows || []).slice().reverse().map(logLine).join("");
+  }
+  function logLine(e) { return "<div><span class='ts'>" + hhmm(e.ts) + "</span><span class='k k-" + esc(e.kind) + "'>" + esc(e.kind) + "</span><span>" + esc(e.text) + (e.source ? " <span class='small'>[" + esc(e.source) + "]</span>" : "") + "</span></div>"; }
+  function feedLine(ts, kind, text) { return "<div><span class='ts'>" + hhmm(ts) + "</span><span class='k k-" + kind + "'>" + kind + "</span><span>" + esc(text) + "</span></div>"; }
+  function prepend(el, html, max) { el.insertAdjacentHTML("afterbegin", html); while (el.children.length > (max || 300)) el.removeChild(el.lastChild); }
+
+  async function loadDevices() { devices = await api("/api/devices"); renderRooms(); }
+  function renderRooms() {
+    if (!devices) return;
+    const f = ($("#filter").value || "").toLowerCase();
+    $("#rooms").innerHTML = (devices.rooms || []).map(room => {
+      const outs = room.outputs.filter(o => !f || room.name.includes(f) || o.name.toLowerCase().includes(f));
+      const btns = room.buttons.filter(b => !f || room.name.includes(f) || b.label.toLowerCase().includes(f));
+      if (!outs.length && !btns.length) return "";
+      return "<div class='room'><h3>" + esc(room.name) + "</h3>" +
+        outs.map(o => "<div class='row' data-dev='" + esc(o.device) + "'><span class='name'>" + esc(o.name) + " <span class='small'>" + esc(o.kind) + "</span></span>" +
+          "<span class='lvl'>" + (o.level == null ? "—" : Math.round(o.level) + "%") + "</span>" +
+          "<input type='range' min='0' max='100' value='" + (o.level == null ? 0 : Math.round(o.level)) + "' class='needsctl' data-phrase='" + esc(o.phrase) + "'>" +
+          "<input type='number' min='0' max='3600' step='0.5' placeholder='fade s' style='width:80px' class='fade'>" +
+          "<button class='needsctl setbtn' data-phrase='" + esc(o.phrase) + "'>set</button></div>").join("") +
+        (btns.length ? "<div class='row'><span class='name small'>keypad buttons</span></div>" : "") +
+        btns.map(b => "<div class='row'><span class='name'>" + esc(b.label) + " <span class='chip " + esc(b.kind) + "'>" + esc(b.kind) + "</span>" +
+          (b.audio_zones && b.audio_zones.length ? " <span class='small'>audio: " + esc(b.audio_zones.join(", ")) + "</span>" : "") +
+          (b.savant && b.savant.length ? "<div class='small'>" + esc(b.savant.join(" · ")) + "</div>" : "") + "</span>" +
+          "<button class='needsctl pressbtn' data-phrase='" + esc(b.phrase) + "'" + (b.id ? "" : " disabled title='no LEAP id'") + ">press</button></div>").join("") +
+        "</div>";
+    }).join("");
+    document.querySelectorAll(".needsctl").forEach(el => el.disabled = !(controlOn && connected));
+    document.querySelectorAll(".setbtn").forEach(b => b.onclick = async () => {
+      const row = b.closest(".row"); const level = row.querySelector("input[type=range]").value; const fade = row.querySelector(".fade").value;
+      if (!confirm("Set " + b.dataset.phrase + " to " + level + "%" + (fade ? " over " + fade + " s" : "") + "?")) return;
+      const r = await api("/api/set", { method: "POST", body: JSON.stringify({ output: b.dataset.phrase, level: +level, fade: fade ? +fade : null }) });
+      if (r.ok) toast("sent");
+    });
+    document.querySelectorAll(".pressbtn").forEach(b => b.onclick = async () => {
+      if (!confirm("Press " + b.dataset.phrase + "?")) return;
+      const r = await api("/api/press", { method: "POST", body: JSON.stringify({ button: b.dataset.phrase }) });
+      if (r.ok) toast("pressed");
+    });
+  }
+  $("#filter").oninput = renderRooms;
+
+  async function loadScenes() {
+    const s = await api("/api/scenes");
+    const names = Object.keys(s || {});
+    $("#scenes").innerHTML = names.length ? names.map(n => "<div class='row'><span class='name'><b>" + esc(n) + "</b> <span class='small'>" + (s[n].steps || []).length + " steps · " + esc(JSON.stringify(s[n].steps)).slice(0, 160) + "</span></span>" +
+      "<button class='needsctl runscene' data-name='" + esc(n) + "'>run</button><button class='delscene' data-name='" + esc(n) + "'>delete</button></div>").join("") : "<p class='small'>no scenes yet</p>";
+    document.querySelectorAll(".needsctl").forEach(el => el.disabled = !(controlOn && connected));
+    document.querySelectorAll(".runscene").forEach(b => b.onclick = async () => { if (confirm("Run scene " + b.dataset.name + "?")) { const r = await api("/api/scene/" + encodeURIComponent(b.dataset.name) + "/run", { method: "POST", body: "{}" }); if (r.ok) toast("scene sent"); } });
+    document.querySelectorAll(".delscene").forEach(b => b.onclick = async () => { if (confirm("Delete scene " + b.dataset.name + "?")) { await api("/api/scenes/" + encodeURIComponent(b.dataset.name), { method: "DELETE" }); loadScenes(); } });
+  }
+  $("#sceneSave").onclick = async () => {
+    const name = $("#sceneName").value.trim(); let steps;
+    try { steps = JSON.parse($("#sceneSteps").value); } catch (e) { toast("steps must be valid JSON"); return; }
+    if (!name) { toast("name the scene"); return; }
+    const r = await api("/api/scenes/" + encodeURIComponent(name), { method: "PUT", body: JSON.stringify({ steps }) });
+    if (r.ok) { toast("saved"); loadScenes(); }
+  };
+
+  $("#ctrlToggle").onchange = async (ev) => {
+    const on = ev.target.checked;
+    if (on && !confirm("Allow this relay to send commands to the lights? Each command is still logged with its source.")) { ev.target.checked = false; return; }
+    await api("/api/control", { method: "POST", body: JSON.stringify({ enabled: on }) });
+    loadStatus();
+  };
+
+  let es = null;
+  function listen() {
+    if (es) es.close();
+    es = new EventSource("/api/events?token=" + encodeURIComponent(token));
+    es.onmessage = (m) => {
+      let d; try { d = JSON.parse(m.data); } catch (e) { return; }
+      const feed = $("#feed");
+      if (d.type === "hello") { renderStatus(d.status); return; }
+      if (d.type === "level") {
+        const o = d.output; prepend(feed, feedLine(d.ts, "event", (o ? o.area + " / " + o.name : "device " + d.device) + " → " + Math.round(d.level) + "%"));
+        document.querySelectorAll(".row[data-dev='" + d.device + "']").forEach(row => { row.querySelector(".lvl").textContent = Math.round(d.level) + "%"; row.querySelector("input[type=range]").value = Math.round(d.level); });
+      } else if (d.type === "button") {
+        if (d.action === "press") { const e = d.entry; prepend(feed, feedLine(d.ts, "event", (e ? e.area + " / " + e.label : "button " + d.button) + " pressed")); }
+      } else if (d.type === "command") { prepend(feed, feedLine(d.ts, "command", d.text + "  [" + d.source + "]")); loadClients();
+      } else if (d.type === "log") { prepend($("#log"), logLine(d.entry)); if (d.entry.kind !== "system") prepend(feed, feedLine(d.ts, d.entry.kind, d.entry.text));
+      } else if (d.type === "status") { loadStatus(); if (d.connected) loadDevices();
+      } else if (d.type === "control") { loadStatus(); }
+    };
+    es.onerror = () => { $("#conn").className = "pill warn"; $("#conn").innerHTML = '<span class="dot"></span>dashboard reconnecting…'; };
+  }
+
+  async function boot() {
+    try { await loadStatus(); await Promise.all([loadClients(), loadDevices(), loadScenes(), loadLog()]); listen(); }
+    catch (e) { console.error(e); }
+  }
+  boot();
+  setInterval(() => { loadStatus().catch(() => {}); loadClients().catch(() => {}); }, 15000);
+})();
+</script>
+</body>
+</html>

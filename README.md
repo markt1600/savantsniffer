@@ -68,6 +68,37 @@ then only confirms them. Button → workflow links are inferred by name within a
 room and say so; the exact binding lives in Savant's scene database, which is
 not part of the export. The Mac app's Guide has the same importer as step 1.
 
+### 0c. The relay: control from every device through one always-on box
+
+`lutron relay` runs on a PC, Mac or Pi that stays on. It holds the single LEAP
+connection to the processor and exposes a small HTTP API plus a browser
+dashboard (connection state, who is connected, the live feed of button presses
+and level changes, the command log, every room's loads and buttons, scenes).
+
+```bash
+lutron relay --demo            # try the dashboard with a fake processor
+lutron relay                   # real: reads relay.yaml (created on first run)
+```
+
+`relay.yaml` holds the processor address, the paths, the port (8765) and the
+token every caller must send. Control is **off** until you switch it on in the
+dashboard; until then every command is refused and logged. Pair once from the
+Mac app and copy the three certificate files into the relay's `leap-certs`
+folder; no second button press.
+
+```bash
+curl -H "X-Relay-Token: $TOKEN" -H "X-Client-Name: kitchen-ipad" \
+     -X POST http://relay:8765/api/set -d '{"output":"kitchen hob","level":0}' -H 'Content-Type: application/json'
+curl -H "X-Relay-Token: $TOKEN" -X POST http://relay:8765/api/press -d '{"button":"home office / broadcast"}' -H 'Content-Type: application/json'
+curl -H "X-Relay-Token: $TOKEN" http://relay:8765/api/events          # server-sent events
+```
+
+Windows: run `install\windows\install-relay.ps1` from an elevated PowerShell.
+It creates a private Python environment under `%LOCALAPPDATA%\LutronRelay`,
+writes the config with a fresh token, copies the pre-filled map, opens the
+firewall port on the private profile, and registers a scheduled task that
+starts the relay at logon and restarts it if it stops.
+
 ### 1. Discover the Lutron processor and the Savant Mac mini
 ```bash
 lutron doctor        # what discovery tools exist on your OS (installs nothing)

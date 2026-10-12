@@ -399,7 +399,7 @@ def link_buttons_to_workflows(buttons: list[dict], workflows: list[dict]) -> Non
                 hits.append(wf)
         if hits:
             b["savant_workflows"] = [f"{w['name']} [{w['service']}]" for w in hits]
-            b["savant_actions"] = [a["text"] for w in hits for a in w["actions"]]
+            b["savant_actions"] = list(dict.fromkeys(a["text"] for w in hits for a in w["actions"]))
 
 
 def audio_zone_rooms(wiring: dict, rooms: dict | None = None) -> dict:

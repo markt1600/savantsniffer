@@ -289,7 +289,8 @@ enum SavantImport {
             }
             if !hits.isEmpty {
                 buttons[i].workflows = hits.map { "\($0.name) [\($0.service)]" }
-                buttons[i].actions = hits.flatMap { $0.actions }
+                var seen = Set<String>()
+                buttons[i].actions = hits.flatMap { $0.actions }.filter { seen.insert($0).inserted }
             }
         }
     }

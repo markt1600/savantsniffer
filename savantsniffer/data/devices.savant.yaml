@@ -621,7 +621,6 @@ areas:
             - Vol up (Kitchen) [SVC_ENV_LIGHTING]
             savant_actions:
             - 'Output Module / Audio Zone 6: IncreaseVolume'
-            - 'Output Module / Audio Zone 6: IncreaseVolume'
             audio_zones:
             - Kitchen
             savant_captured: true
@@ -637,7 +636,6 @@ areas:
             - Vol Down (Kitchen) [SVC_GEN_GENERIC]
             - Vol Down (Kitchen) [SVC_ENV_LIGHTING]
             savant_actions:
-            - 'Output Module / Audio Zone 6: DecreaseVolume'
             - 'Output Module / Audio Zone 6: DecreaseVolume'
             audio_zones:
             - Kitchen
@@ -1838,7 +1836,6 @@ areas:
             - Vol Down (Master Bath) [SVC_ENV_LIGHTING]
             savant_actions:
             - 'Output Module / Audio Zone 1: DecreaseVolume'
-            - 'Output Module / Audio Zone 1: DecreaseVolume'
             audio_zones:
             - Master Bathroom
             savant_captured: true
@@ -1882,7 +1879,6 @@ areas:
             - Vol up (Master Bath) [SVC_GEN_GENERIC]
             - Vol up (Master Bath) [SVC_ENV_LIGHTING]
             savant_actions:
-            - 'Output Module / Audio Zone 1: IncreaseVolume'
             - 'Output Module / Audio Zone 1: IncreaseVolume'
             audio_zones:
             - Master Bathroom
@@ -1964,7 +1960,6 @@ areas:
             - Vol Down (Powder Room) [SVC_ENV_LIGHTING]
             savant_actions:
             - 'Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume'
-            - 'Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume'
             audio_zones:
             - Powder Room
             savant_captured: true
@@ -2009,7 +2004,6 @@ areas:
             - Vol up (Powder Room) [SVC_GEN_GENERIC]
             - Vol up (Powder Room) [SVC_ENV_LIGHTING]
             savant_actions:
-            - 'Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume'
             - 'Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume'
             audio_zones:
             - Powder Room

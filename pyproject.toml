@@ -18,7 +18,7 @@ lutron = "savantsniffer.cli:main"
 savantsniffer-web = "savantsniffer.webapp:main"
 
 [tool.setuptools]
-packages = ["savantsniffer"]
+packages = ["savantsniffer", "savantsniffer.relay"]
 
 [tool.setuptools.package-data]
-savantsniffer = ["templates/*.html", "static/*", "data/*.tsv"]
+savantsniffer = ["templates/*.html", "static/*", "data/*.tsv", "data/*.yaml", "data/*.json", "relay/*.html"]

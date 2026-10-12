@@ -317,6 +317,9 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--replace", action="store_true", help="overwrite the map even if it holds captured values")
     sp.set_defaults(func=cmd_import_savant)
 
+    sp = sub.add_parser("relay", help="run the always-on relay service (HTTP API + dashboard); see: lutron relay --help")
+    sp.set_defaults(func=lambda a: None)
+
     sp = sub.add_parser("export", help="write the integration report (Markdown) from devices.yaml + .env")
     sp.add_argument("--out", default="integration-report.md")
     sp.set_defaults(func=cmd_export)
@@ -338,6 +341,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] == "relay":          # the relay has its own options; hand them over whole
+        from .relay.server import main as relay_main
+        return relay_main(argv[1:])
     args = build_parser().parse_args(argv)
     args.func(args)
     return 0

@@ -911,7 +911,6 @@
        "ledHref": "/led/2832",
        "position": 863,
        "savantActions": [
-        "Output Module / Audio Zone 6: IncreaseVolume",
         "Output Module / Audio Zone 6: IncreaseVolume"
        ],
        "savantCaptured": true,
@@ -933,7 +932,6 @@
        "ledHref": "/led/2833",
        "position": 876,
        "savantActions": [
-        "Output Module / Audio Zone 6: DecreaseVolume",
         "Output Module / Audio Zone 6: DecreaseVolume"
        ],
        "savantCaptured": true,
@@ -1487,7 +1485,6 @@
        "ledHref": "/led/1982",
        "position": 847,
        "savantActions": [
-        "Output Module / Audio Zone 1: DecreaseVolume",
         "Output Module / Audio Zone 1: DecreaseVolume"
        ],
        "savantCaptured": true,
@@ -1545,7 +1542,6 @@
        "ledHref": "/led/1981",
        "position": 916,
        "savantActions": [
-        "Output Module / Audio Zone 1: IncreaseVolume",
         "Output Module / Audio Zone 1: IncreaseVolume"
        ],
        "savantCaptured": true,
@@ -2419,7 +2415,6 @@
        "ledHref": "/led/2417",
        "position": 822,
        "savantActions": [
-        "Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume",
         "Single Input Output Module (Powder Room) / Audio Zone 1: DecreaseVolume"
        ],
        "savantCaptured": true,
@@ -2478,7 +2473,6 @@
        "ledHref": "/led/2416",
        "position": 894,
        "savantActions": [
-        "Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume",
         "Single Input Output Module (Powder Room) / Audio Zone 1: IncreaseVolume"
        ],
        "savantCaptured": true,
@@ -2874,7 +2868,7 @@
     "room": "Server Rack"
    }
   ],
-  "importedAt": "2026-10-11T15:29:59Z",
+  "importedAt": "2026-10-12T01:42:55Z",
   "lutronAreas": {
    "Dining Room": [
     "/area/2710"
